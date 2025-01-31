@@ -1,0 +1,10 @@
+.custom-pointer {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: blue; /* Blue color */
+    pointer-events: none; /* Make sure the pointer does not interfere with mouse events */
+    z-index: 9999; /* Ensure the pointer is above other elements */
+  }
+  
