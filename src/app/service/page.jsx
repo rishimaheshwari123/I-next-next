@@ -23,7 +23,7 @@ const Service = () => {
                 </button>
               </div>
               <div className="second">
-                <img src={currElem.img} alt="" />
+                <img src={currElem.img} alt="Inext-ETS" />
               </div>
             </div>
           ))}

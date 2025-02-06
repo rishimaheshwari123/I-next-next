@@ -54,8 +54,8 @@ const WebDesign = () => {
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2">
           <img src="/1.png" alt="not found" />
-          <img src="/2.png" alt="" />
-          <img src="/3.png" alt="" />
+          <img src="/2.png" alt="Inext-ETS" />
+          <img src="/3.png" alt="Inext-ETS" />
         </div>
 
         <div className="main grid lg:grid-cols-2 items-center gap-5 my-20 bg-gray-50 p-6 rounded-md">
