@@ -95,7 +95,7 @@ const PortFolio = () => {
                   : " bg-gray-500 text-black px-4 py-2 rounded-md  transition ease-in duration-500"
               }`}
             >
-              Our Popural Projects
+              Our Popular Projects
             </button>
             <button
               onClick={() => handleTabChange("latest")}
