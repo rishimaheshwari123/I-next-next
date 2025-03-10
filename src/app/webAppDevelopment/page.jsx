@@ -69,7 +69,7 @@ const WebAppDevelopment = () => {
           <div className="second">
             <img
               src="https://d1hdtc0tbqeghx.cloudfront.net/wp-content/uploads/2023/06/22063315/Enterprise-Application-Development.png"
-              alt=""
+              alt="Inext-ETS"
             />
           </div>
         </div>

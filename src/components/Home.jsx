@@ -11,7 +11,7 @@ function Home() {
       <div className="bg mt-[78px] min-h-[calc(100vh-75px)] min-w-screen relative">
         <div className="flex flex-col-reverse md:flex-row h-[calc(100vh-75px)] w-11/12 mx-auto mt-[78px]">
           <div className="w-full md:w-1/2 flex items-center justify-center">
-            <Image src={image} alt="" className="w-[70%] max-w-md" />
+            <Image src={image} alt="Inext-ETS" className="w-[70%] max-w-md" />
           </div>
           <div className="w-full md:w-1/2 flex items-center justify-center">
             <div className="flex flex-col items-center justify-center text-center">

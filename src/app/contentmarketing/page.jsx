@@ -83,8 +83,8 @@ const ContantMarketing = () => {
         <br />
         <div className="grid lg:grid-cols-3 md:grid-cols-2">
           <img src="/1.png" alt="not found" />
-          <img src="/2.png" alt="" />
-          <img src="/3.png" alt="" />
+          <img src="/2.png" alt="Inext-ETS" />
+          <img src="/3.png" alt="Inext-ETS" />
         </div>
 
         <Feedback />

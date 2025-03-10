@@ -8,7 +8,7 @@ const AboutCard = () => {
           key={currElem.id}
           className="border flex flex-col justify-center  items-center p-16 gap-4 rounded-lg "
         >
-          <img src={currElem.img} alt="" />
+          <img src={currElem.img} alt="Inext-ETS" />
           <span className="mt-7 font-bold text-xl text-gray-400">
             {currElem.p}
           </span>

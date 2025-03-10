@@ -71,7 +71,7 @@ const EcomDevlopment = () => {
           <div className="second">
             <img
               src="https://d1hdtc0tbqeghx.cloudfront.net/wp-content/uploads/2023/05/22063328/E-commerce-Development-1.png"
-              alt=""
+              alt="Inext-ETS"
             />
           </div>
         </div>

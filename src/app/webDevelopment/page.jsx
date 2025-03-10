@@ -53,15 +53,15 @@ const WebDevelopment = () => {
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2">
           <img src="/1.png" alt="not found" />
-          <img src="/2.png" alt="" />
-          <img src="/3.png" alt="" />
+          <img src="/2.png" alt="Inext-ETS" />
+          <img src="/3.png" alt="Inext-ETS" />
         </div>
 
         <div className="main grid lg:grid-cols-2 gap-10 my-20 ">
           <div className="first grid border p-10 items-center justify-center gap-4 bg-gray-100 rounded-t-lg">
             <img
               src="https://www.krishaweb.com/wp-content/uploads/2023/05/Startups.svg"
-              alt=""
+              alt="Inext-ETS"
             />
             <p className="text-2xl font-bold text-center">Startups</p>
             <p className="text-xl">
@@ -72,7 +72,7 @@ const WebDevelopment = () => {
           <div className="second border grid items-center justify-center  gap-4 p-10 bg-gray-100 rounded-t-lg">
             <img
               src="https://www.krishaweb.com/wp-content/uploads/2023/05/Small-Business-1.svg"
-              alt=""
+              alt="Inext-ETS"
             />
             <p className="text-2xl font-bold text-center">Small businesses</p>
             <p className="text-xl">
