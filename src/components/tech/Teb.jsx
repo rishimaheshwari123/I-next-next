@@ -18,7 +18,7 @@ import Image from "next/image";
 
 const Teb = ({ data }) => {
   return (
-    <div className=" mt-8 relative">
+    <div className=" mt-8 relative z-0">
       <div className="text-center">
         <p className="text-xl lg:text-3xl font-bold pb-3 border-b-4 border-yellow-400 inline-block">
           Featured Items
@@ -54,11 +54,11 @@ const Teb = ({ data }) => {
               className="p-5 shadow-lg rounded-lg hover:scale-95 transition-transform duration-300"
             >
               <Link href={currElem.link} target="_blank" className="block">
-                <div className="relative w-full h-[500px]">
+                <div className="relative w-full h-[500px] -z-50">
                   <Image
                     src={currElem.img}
                     alt="not found"
-                    className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                    className="absolute inset-0 -z-50 w-full h-full object-cover rounded-lg"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-orange-500 p-3 rounded-b-lg">
                     <p className="text-center text-lg font-bold">
