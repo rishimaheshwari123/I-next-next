@@ -69,6 +69,11 @@ function Footer() {
                 <li className="menu-item menu-item-type-post_type menu-item-object-page">
                   <Link href="/career">Careers</Link>
                 </li>
+                <li className="menu-item menu-item-type-post_type menu-item-object-page">
+                  <Link href="/investment-policy-advisory">
+                    Investment & Policy Advisory
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
