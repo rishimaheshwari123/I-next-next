@@ -37,6 +37,11 @@ export const navbar = [
         title: "Career",
         path: "/career"
     },
+    {
+        id: 8,
+        title: "Investment",
+        path: "/investment-policy-advisory"
+    },
 
 
 ]
