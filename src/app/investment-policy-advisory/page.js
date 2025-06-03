@@ -115,7 +115,7 @@ const Policy = () => {
             {/* Contact Section */}
             <section className="bg-indigo-800 text-white py-12 px-6 md:px-16 text-center">
                 <h2 className="text-2xl font-bold mb-4">📞 Let’s Talk About Your Financial Goals!</h2>
-                <p className="text-lg">Call or WhatsApp: <strong>Awdesh Dixit – +91 91119 64605</strong></p>
+                <p className="text-lg">Call or WhatsApp: <strong>Anubhav Dixit – +91 91119 64605</strong></p>
                 <p className="mt-2">🌐 Visit Us Online: <a href="https://www.inextets.in" target="_blank" rel="noopener noreferrer" className="underline">www.inextets.in</a></p>
             </section>
         </div>
