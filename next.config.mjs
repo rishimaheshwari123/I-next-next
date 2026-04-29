@@ -2,9 +2,13 @@
 const nextConfig = {
     images: {
         domains: [
-            "i.ibb.co"
+            "i.ibb.co",
+            "images.unsplash.com"
         ]
-    }
+    },
+    eslint: {
+        ignoreDuringBuilds: false,
+    },
 };
 
 export default nextConfig;

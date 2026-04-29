@@ -17,6 +17,7 @@ export default function SingleBlogPage() {
     if (params.slug) {
       fetchBlog();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
 
   const fetchBlog = async () => {

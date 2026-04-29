@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { BASE_URL } from "@/config/api";
 import Image from "next/image";
@@ -254,12 +255,12 @@ const AdminLogin = () => {
 
         {/* Back to Home Link */}
         <div className="mt-6 text-center">
-          <a
+          <Link
             href="/"
             className="text-white hover:text-blue-200 transition-colors duration-200 font-medium"
           >
             ← Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   FaEnvelope,
   FaBlog,
@@ -170,7 +171,7 @@ const Dashboard = () => {
             </div>
           </a>
 
-          <a
+          <Link
             href="/"
             className="flex items-center gap-4 p-6 bg-gradient-to-r from-green-50 to-green-100 rounded-xl hover:from-green-100 hover:to-green-200 transition-all duration-300 border border-green-200 group"
           >
@@ -181,7 +182,7 @@ const Dashboard = () => {
               <h3 className="font-semibold text-gray-900">View Website</h3>
               <p className="text-sm text-gray-600">Go to homepage</p>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
 
