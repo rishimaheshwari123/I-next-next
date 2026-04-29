@@ -1,186 +1,342 @@
+"use client";
+
 import React from "react";
-import "./footer.css";
-import { FaFacebook } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa6";
-import { FaTwitter } from "react-icons/fa";
+import { 
+  FaFacebook, 
+  FaLinkedin, 
+  FaTwitter, 
+  FaInstagram,
+  FaYoutube,
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaArrowRight
+} from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 function Footer() {
-  return (
-    <div className="pg-footer">
-      <footer className="footer">
-        <svg
-          className="footer-wave-svg"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 100"
-          preserveAspectRatio="none"
-        >
-          <path
-            className="footer-wave-path"
-            d="M851.8,100c125,0,288.3-45,348.2-64V0H0v44c3.7-1,7.3-1.9,11-2.9C80.7,22,151.7,10.8,223.5,6.3C276.7,2.9,330,4,383,9.8 c52.2,5.7,103.3,16.2,153.4,32.8C623.9,71.3,726.8,100,851.8,100z"
-          ></path>
-        </svg>
-        <div className="footer-content">
-          <div className="footer-content-column">
-            <div className="footer-logo">
-              <Link className="footer-logo-link" href="/">
-                <span className="hidden-link-text">I-NEXT-ETS</span>
-                <h1>I-NEXT-ETS</h1>
-              </Link>
-            </div>
-            <div className="footer-menu">
-              <h2 className="footer-menu-name"> Get Started</h2>
-              <ul id="menu-get-started" className="footer-menu-list">
-                <li className="menu-item menu-item-type-post_type menu-item-object-product">
-                  <Link href="/webdesign">Web Design</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-product">
-                  <Link href="/uiuxdesign">UI/UX Design</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-product">
-                  <Link href="/productdesign">Product Design</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-product">
-                  <Link href="/brandidentity">Brand Identity</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-product">
-                  <Link href="/mobile"> Mobile UI/UX Design</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-content-column">
-            <div className="footer-menu">
-              <h2 className="footer-menu-name"> Company</h2>
-              <ul id="menu-company" className="footer-menu-list">
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/service">Service</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/contact">Contact</Link>
-                </li>
-                <li className="menu-item menu-item-type-taxonomy menu-item-object-category">
-                  <Link href="/portfolio">Portfolio</Link>
-                </li>
-                <li className="menu-item menu-item-type-taxonomy menu-item-object-category">
-                  <Link href="/workinfo">How We Work</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/career">Careers</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/investment-policy-advisory">
-                    Investment & Policy Advisory
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-content-column">
-            <div className="footer-menu">
-              <h2 className="footer-menu-name"> Quick Links</h2>
-              <ul id="menu-legal" className="footer-menu-list">
-                <li className="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-170434">
-                  <Link href="/about">About</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/prework">Work Done</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/inboudmarket">Inbound Marketing</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/seomarket">SEO Marketing</Link>
-                </li>
-                <li className="menu-item menu-item-type-post_type menu-item-object-page">
-                  <Link href="/socialmarket">Social Media Marketing</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="footer-content-column">
-            <div className="footer-call-to-action">
-              <h2 className="footer-call-to-action-title"> Address</h2>
+  const currentYear = new Date().getFullYear();
 
-              <p className="mt-1">
-                Plot No - 11 ,2nd floor, near MANOHAR DAIRY, Zone-I, Maharana
-                Pratap Nagar, Bhopal, Madhya Pradesh 462011
-              </p>
-            </div>
-            <div className="footer-call-to-action">
-              <h2 className="footer-call-to-action-title"> You Call Us</h2>
-              <p className="footer-call-to-action-link-wrapper">
-                {" "}
-                <Link
-                  className="footer-call-to-action-link"
-                  href="tel:9981122493"
-                  target="_self"
-                >
-                  {" "}
-                  9981122493{" "}
-                </Link>
-              </p>
-            </div>
-          </div>
-          <div className="footer-social-links">
-            {" "}
-            <svg
-              className="footer-social-amoeba-svg"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 236 54"
-            >
-              <path
-                className="footer-social-amoeba-path"
-                d="M223.06,43.32c-.77-7.2,1.87-28.47-20-32.53C187.78,8,180.41,18,178.32,20.7s-5.63,10.1-4.07,16.7-.13,15.23-4.06,15.91-8.75-2.9-6.89-7S167.41,36,167.15,33a18.93,18.93,0,0,0-2.64-8.53c-3.44-5.5-8-11.19-19.12-11.19a21.64,21.64,0,0,0-18.31,9.18c-2.08,2.7-5.66,9.6-4.07,16.69s.64,14.32-6.11,13.9S108.35,46.5,112,36.54s-1.89-21.24-4-23.94S96.34,0,85.23,0,57.46,8.84,56.49,24.56s6.92,20.79,7,24.59c.07,2.75-6.43,4.16-12.92,2.38s-4-10.75-3.46-12.38c1.85-6.6-2-14-4.08-16.69a21.62,21.62,0,0,0-18.3-9.18C13.62,13.28,9.06,19,5.62,24.47A18.81,18.81,0,0,0,3,33a21.85,21.85,0,0,0,1.58,9.08,16.58,16.58,0,0,1,1.06,5A6.75,6.75,0,0,1,0,54H236C235.47,54,223.83,50.52,223.06,43.32Z"
-              ></path>
-            </svg>
-            <Link
-              className="footer-social-link linkedin"
-              href="#"
-              target="_blank"
-            >
-              <span className="hidden-link-text">Linkedin</span>
-              <FaLinkedin size={25} />
+  return (
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-500 rounded-full filter blur-3xl"></div>
+      </div>
+
+      {/* Main Footer Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          
+          {/* Column 1: Logo & About */}
+          <div className="space-y-6">
+            <Link href="/" className="inline-block group">
+              <div className="flex items-center space-x-3">
+                <Image
+                  src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
+                  width={60}
+                  height={60}
+                  alt="I Next ETS Logo"
+                  className="rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300"
+                />
+                <div>
+                  <h2 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
+                    I Next ETS
+                  </h2>
+                  <p className="text-xs text-gray-400">Innovation & Excellence</p>
+                </div>
+              </div>
             </Link>
-            <Link
-              className="footer-social-link twitter"
-              href="#"
-              target="_blank"
-            >
-              <span className="hidden-link-text">Twitter</span>
-              <FaTwitter size={25} />
-            </Link>
-            <Link
-              className="footer-social-link youtube"
-              href="#"
-              target="_blank"
-            >
-              <span className="hidden-link-text">Facebook</span>
-              <FaFacebook size={25} />
-            </Link>
-            <Link
-              className="footer-social-link github"
-              href="#"
-              target="_blank"
-            >
-              <span className="hidden-link-text">Github</span>
-              <FaGithub size={25} />
-            </Link>
-          </div>
-        </div>
-        <div className="footer-copyright">
-          <div className="footer-copyright-wrapper">
-            <p className="footer-copyright-text">
-              <Link className="footer-copyright-link" href="#" target="_self">
-                {" "}
-                ©2024. | Designed By: I NEXT ETS. | All rights reserved.{" "}
-              </Link>
+            
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Transforming ideas into digital reality. We deliver cutting-edge solutions in web development, mobile apps, and digital marketing.
             </p>
+
+            {/* Social Media Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4 flex items-center">
+                <span className="w-1 h-5 bg-orange-500 rounded-full mr-2"></span>
+                Follow Us
+              </h3>
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://facebook.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/50"
+                  aria-label="Facebook"
+                >
+                  <FaFacebook className="w-5 h-5" />
+                </a>
+                
+                <a 
+                  href="https://linkedin.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-700/50"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedin className="w-5 h-5" />
+                </a>
+                
+                <a 
+                  href="https://twitter.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-sky-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-sky-500/50"
+                  aria-label="Twitter"
+                >
+                  <FaTwitter className="w-5 h-5" />
+                </a>
+                
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-pink-600/50"
+                  aria-label="Instagram"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                </a>
+                
+                <a 
+                  href="https://youtube.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-600/50"
+                  aria-label="YouTube"
+                >
+                  <FaYoutube className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: Services */}
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-6 flex items-center">
+              <span className="w-1 h-5 bg-blue-500 rounded-full mr-2"></span>
+              Our Services
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  href="/webdesign" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Web Design
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/webDevelopment" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Web Development
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/mobile" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Mobile App Development
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/uiuxdesign" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  UI/UX Design
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/seomarket" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  SEO Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/socialmarket" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Social Media Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/brandidentity" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Brand Identity
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-6 flex items-center">
+              <span className="w-1 h-5 bg-orange-500 rounded-full mr-2"></span>
+              Company
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  href="/about" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/portfolio" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/workinfo" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  How We Work
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/career" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contact" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/investment-policy-advisory" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Investment & Policy Advisory
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/login" 
+                  className="text-gray-400 hover:text-orange-400 hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Admin Login
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Info */}
+          <div>
+            <h3 className="text-white font-semibold text-lg mb-6 flex items-center">
+              <span className="w-1 h-5 bg-green-500 rounded-full mr-2"></span>
+              Get In Touch
+            </h3>
+            <div className="space-y-5">
+              {/* Phone */}
+              <a 
+                href="tel:+919981122493" 
+                className="flex items-start space-x-3 text-gray-400 hover:text-white transition-colors duration-300 group"
+              >
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-orange-600 transition-colors duration-300 shadow-lg">
+                  <FaPhone className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Call Us</p>
+                  <p className="text-sm font-semibold">+91 9981122493</p>
+                </div>
+              </a>
+
+              {/* Email */}
+              <a 
+                href="mailto:info.inextets@gmail.com" 
+                className="flex items-start space-x-3 text-gray-400 hover:text-white transition-colors duration-300 group"
+              >
+                <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors duration-300 shadow-lg">
+                  <FaEnvelope className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Email Us</p>
+                  <p className="text-sm font-semibold break-all">info.inextets@gmail.com</p>
+                </div>
+              </a>
+
+              {/* Address */}
+              <div className="flex items-start space-x-3 text-gray-400">
+                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <FaMapMarkerAlt className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Visit Us</p>
+                  <p className="text-sm leading-relaxed">
+                    Plot No - 11, 2nd floor, near MANOHAR DAIRY, Zone-I, Maharana Pratap Nagar, Bhopal, Madhya Pradesh 462011
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </footer>
-    </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-700 my-8"></div>
+
+        {/* Bottom Footer */}
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-gray-400 text-sm text-center md:text-left">
+            © {currentYear} <span className="text-white font-semibold">I Next ETS</span>. All rights reserved. Designed with ❤️ by I Next ETS Team.
+          </p>
+          
+          <div className="flex items-center space-x-6">
+            <Link 
+              href="/privacy-policy" 
+              className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              href="/terms-conditions" 
+              className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
+            >
+              Terms & Conditions
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
 

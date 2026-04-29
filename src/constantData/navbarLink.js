@@ -1,47 +1,37 @@
 export const navbar = [
     {
         id: 1,
+        title: "Home",
+        path: "/"
+    },
+    {
+        id: 2,
         title: "Services",
         path: "/service"
     },
     {
-        id: 2,
-        title: "How We Work",
-        path: "/workinfo"
-    },
-
-    {
         id: 3,
-        title: "Work Done",
-        path: "prework"
-    },
-
-    {
-        id: 4,
-        title: "About",
+        title: "About Us",
         path: "/about"
     },
     {
-        id: 5,
-        title: "Contact US",
-        path: "/contact"
-    },
-
-    {
-        id: 6,
-        title: "PortFolio",
+        id: 4,
+        title: "Portfolio",
         path: "/portfolio"
     },
     {
-        id: 7,
+        id: 5,
+        title: "News Updates",
+        path: "/news"
+    },
+    {
+        id: 6,
         title: "Career",
         path: "/career"
     },
     {
-        id: 8,
-        title: "Investment",
-        path: "/investment-policy-advisory"
-    },
-
-
+        id: 7,
+        title: "Contact",
+        path: "/contact"
+    }
 ]

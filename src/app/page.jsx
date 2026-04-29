@@ -1,25 +1,28 @@
 import React from "react";
-import Home from "../components/Home";
-import Technology from "@/components/Technology";
-import IndustryExpertise from "@/components/IndustryExpertise";
+import HeroSlider from "../components/HeroSlider";
+import ServicesGrid from "@/components/ServicesGrid";
+import StatsSection from "@/components/StatsSection";
+import TechnologyNew from "@/components/TechnologyNew";
+import Testimonials from "@/components/Testimonials";
+import VideoTestimonials from "@/components/VideoTestimonials";
 import Faq from "@/components/Faq";
 import TrustedCompanies from "@/components/TrustedCompanies";
-import Help from "@/components/Help";
-import INEXTETS from "@/components/InfoDetails";
+// import Help from "@/components/Help";
 
 const HomePage = () => {
   return (
     <div>
-      <Home />
-      <div className="mt-[87px] w-11/12 mx-auto">
-        <Technology />
-        <IndustryExpertise />
-        <INEXTETS />
+      <HeroSlider />
+      <ServicesGrid />
+      <StatsSection />
+      <TechnologyNew />
+      <Testimonials />
+      <VideoTestimonials />
+      <div className=" ">
         <Faq />
-
-        <TrustedCompanies />
+        {/* <TrustedCompanies /> */}
       </div>
-      <Help />
+      {/* <Help /> */}
     </div>
   );
 };
