@@ -24,7 +24,7 @@ export default function SingleBlogPage() {
   const fetchBlog = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/v1/blog/slug/${params.slug}`
+        `${BASE_URL}/blog/slug/${params.slug}`
       );
       if (response.data.success) {
         setBlog(response.data.blog);

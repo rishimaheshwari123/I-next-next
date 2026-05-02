@@ -19,7 +19,7 @@ export default function NewsPage() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/v1/blog/getAll`);
+      const response = await axios.get(`${BASE_URL}/blog/getAll`);
       if (response.data.success) {
         setBlogs(response.data.blogs);
       }
