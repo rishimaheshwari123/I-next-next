@@ -4,6 +4,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaTimes } from 'react-icons/fa';
+import { BASE_URL } from "@/config/api";
+
 
 export default function DomainBookingModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -30,7 +32,7 @@ export default function DomainBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/v1/domain/create',
+        `${BASE_URL}/api/v1/domain/create`,
         formData
       );
 

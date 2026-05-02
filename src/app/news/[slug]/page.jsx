@@ -6,6 +6,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { FaArrowLeft, FaCalendar, FaClock, FaShareAlt } from 'react-icons/fa';
+import { BASE_URL } from '@/config/api';
 
 export default function SingleBlogPage() {
   const params = useParams();
@@ -23,7 +24,7 @@ export default function SingleBlogPage() {
   const fetchBlog = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/blog/slug/${params.slug}`
+        `${BASE_URL}/api/v1/blog/slug/${params.slug}`
       );
       if (response.data.success) {
         setBlog(response.data.blog);

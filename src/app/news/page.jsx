@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import { BASE_URL } from '@/config/api';
 
 export default function NewsPage() {
   const [blogs, setBlogs] = useState([]);
@@ -18,7 +19,7 @@ export default function NewsPage() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/blog/getAll');
+      const response = await axios.get(`${BASE_URL}/api/v1/blog/getAll`);
       if (response.data.success) {
         setBlogs(response.data.blogs);
       }

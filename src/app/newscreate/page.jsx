@@ -132,7 +132,7 @@ export default function NewsCreate() {
       }
 
       const response = await axios.post(
-        'http://localhost:8080/api/v1/blog/create',
+        `${BASE_URL}/api/v1/blog/create`,
         data,
         {
           headers: {

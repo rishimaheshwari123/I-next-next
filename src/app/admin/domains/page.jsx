@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaTrash, FaEye, FaFilter, FaDownload } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import { BASE_URL } from "@/config/api";
 
 export default function AdminDomainsPage() {
   const [inquiries, setInquiries] = useState([]);
@@ -18,7 +19,7 @@ export default function AdminDomainsPage() {
 
   const fetchInquiries = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/v1/domain/getAll');
+      const response = await axios.get(`${BASE_URL}/domain/getAll`);
       if (response.data.success) {
         setInquiries(response.data.inquiries);
       }
@@ -33,7 +34,7 @@ export default function AdminDomainsPage() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/domain/update-status/${id}`,
+        `${BASE_URL}/domain/update-status/${id}`,
         { status: newStatus }
       );
 
@@ -61,7 +62,7 @@ export default function AdminDomainsPage() {
     if (result.isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:8080/api/v1/domain/delete/${id}`
+          `${BASE_URL}/domain/delete/${id}`
         );
 
         if (response.data.success) {
