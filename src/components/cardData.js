@@ -601,6 +601,42 @@ export const paiadvertising = [
     },
 
 ]
+
+export const socialMediaMarketing = [
+    {
+        id: 1,
+        title: "Inconsistent posting schedule affecting audience engagement."
+    },
+    {
+        id: 2,
+        title: "Difficulty creating content that resonates with your target audience."
+    },
+    {
+        id: 3,
+        title: "Limited understanding of social media algorithms and best practices."
+    },
+    {
+        id: 4,
+        title: "Struggling to manage multiple social media platforms effectively."
+    },
+    {
+        id: 5,
+        title: "Unable to measure ROI from social media marketing efforts."
+    },
+    {
+        id: 6,
+        title: "Lack of resources to respond to comments and messages promptly."
+    },
+    {
+        id: 7,
+        title: "Challenges in building a loyal community around your brand."
+    },
+    {
+        id: 8,
+        title: "Difficulty in creating engaging visual content and videos."
+    },
+]
+
 export const contentMarketing = [
     {
         id: 1,

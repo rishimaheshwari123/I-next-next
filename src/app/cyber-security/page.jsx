@@ -1,152 +1,170 @@
-// import { contentMarketing } from "@/components/cardData";
+import React from "react";
+import { IoIosArrowDropright } from "react-icons/io";
+import { FaQuoteRight, FaCheck, FaShieldAlt, FaLock, FaUserSecret, FaServer, FaBug, FaEye, FaNetworkWired, FaKey } from "react-icons/fa";
+import { MdSecurity, MdVerifiedUser } from "react-icons/md";
 // import Feedback from "@/components/Feedback";
 // import Help from "@/components/Help";
-import React from "react";
-import { FaQuoteRight, FaCheck, FaRocket, FaChartLine, FaBullseye, FaUsers, FaTrophy, FaLightbulb, FaHandshake, FaCrown } from "react-icons/fa";
-import { IoIosArrowDropright } from "react-icons/io";
-import { MdTrendingUp, MdBusinessCenter } from "react-icons/md";
 import Link from "next/link";
 
-const BusinessGrowth = () => {
+const CyberSecurity = () => {
   const pricingPlans = [
     {
       id: 1,
-      name: "Growth Starter",
-      price: "₹35,000",
+      name: "Basic Security",
+      price: "₹40,000",
       period: "/month",
-      description: "Perfect for startups ready to scale their business",
+      description: "Essential security for small businesses",
       features: [
-        "Business Strategy Consultation",
-        "Market Research & Analysis",
-        "Competitor Analysis",
-        "Growth Roadmap Development",
-        "Monthly Performance Review",
-        "Basic Marketing Support",
-        "Email & Chat Support"
+        "Security Assessment",
+        "Vulnerability Scanning",
+        "Basic Firewall Setup",
+        "Antivirus Protection",
+        "Security Awareness Training",
+        "Monthly Security Reports",
+        "Email Support"
       ],
       popular: false
     },
     {
       id: 2,
-      name: "Growth Accelerator",
-      price: "₹65,000",
+      name: "Advanced Security",
+      price: "₹80,000",
       period: "/month",
-      description: "Ideal for businesses seeking rapid expansion",
+      description: "Comprehensive protection for growing businesses",
       features: [
-        "Comprehensive Growth Strategy",
-        "Advanced Market Analysis",
-        "Multi-Channel Marketing",
-        "Sales Funnel Optimization",
-        "Customer Acquisition Strategy",
-        "Brand Positioning",
-        "Bi-weekly Strategy Sessions",
-        "Performance Dashboard",
+        "Advanced Threat Detection",
+        "24/7 Security Monitoring",
+        "Penetration Testing",
+        "Data Encryption",
+        "Incident Response Plan",
+        "Security Compliance Audit",
+        "Multi-factor Authentication",
+        "Bi-weekly Security Updates",
         "Priority Support"
       ],
       popular: true
     },
     {
       id: 3,
-      name: "Enterprise Growth",
-      price: "₹1,20,000",
+      name: "Enterprise Security",
+      price: "₹2,00,000",
       period: "/month",
-      description: "Complete business growth solution for market leaders",
+      description: "Complete security solution for enterprises",
       features: [
-        "Full-Service Growth Management",
-        "Advanced Analytics & Insights",
-        "Omnichannel Marketing Strategy",
-        "Sales & Marketing Alignment",
-        "Customer Retention Programs",
-        "Partnership Development",
-        "Weekly Executive Sessions",
-        "Real-time Growth Dashboard",
-        "Dedicated Growth Manager",
+        "Full Security Infrastructure",
+        "Advanced Threat Intelligence",
+        "SOC (Security Operations Center)",
+        "Zero Trust Architecture",
+        "DDoS Protection",
+        "Security Information & Event Management",
+        "Compliance Management",
+        "Disaster Recovery Planning",
+        "Weekly Security Briefings",
+        "Dedicated Security Team",
         "24/7 Priority Support"
       ],
       popular: false
     }
   ];
 
-  const growthPillars = [
-    { icon: FaRocket, name: "Rapid Scaling", color: "text-blue-600" },
-    { icon: FaChartLine, name: "Revenue Growth", color: "text-green-600" },
-    { icon: FaUsers, name: "Customer Acquisition", color: "text-purple-600" },
-    { icon: FaTrophy, name: "Market Leadership", color: "text-orange-600" }
+  const securityServices = [
+    { icon: FaShieldAlt, name: "Threat Protection", color: "text-red-600" },
+    { icon: FaLock, name: "Data Encryption", color: "text-blue-600" },
+    { icon: FaUserSecret, name: "Privacy", color: "text-purple-600" },
+    { icon: FaNetworkWired, name: "Network Security", color: "text-green-600" }
   ];
 
-  const whyBusinessGrowth = [
+  const whyChooseUs = [
     {
-      icon: FaBullseye,
-      title: "Strategic Planning",
-      description: "Data-driven strategies tailored to your business goals and market position"
+      icon: MdSecurity,
+      title: "Proactive Protection",
+      description: "Stay ahead of threats with continuous monitoring and threat intelligence"
     },
     {
-      icon: MdTrendingUp,
-      title: "Sustainable Growth",
-      description: "Build long-term growth foundations that scale with your business"
+      icon: MdVerifiedUser,
+      title: "Certified Experts",
+      description: "Team of certified security professionals with industry expertise"
     },
     {
-      icon: FaHandshake,
-      title: "Expert Guidance",
-      description: "Work with experienced growth strategists who understand your industry"
+      icon: FaEye,
+      title: "24/7 Monitoring",
+      description: "Round-the-clock surveillance to detect and respond to threats instantly"
     },
     {
-      icon: FaCrown,
-      title: "Competitive Edge",
-      description: "Stay ahead of competitors with innovative growth strategies"
+      icon: FaServer,
+      title: "Compliance Ready",
+      description: "Meet industry standards and regulatory compliance requirements"
     }
   ];
 
   const benefits = [
     {
-      icon: MdBusinessCenter,
-      title: "Holistic Approach",
-      description: "We address all aspects of business growth - marketing, sales, operations, and customer success"
+      icon: FaBug,
+      title: "Vulnerability Management",
+      description: "Identify and fix security weaknesses before they can be exploited"
     },
     {
-      icon: FaLightbulb,
-      title: "Innovation Driven",
-      description: "Leverage cutting-edge strategies and technologies to accelerate your growth"
+      icon: FaKey,
+      title: "Access Control",
+      description: "Implement robust authentication and authorization systems"
     },
     {
-      icon: FaChartLine,
-      title: "Measurable Results",
-      description: "Track your growth with clear KPIs and regular performance reporting"
+      icon: FaShieldAlt,
+      title: "Incident Response",
+      description: "Rapid response to security incidents to minimize damage"
     }
   ];
 
-  const growthChallenges = [
+  const securityChallenges = [
     {
       id: 1,
-      title: "Struggling to achieve consistent revenue growth quarter over quarter."
+      title: "Increasing cyber threats and sophisticated attack methods."
     },
     {
       id: 2,
-      title: "Difficulty in scaling operations while maintaining quality."
+      title: "Lack of in-house security expertise and resources."
     },
     {
       id: 3,
-      title: "Lack of clear growth strategy and actionable roadmap."
+      title: "Difficulty in maintaining compliance with security regulations."
     },
     {
       id: 4,
-      title: "Challenges in customer acquisition and retention."
+      title: "Vulnerable systems and outdated security infrastructure."
     },
     {
       id: 5,
-      title: "Unable to differentiate from competitors in the market."
+      title: "Data breaches resulting in financial and reputational damage."
     },
     {
       id: 6,
-      title: "Limited resources to execute growth initiatives effectively."
+      title: "Challenges in securing remote work environments."
     },
     {
       id: 7,
-      title: "Difficulty in measuring and optimizing growth metrics."
+      title: "Insufficient security awareness among employees."
     },
     {
       id: 8,
-      title: "Struggling to expand into new markets or segments."
+      title: "Complex IT infrastructure making security management difficult."
+    }
+  ];
+
+  const securitySolutions = [
+    {
+      icon: FaShieldAlt,
+      title: "Threat Detection & Response",
+      description: "Advanced systems to identify and neutralize threats in real-time"
+    },
+    {
+      icon: FaLock,
+      title: "Data Protection",
+      description: "Comprehensive encryption and data loss prevention solutions"
+    },
+    {
+      icon: FaNetworkWired,
+      title: "Network Security",
+      description: "Secure your network infrastructure from external and internal threats"
     }
   ];
 
@@ -158,33 +176,33 @@ const BusinessGrowth = () => {
         <br />
         <div className="flex gap-3 mb-3">
           <p className="border-r-2 pr-3 text-gray-300 text-xl">Home</p>
-          <p className="text-xl">Business Growth Package</p>
+          <p className="text-xl">Cyber Security</p>
         </div>
 
-        {/* Hero Section - Modern Layout */}
-        <div className="relative bg-gradient-to-r from-indigo-50 via-white to-cyan-50 rounded-3xl p-8 lg:p-16 mb-20 overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
+        {/* Hero Section */}
+        <div className="relative bg-gradient-to-r from-red-50 via-white to-gray-50 rounded-3xl p-8 lg:p-16 mb-20 overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-red-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gray-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             <div className="first order-2 lg:order-1">
               <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                🚀 Accelerate Your Success
+                🔒 Enterprise-Grade Protection
               </div>
               <h1 className="text-3xl lg:text-5xl font-bold leading-tight mb-6">
-                Scale Your Business With 
-                <span className="text-orange-500"> Strategic Growth Solutions</span>
+                Protect Your Business With 
+                <span className="text-orange-500"> Advanced Cyber Security</span>
               </h1>
               
               <p className="text-lg lg:text-xl text-gray-700 leading-relaxed mb-8">
-                Transform your business with proven growth strategies. From market expansion to revenue optimization, we provide end-to-end solutions that drive sustainable, measurable growth.
+                Safeguard your digital assets with comprehensive cyber security solutions. From threat detection to incident response, we provide end-to-end protection against evolving cyber threats.
               </p>
 
-              {/* Growth Pillars Icons */}
+              {/* Security Services Icons */}
               <div className="flex gap-4 mb-8">
-                {growthPillars.map((pillar, index) => (
-                  <div key={index} className="group" title={pillar.name}>
-                    <pillar.icon className={`text-3xl ${pillar.color} hover:scale-125 transition-transform duration-300 cursor-pointer`} />
+                {securityServices.map((service, index) => (
+                  <div key={index} className="group" title={service.name}>
+                    <service.icon className={`text-3xl ${service.color} hover:scale-125 transition-transform duration-300 cursor-pointer`} />
                   </div>
                 ))}
               </div>
@@ -192,48 +210,48 @@ const BusinessGrowth = () => {
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                   <FaCheck className="text-green-500" />
-                  <span className="font-semibold">Revenue Growth</span>
+                  <span className="font-semibold">24/7 Monitoring</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                   <FaCheck className="text-green-500" />
-                  <span className="font-semibold">Market Expansion</span>
+                  <span className="font-semibold">Threat Detection</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                   <FaCheck className="text-green-500" />
-                  <span className="font-semibold">Scalable Systems</span>
+                  <span className="font-semibold">Compliance</span>
                 </div>
               </div>
               
               <Link href="/contact">
                 <button className="flex items-center gap-2 font-bold text-xl bg-orange-500 px-8 py-4 rounded-full hover:bg-orange-600 hover:shadow-2xl transition-all duration-300 text-white group">
-                  Start Growing Today <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
+                  Secure Your Business <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
                 </button>
               </Link>
             </div>
 
             <div className="second order-1 lg:order-2 flex justify-center">
               <img
-                src="/herosection/marketing.webp"
-                alt="Business Growth"
-                className="w-full  rounded-lg h-auto drop-shadow-2xl"
+                src="/herosection/info.jpeg"
+                alt="Cyber Security"
+                className="w-full h-auto drop-shadow-2xl rounded-2xl"
               />
             </div>
           </div>
         </div>
 
-        {/* Why Business Growth Package */}
+        {/* Why Choose Us */}
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Why Choose Our Business Growth Package?
+              Why Choose Our Cyber Security Services?
             </h2>
             <p className="text-xl text-gray-600">
-              Comprehensive solutions for sustainable business expansion
+              Comprehensive protection from certified security experts
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyBusinessGrowth.map((item, index) => (
+            {whyChooseUs.map((item, index) => (
               <div key={index} className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-t-4 border-orange-500">
                 <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
                   <item.icon className="text-3xl text-orange-500" />
@@ -245,9 +263,33 @@ const BusinessGrowth = () => {
           </div>
         </div>
 
+        {/* Security Solutions */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Our Cyber Security Solutions
+            </h2>
+            <p className="text-xl text-gray-600">
+              Comprehensive protection for your digital infrastructure
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {securitySolutions.map((item, index) => (
+              <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-center border-2 border-gray-100 hover:border-orange-200">
+                <div className="bg-gradient-to-br from-red-100 to-red-200 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                  <item.icon className="text-4xl text-red-600" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Trusted Companies */}
         <div className="mb-20">
-          <p className="text-center text-gray-600 text-lg mb-8 font-semibold">Trusted by Growing Businesses</p>
+          <p className="text-center text-gray-600 text-lg mb-8 font-semibold">Trusted by Leading Brands</p>
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6 items-center">
             <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-xl transition-shadow">
               <img src="/1.png" alt="Client Logo" className="w-full h-auto" />
@@ -265,18 +307,18 @@ const BusinessGrowth = () => {
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              What Makes Us Different
+              Key Security Benefits
             </h2>
             <p className="text-xl text-gray-600">
-              Our unique approach to business growth
+              Protect your business from cyber threats
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {benefits.map((item, index) => (
               <div key={index} className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-center">
-                <div className="bg-gradient-to-br from-indigo-100 to-indigo-200 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto">
-                  <item.icon className="text-4xl text-indigo-600" />
+                <div className="bg-gradient-to-br from-gray-100 to-gray-200 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                  <item.icon className="text-4xl text-gray-700" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                 <p className="text-gray-600 leading-relaxed text-lg">{item.description}</p>
@@ -289,10 +331,10 @@ const BusinessGrowth = () => {
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Overcome Your Business Growth Challenges
+              Security Challenges We Address
             </h2>
             <p className="text-xl text-gray-600">
-              We help businesses break through growth barriers
+              Comprehensive solutions for modern security threats
             </p>
           </div>
 
@@ -300,20 +342,20 @@ const BusinessGrowth = () => {
             <div className="grid lg:grid-cols-2 gap-10 items-center">
               <div className="first">
                 <h3 className="text-2xl lg:text-3xl font-bold mb-8 text-gray-800">
-                  Brands choose us to overcome growth hurdles:
+                  Businesses approach us when facing:
                 </h3>
                 <div className="grid gap-6">
-                  {growthChallenges.map((currElem) => (
+                  {securityChallenges.map((currElem) => (
                     <div
                       key={currElem.id}
-                      className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-indigo-500 hover:border-indigo-600"
+                      className="group bg-gradient-to-br from-white to-gray-50 p-5 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-red-500 hover:border-red-600"
                     >
                       <div className="flex gap-4 items-start">
-                        <div className="bg-indigo-100 p-3 rounded-full group-hover:bg-indigo-500 transition-colors duration-300">
-                          <FaQuoteRight className="text-lg text-indigo-500 group-hover:text-white transition-colors duration-300" />
+                        <div className="bg-red-100 p-3 rounded-full group-hover:bg-red-500 transition-colors duration-300">
+                          <FaQuoteRight className="text-lg text-red-500 group-hover:text-white transition-colors duration-300" />
                         </div>
                         <div>
-                          <span className="text-sm font-bold text-indigo-500 mb-2 block">Challenge #{currElem.id}</span>
+                          <span className="text-sm font-bold text-red-500 mb-2 block">Challenge #{currElem.id}</span>
                           <span className="text-lg leading-relaxed text-gray-800 font-medium">
                             {currElem.title}
                           </span>
@@ -326,20 +368,20 @@ const BusinessGrowth = () => {
 
               <div className="second flex justify-center">
                 <img
-                  src="/herosection/marketing.webp"
-                  alt="Business Growth Solutions"
-                  className="w-full max-w-md h-auto rounded-2xl shadow-lg"
+                  src="/herosection/info.jpeg"
+                  alt="Security Solutions"
+                  className="w-full h-auto rounded-2xl shadow-lg"
                 />
               </div>
             </div>
 
             <div className="text-center mt-12">
               <p className="text-xl text-gray-700 mb-6">
-                <span className="font-bold text-orange-500">Ready to scale your business?</span> Let our growth experts create a custom strategy for you.
+                <span className="font-bold text-orange-500">Don't wait for a breach!</span> Protect your business with our comprehensive security solutions.
               </p>
               <Link href="/contact">
                 <button className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  Get Free Growth Consultation
+                  Get Free Security Assessment
                 </button>
               </Link>
             </div>
@@ -350,13 +392,13 @@ const BusinessGrowth = () => {
         <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
           <div className="text-center mb-16">
             <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              💰 Investment in Your Growth
+              💰 Transparent Pricing
             </div>
             <h2 className="text-3xl lg:text-5xl font-bold mb-4">
-              Choose Your Growth Package
+              Choose Your Security Package
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Flexible packages designed to accelerate your business growth at every stage
+              Flexible packages designed to protect businesses of all sizes
             </p>
           </div>
 
@@ -383,7 +425,7 @@ const BusinessGrowth = () => {
                     <span className="text-5xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">{plan.price}</span>
                     <span className="text-gray-600 mb-2 text-lg">{plan.period}</span>
                   </div>
-                  <p className="text-sm text-gray-500">Comprehensive growth service</p>
+                  <p className="text-sm text-gray-500">Monthly service fee</p>
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -414,10 +456,10 @@ const BusinessGrowth = () => {
 
           <div className="text-center mt-16">
             <p className="text-gray-700 text-lg mb-4">
-              Need a custom growth strategy tailored to your business?
+              Need a custom security solution for your organization?
             </p>
             <Link href="/contact" className="text-orange-500 font-bold text-xl hover:underline inline-flex items-center gap-2">
-              Contact Our Growth Strategists <IoIosArrowDropright className="text-2xl" />
+              Contact Our Security Experts <IoIosArrowDropright className="text-2xl" />
             </Link>
           </div>
         </div>
@@ -434,4 +476,4 @@ const BusinessGrowth = () => {
   );
 };
 
-export default BusinessGrowth;
+export default CyberSecurity;
