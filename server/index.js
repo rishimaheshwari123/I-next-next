@@ -39,7 +39,9 @@ app.use("/api/v1/contact", require("./routes/contactRoute"));
 app.use("/api/v1/auth", require("./routes/authRoute"));
 app.use("/api/v1/image", require("./routes/imageRoute"));
 app.use("/api/v1/blog", require("./routes/blogRoute"));
-app.use("/api/v1/domain", require("./routes/domainRoute"))
+app.use("/api/v1/domain", require("./routes/domainRoute"));
+app.use("/api/v1/plan", require("./routes/planRoute"));
+app.use("/api/v1/hosting", require("./routes/hostingRoute"));
 
 const PORT = process.env.PORT || 8080;
 

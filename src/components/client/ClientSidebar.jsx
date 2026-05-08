@@ -4,21 +4,22 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FaTachometerAlt,
-  FaEnvelope,
-  FaBlog,
+  FaProjectDiagram,
+  FaFileInvoice,
+  FaTicketAlt,
   FaSignOutAlt,
   FaBars,
   FaTimes,
   FaUser,
-  FaGlobe,
+  FaHome,
   FaChevronLeft,
   FaChevronRight,
+  FaCog,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from 'react-toastify';
-import { logoutToasts } from '@/config/toast';
 
-const AdminSidebar = () => {
+const ClientSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -37,48 +38,35 @@ const AdminSidebar = () => {
     {
       name: "Dashboard",
       icon: FaTachometerAlt,
-      path: "/admin/dashboard",
+      path: "/client/dashboard",
       color: "from-blue-500 to-blue-600",
     },
     {
-      name: "Plans",
-      icon: FaGlobe,
-      path: "/admin/plans",
-      color: "from-orange-500 to-orange-600",
-    },
-    {
-      name: "Hosting",
-      icon: FaGlobe,
-      path: "/admin/hosting",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      name: "Contacts",
-      icon: FaEnvelope,
-      path: "/admin/contacts",
+      name: "My Plans",
+      icon: FaProjectDiagram,
+      path: "/client/plans",
       color: "from-purple-500 to-purple-600",
     },
     {
-      name: "Blogs",
-      icon: FaBlog,
-      path: "/admin/blogs",
-      color: "from-pink-500 to-pink-600",
+      name: "My Hosting",
+      icon: FaProjectDiagram,
+      path: "/client/my-hosting",
+      color: "from-green-500 to-green-600",
     },
     {
-      name: "Domain Inquiries",
-      icon: FaGlobe,
-      path: "/admin/domains",
-      color: "from-green-500 to-green-600",
+      name: "Hosting Inquiry",
+      icon: FaProjectDiagram,
+      path: "/client/hosting",
+      color: "from-orange-500 to-orange-600",
     },
   ];
 
   const handleLogout = () => {
-    const loadingToast = logoutToasts.loading();
+    const loadingToast = toast.loading("Logging out...");
 
     setTimeout(() => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      sessionStorage.removeItem("welcomeShown");
       
       toast.update(loadingToast, {
         render: "Logged out successfully! See you soon! 👋",
@@ -92,7 +80,7 @@ const AdminSidebar = () => {
       });
 
       setTimeout(() => {
-        router.push("/login");
+        router.push("/");
       }, 1000);
     }, 800);
   };
@@ -148,13 +136,29 @@ const AdminSidebar = () => {
                   <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     I Next ETS
                   </h2>
-                  <p className="text-xs text-gray-500 font-medium">Admin Panel</p>
+                  <p className="text-xs text-gray-500 font-medium">Client Portal</p>
                 </div>
               )}
             </div>
           </div>
 
-         
+          {/* User Info Section */}
+          {/* {user && !isCollapsed && (
+            <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <FaUser className="text-white text-xl" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-900 truncate">{user.name}</p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                </div>
+              </div>
+            </div>
+          )} */}
 
           {/* Collapsed User Avatar */}
           {user && isCollapsed && (
@@ -221,4 +225,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default ClientSidebar;

@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { BASE_URL } from "@/config/api";
-import Image from "next/image";
 import { toast } from 'react-toastify';
 import { loginToasts } from '@/config/toast';
 
@@ -50,9 +49,26 @@ const AdminLogin = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Check if user is admin
+        // Check if user is admin or client
         if (data.user.role === "admin") {
-          // Success toast
+          // Success toast for admin
+          toast.update(loadingToast, {
+            render: `Welcome back Admin, ${data.user.name}! 🎉`,
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+
+          // Redirect to admin dashboard
+          setTimeout(() => {
+            router.push("/admin/dashboard");
+          }, 1000);
+        } else if (data.user.role === "client") {
+          // Success toast for client
           toast.update(loadingToast, {
             render: `Welcome back, ${data.user.name}! 🎉`,
             type: "success",
@@ -64,14 +80,14 @@ const AdminLogin = () => {
             draggable: true,
           });
 
-          // Redirect after a short delay
+          // Redirect to client dashboard
           setTimeout(() => {
-            router.push("/admin/dashboard");
+            router.push("/client/dashboard");
           }, 1000);
         } else {
-          // Error toast for non-admin users
+          // Error toast for unknown role
           toast.update(loadingToast, {
-            render: "Access denied. Admin privileges required! ❌",
+            render: "Invalid user role! ❌",
             type: "error",
             isLoading: false,
             autoClose: 5000,
@@ -81,7 +97,7 @@ const AdminLogin = () => {
             draggable: true,
           });
           
-          setError("Access denied. Admin privileges required.");
+          setError("Invalid user role.");
           localStorage.removeItem("token");
           localStorage.removeItem("user");
         }
@@ -122,33 +138,23 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center px-4 py-12 mt-20">
-      {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
+    <div>
+       <br />
+      <br />
+      <br />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+     
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-10 text-center">
-            <div className="flex justify-center mb-4">
-              <Image
-                src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
-                width={80}
-                height={80}
-                alt="I Next ETS Logo"
-                className="rounded-2xl shadow-lg"
-              />
-            </div>
-            <h1 className="text-3xl font-bold text-white mb-2"> Login</h1>
-            <p className="text-blue-100">Welcome back! Please login to continue</p>
+          <div className="bg-white px-8 py-4  text-center border-b border-gray-100">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+            <p className="text-gray-600">Please login to continue</p>
           </div>
 
           {/* Form */}
-          <div className="px-8 py-10">
+          <div className="px-8">
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <p className="text-red-600 text-sm font-medium">{error}</p>
@@ -172,7 +178,7 @@ const AdminLogin = () => {
                     onChange={handleChange}
                     required
                     className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"
-                    placeholder="Enter Your Email Address"
+                    placeholder="Enter your email address"
                   />
                 </div>
               </div>
@@ -212,7 +218,7 @@ const AdminLogin = () => {
                 className={`w-full py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 ${
                   loading
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                    : "bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                 }`}
               >
                 {loading ? (
@@ -247,7 +253,16 @@ const AdminLogin = () => {
 
           {/* Footer */}
           <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-sm text-gray-600 mb-3">
+              Don't have an account?{" "}
+              <Link
+                href="/register"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200"
+              >
+                Register as Client
+              </Link>
+            </p>
+            <p className="text-center text-xs text-gray-500">
               Protected area. Authorized access only.
             </p>
           </div>
@@ -257,13 +272,15 @@ const AdminLogin = () => {
         <div className="mt-6 text-center">
           <Link
             href="/"
-            className="text-white hover:text-blue-200 transition-colors duration-200 font-medium"
+            className="text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium"
           >
             ← Back to Home
           </Link>
         </div>
       </div>
     </div>
+    </div>
+
   );
 };
 

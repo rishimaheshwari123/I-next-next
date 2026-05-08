@@ -366,13 +366,21 @@ const Navbar = () => {
                 ))}
               </ul>
 
-              {/* CTA Button */}
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
-              >
+              {/* CTA Buttons */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                >
 Book Domain
-              </button>
+                </button>
+                <Link
+                  href="/login"
+                  className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                >
+                  Login
+                </Link>
+              </div>
             </div>
 
             {/* Mobile Menu Button */}

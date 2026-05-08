@@ -6,6 +6,7 @@ import { FaQuoteRight, FaCheck, FaRocket, FaChartLine, FaBullseye, FaUsers, FaTr
 import { IoIosArrowDropright } from "react-icons/io";
 import { MdTrendingUp, MdBusinessCenter } from "react-icons/md";
 import Link from "next/link";
+import PlanCard from "@/components/PlanCard";
 
 const BusinessGrowth = () => {
   const pricingPlans = [
@@ -362,53 +363,7 @@ const BusinessGrowth = () => {
 
           <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {pricingPlans.map((plan) => (
-              <div
-                key={plan.id}
-                className={`relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 p-8 ${
-                  plan.popular ? 'border-4 border-orange-500 transform lg:scale-105 lg:-mt-4' : 'border-2 border-gray-200'
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-2 rounded-full text-sm font-bold shadow-xl">
-                      ⭐ MOST POPULAR
-                    </span>
-                  </div>
-                )}
-
-                <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold mb-3 text-gray-800">{plan.name}</h3>
-                  <p className="text-gray-600 text-sm mb-6 min-h-[40px] leading-relaxed">{plan.description}</p>
-                  <div className="flex items-end justify-center gap-2 mb-2">
-                    <span className="text-5xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">{plan.price}</span>
-                    <span className="text-gray-600 mb-2 text-lg">{plan.period}</span>
-                  </div>
-                  <p className="text-sm text-gray-500">Comprehensive growth service</p>
-                </div>
-
-                <div className="space-y-4 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="bg-green-100 p-1 rounded-full mt-0.5">
-                        <FaCheck className="text-green-600 text-sm" />
-                      </div>
-                      <span className="text-gray-700 leading-relaxed">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <Link href="/contact">
-                  <button
-                    className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-300 ${
-                      plan.popular
-                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-2xl hover:scale-105'
-                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200 hover:shadow-lg'
-                    }`}
-                  >
-                    {plan.popular ? 'Get Started Now' : 'Choose Package'}
-                  </button>
-                </Link>
-              </div>
+              <PlanCard key={plan.id} plan={plan} serviceName="Business Growth Package" />
             ))}
           </div>
 

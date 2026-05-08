@@ -5,6 +5,7 @@ import { MdAutoAwesome, MdPsychology } from "react-icons/md";
 // import Feedback from "@/components/Feedback";
 // import Help from "@/components/Help";
 import Link from "next/link";
+import PlanCard from "@/components/PlanCard";
 
 const AIServices = () => {
   const pricingPlans = [

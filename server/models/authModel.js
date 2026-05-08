@@ -14,7 +14,10 @@ const authSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
-
+    company: {
+      type: String,
+      trim: true,
+    },
     password: {
       type: String,
       required: true,
