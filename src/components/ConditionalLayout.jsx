@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import ButtomIcon from "@/components/ButtomIcon";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -21,7 +20,6 @@ export default function ConditionalLayout({ children }) {
       <Navbar />
       {children}
       <ScrollToTop />
-      <ButtomIcon />
       <Footer />
     </>
   );

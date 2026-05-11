@@ -124,9 +124,31 @@ const loginCtrl = async (req, res) => {
   }
 };
 
+// Get all clients (Admin only)
+const getAllClientsCtrl = async (req, res) => {
+  try {
+    const clients = await authModel
+      .find({ role: "client" })
+      .select("-password -token")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      totalClients: clients.length,
+      clients,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching clients",
+    });
+  }
+};
+
 
 module.exports = {
   registerCtrl,
   loginCtrl,
-
+  getAllClientsCtrl,
 };

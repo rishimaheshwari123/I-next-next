@@ -123,11 +123,38 @@ function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link 
-                  href="/webdesign" 
+                  href="/socialmarket" 
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  Web Design
+                  Social Media Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contentmarketing" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Content Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/inboudmarket" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Inbound Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/seomarket" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  SEO Marketing
                 </Link>
               </li>
               <li>
@@ -150,38 +177,20 @@ function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/uiuxdesign" 
+                  href="/ai-services" 
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  UI/UX Design
+                  AI & ML Services
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/seomarket" 
+                  href="/cyber-security" 
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  SEO Marketing
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/socialmarket" 
-                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
-                >
-                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  Social Media Marketing
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/brandidentity" 
-                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
-                >
-                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  Brand Identity
+                  Cyber Security
                 </Link>
               </li>
             </ul>
@@ -241,20 +250,20 @@ function Footer() {
               </li>
               <li>
                 <Link 
+                  href="/support" 
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Customer Support
+                </Link>
+              </li>
+              <li>
+                <Link 
                   href="/investment-policy-advisory" 
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   Investment & Policy Advisory
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/login" 
-                  className="text-gray-400 hover:text-orange-400 hover:pl-2 transition-all duration-300 flex items-center group text-sm"
-                >
-                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  Admin Login
                 </Link>
               </li>
             </ul>

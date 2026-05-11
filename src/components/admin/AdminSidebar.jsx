@@ -10,9 +10,14 @@ import {
   FaBars,
   FaTimes,
   FaUser,
+  FaUsers,
   FaGlobe,
   FaChevronLeft,
   FaChevronRight,
+  FaBullhorn,
+  FaHeadset,
+  FaInbox,
+  FaRobot,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from 'react-toastify';
@@ -40,14 +45,21 @@ const AdminSidebar = () => {
       path: "/admin/dashboard",
       color: "from-blue-500 to-blue-600",
     },
+   
     {
-      name: "Plans",
+      name: "Client Plans",
       icon: FaGlobe,
       path: "/admin/plans",
       color: "from-orange-500 to-orange-600",
     },
     {
-      name: "Hosting",
+      name: "Manage Clients",
+      icon: FaUsers,
+      path: "/admin/clients",
+      color: "from-indigo-500 to-indigo-600",
+    },
+    {
+      name: "Server Hosting",
       icon: FaGlobe,
       path: "/admin/hosting",
       color: "from-green-500 to-green-600",
@@ -58,17 +70,42 @@ const AdminSidebar = () => {
       path: "/admin/contacts",
       color: "from-purple-500 to-purple-600",
     },
-    {
-      name: "Blogs",
-      icon: FaBlog,
-      path: "/admin/blogs",
-      color: "from-pink-500 to-pink-600",
-    },
+   
     {
       name: "Domain Inquiries",
       icon: FaGlobe,
       path: "/admin/domains",
       color: "from-green-500 to-green-600",
+    },
+     {
+      name: "Blogs",
+      icon: FaBlog,
+      path: "/admin/blogs",
+      color: "from-pink-500 to-pink-600",
+    },
+     {
+      name: "Advertisements",
+      icon: FaBullhorn,
+      path: "/admin/advertisements",
+      color: "from-yellow-500 to-yellow-600",
+    },
+    {
+      name: "Support Tickets",
+      icon: FaHeadset,
+      path: "/admin/support",
+      color: "from-purple-500 to-purple-600",
+    },
+     {
+      name: "Contact Inquiries",
+      icon: FaInbox,
+      path: "/admin/inquiries",
+      color: "from-teal-500 to-teal-600",
+    },
+    {
+      name: "AI Chatbot",
+      icon: FaRobot,
+      path: "/admin/chatbot",
+      color: "from-blue-500 to-purple-600",
     },
   ];
 

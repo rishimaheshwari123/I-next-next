@@ -42,6 +42,10 @@ app.use("/api/v1/blog", require("./routes/blogRoute"));
 app.use("/api/v1/domain", require("./routes/domainRoute"));
 app.use("/api/v1/plan", require("./routes/planRoute"));
 app.use("/api/v1/hosting", require("./routes/hostingRoute"));
+app.use('/api/v1/advertisements', require("./routes/advertisement.routes"));
+app.use('/api/v1/support', require("./routes/supportRoute"));
+app.use('/api/v1/inquiry', require("./routes/contactInquiryRoute"));
+app.use('/api/v1/chatbot', require("./routes/chatbotInquiryRoute"));
 
 const PORT = process.env.PORT || 8080;
 

@@ -7,6 +7,9 @@ import Testimonials from "@/components/Testimonials";
 import VideoTestimonials from "@/components/VideoTestimonials";
 import Faq from "@/components/Faq";
 import TrustedCompanies from "@/components/TrustedCompanies";
+import ContactInquiry from "@/components/ContactInquiry";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import AIChatbot from "@/components/AIChatbot";
 // import Help from "@/components/Help";
 
 const HomePage = () => {
@@ -22,6 +25,9 @@ const HomePage = () => {
         <Faq />
         {/* <TrustedCompanies /> */}
       </div>
+      <ContactInquiry />
+      <WhatsAppButton />
+      <AIChatbot />
       {/* <Help /> */}
     </div>
   );
