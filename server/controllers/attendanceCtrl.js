@@ -151,7 +151,9 @@ exports.getMyAttendance = async (req, res) => {
       query.date = { $gte: startDate, $lte: endDate };
     }
 
-    const attendance = await Attendance.find(query).sort({ date: -1 });
+    const attendance = await Attendance.find(query)
+      .populate("employeeId", "name employeeId designation department")
+      .sort({ date: -1 });
 
     // Calculate statistics
     const stats = {
