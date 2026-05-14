@@ -47,6 +47,13 @@ app.use('/api/v1/support', require("./routes/supportRoute"));
 app.use('/api/v1/inquiry', require("./routes/contactInquiryRoute"));
 app.use('/api/v1/chatbot', require("./routes/chatbotInquiryRoute"));
 
+// Employee Management Routes
+app.use("/api/v1/employee", require("./routes/employeeRoute"));
+app.use("/api/v1/attendance", require("./routes/attendanceRoute"));
+app.use("/api/v1/leave", require("./routes/leaveRoute"));
+app.use("/api/v1/task", require("./routes/taskRoute"));
+app.use("/api/v1/task-chat", require("./routes/taskChatRoute"));
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {

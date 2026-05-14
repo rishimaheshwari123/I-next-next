@@ -25,7 +25,7 @@ const authSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["client", "admin"],
+      enum: ["client", "admin", "employee"],
       default: "client",
     },
 

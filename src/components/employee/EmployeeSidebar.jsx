@@ -4,30 +4,21 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   FaTachometerAlt,
-  FaEnvelope,
-  FaBlog,
-  FaSignOutAlt,
-  FaBars,
-  FaTimes,
-  FaUser,
-  FaUsers,
-  FaGlobe,
-  FaChevronLeft,
-  FaChevronRight,
-  FaBullhorn,
-  FaHeadset,
-  FaInbox,
-  FaRobot,
-  FaUserTie,
   FaCalendarCheck,
   FaCalendarAlt,
   FaTasks,
+  FaMoneyBillWave,
+  FaUser,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import Image from "next/image";
-import { toast } from 'react-toastify';
-import { logoutToasts } from '@/config/toast';
+import { toast } from "react-toastify";
 
-const AdminSidebar = () => {
+const EmployeeSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,105 +37,49 @@ const AdminSidebar = () => {
     {
       name: "Dashboard",
       icon: FaTachometerAlt,
-      path: "/admin/dashboard",
+      path: "/employee/dashboard",
       color: "from-blue-500 to-blue-600",
-    },
-   
-    {
-      name: "Client Plans",
-      icon: FaGlobe,
-      path: "/admin/plans",
-      color: "from-orange-500 to-orange-600",
-    },
-    {
-      name: "Manage Clients",
-      icon: FaUsers,
-      path: "/admin/clients",
-      color: "from-indigo-500 to-indigo-600",
-    },
-    {
-      name: "Server Hosting",
-      icon: FaGlobe,
-      path: "/admin/hosting",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      name: "Contacts",
-      icon: FaEnvelope,
-      path: "/admin/contacts",
-      color: "from-purple-500 to-purple-600",
-    },
-   
-    {
-      name: "Domain Inquiries",
-      icon: FaGlobe,
-      path: "/admin/domains",
-      color: "from-green-500 to-green-600",
-    },
-     {
-      name: "Blogs",
-      icon: FaBlog,
-      path: "/admin/blogs",
-      color: "from-pink-500 to-pink-600",
-    },
-     {
-      name: "Advertisements",
-      icon: FaBullhorn,
-      path: "/admin/advertisements",
-      color: "from-yellow-500 to-yellow-600",
-    },
-    {
-      name: "Support Tickets",
-      icon: FaHeadset,
-      path: "/admin/support",
-      color: "from-purple-500 to-purple-600",
-    },
-     {
-      name: "Contact Inquiries",
-      icon: FaInbox,
-      path: "/admin/inquiries",
-      color: "from-teal-500 to-teal-600",
-    },
-    {
-      name: "AI Chatbot",
-      icon: FaRobot,
-      path: "/admin/chatbot",
-      color: "from-blue-500 to-purple-600",
-    },
-    {
-      name: "Employees",
-      icon: FaUserTie,
-      path: "/admin/employees",
-      color: "from-cyan-500 to-cyan-600",
     },
     {
       name: "Attendance",
       icon: FaCalendarCheck,
-      path: "/admin/attendance",
+      path: "/employee/attendance",
       color: "from-emerald-500 to-emerald-600",
     },
     {
       name: "Leave Requests",
       icon: FaCalendarAlt,
-      path: "/admin/leaves",
+      path: "/employee/leaves",
       color: "from-amber-500 to-amber-600",
     },
     {
-      name: "Tasks",
+      name: "My Tasks",
       icon: FaTasks,
-      path: "/admin/tasks",
+      path: "/employee/tasks",
       color: "from-rose-500 to-rose-600",
+    },
+    {
+      name: "Salary",
+      icon: FaMoneyBillWave,
+      path: "/employee/salary",
+      color: "from-green-500 to-green-600",
+    },
+    {
+      name: "Profile",
+      icon: FaUser,
+      path: "/employee/profile",
+      color: "from-purple-500 to-purple-600",
     },
   ];
 
   const handleLogout = () => {
-    const loadingToast = logoutToasts.loading();
+    const loadingToast = toast.loading("Logging out...");
 
     setTimeout(() => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       sessionStorage.removeItem("welcomeShown");
-      
+
       toast.update(loadingToast, {
         render: "Logged out successfully! See you soon! 👋",
         type: "success",
@@ -192,12 +127,20 @@ const AdminSidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="hidden lg:flex absolute -right-3 top-8 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 z-50"
           >
-            {isCollapsed ? <FaChevronRight size={12} /> : <FaChevronLeft size={12} />}
+            {isCollapsed ? (
+              <FaChevronRight size={12} />
+            ) : (
+              <FaChevronLeft size={12} />
+            )}
           </button>
 
           {/* Logo Section */}
           <div className="p-6 border-b border-gray-200">
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
+            <div
+              className={`flex items-center ${
+                isCollapsed ? "justify-center" : "space-x-3"
+              }`}
+            >
               <div className="relative">
                 <Image
                   src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
@@ -213,13 +156,33 @@ const AdminSidebar = () => {
                   <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     I Next ETS
                   </h2>
-                  <p className="text-xs text-gray-500 font-medium">Admin Panel</p>
+                  <p className="text-xs text-gray-500 font-medium">
+                    Employee Portal
+                  </p>
                 </div>
               )}
             </div>
           </div>
 
-         
+          {/* User Info */}
+          {/* {user && !isCollapsed && (
+            <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <FaUser className="text-white text-xl" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-800 truncate">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                </div>
+              </div>
+            </div>
+          )} */}
 
           {/* Collapsed User Avatar */}
           {user && isCollapsed && (
@@ -246,15 +209,17 @@ const AdminSidebar = () => {
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
                     className={`group relative flex items-center ${
-                      isCollapsed ? 'justify-center' : 'space-x-3'
+                      isCollapsed ? "justify-center" : "space-x-3"
                     } px-4 py-3 rounded-xl transition-all duration-200 ${
                       isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
-                    title={isCollapsed ? item.name : ''}
+                    title={isCollapsed ? item.name : ""}
                   >
-                    <Icon className={`text-xl ${isActive ? 'animate-pulse' : ''}`} />
+                    <Icon
+                      className={`text-xl ${isActive ? "animate-pulse" : ""}`}
+                    />
                     {!isCollapsed && (
                       <span className="font-semibold">{item.name}</span>
                     )}
@@ -272,9 +237,9 @@ const AdminSidebar = () => {
             <button
               onClick={handleLogout}
               className={`w-full flex items-center ${
-                isCollapsed ? 'justify-center' : 'justify-center space-x-3'
+                isCollapsed ? "justify-center" : "justify-center space-x-3"
               } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
-              title={isCollapsed ? 'Logout' : ''}
+              title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />
               {!isCollapsed && <span>Logout</span>}
@@ -286,4 +251,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default EmployeeSidebar;

@@ -8,9 +8,10 @@ export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
   const isClientRoute = pathname?.startsWith("/client");
+  const isEmployeeRoute = pathname?.startsWith("/employee");
 
-  if (isAdminRoute || isClientRoute) {
-    // Admin and Client routes: no navbar, footer, scroll to top, or bottom icons
+  if (isAdminRoute || isClientRoute || isEmployeeRoute) {
+    // Admin, Client, and Employee routes: no navbar, footer, scroll to top, or bottom icons
     return <>{children}</>;
   }
 

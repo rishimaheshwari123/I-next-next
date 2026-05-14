@@ -49,7 +49,7 @@ const AdminLogin = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Check if user is admin or client
+        // Check if user is admin, employee, or client
         if (data.user.role === "admin") {
           // Success toast for admin
           toast.update(loadingToast, {
@@ -66,6 +66,23 @@ const AdminLogin = () => {
           // Redirect to admin dashboard
           setTimeout(() => {
             router.push("/admin/dashboard");
+          }, 1000);
+        } else if (data.user.role === "employee") {
+          // Success toast for employee
+          toast.update(loadingToast, {
+            render: `Welcome back, ${data.user.name}! 👋`,
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+
+          // Redirect to employee dashboard
+          setTimeout(() => {
+            router.push("/employee/dashboard");
           }, 1000);
         } else if (data.user.role === "client") {
           // Success toast for client
