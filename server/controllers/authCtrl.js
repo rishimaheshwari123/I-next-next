@@ -103,10 +103,20 @@ const loginCtrl = async (req, res) => {
         httpOnly: true,
       };
 
+      // Prepare user response with permissions
+      const userResponse = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isStaff: user.isStaff || false,
+        permissions: user.permissions || {},
+      };
+
       res.cookie("token", token, options).status(200).json({
         success: true,
         token,
-        user,
+        user: userResponse,
         message: `User Login Success`,
       });
     } else {

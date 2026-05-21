@@ -23,7 +23,7 @@ exports.sendMessage = async (req, res) => {
     let senderName, senderModel, senderId;
 
     if (userRole === "employee") {
-      const employee = await Employee.findOne({ userId });
+      const employee = await Employee.findById(userId); // userId is employee._id from JWT
       if (!employee) {
         return res.status(404).json({
           success: false,
@@ -119,7 +119,7 @@ exports.editMessage = async (req, res) => {
     // Verify sender
     let senderId;
     if (userRole === "employee") {
-      const employee = await Employee.findOne({ userId });
+      const employee = await Employee.findById(userId); // userId is employee._id from JWT
       senderId = employee._id;
     } else {
       senderId = userId;
@@ -171,7 +171,7 @@ exports.deleteMessage = async (req, res) => {
     // Verify sender
     let senderId;
     if (userRole === "employee") {
-      const employee = await Employee.findOne({ userId });
+      const employee = await Employee.findById(userId); // userId is employee._id from JWT
       senderId = employee._id;
     } else {
       senderId = userId;
@@ -242,7 +242,7 @@ exports.getUnreadCount = async (req, res) => {
     let unreadCount;
 
     if (userRole === "employee") {
-      const employee = await Employee.findOne({ userId });
+      const employee = await Employee.findById(userId); // userId is employee._id from JWT
 
       // Get tasks assigned to employee
       const tasks = await Task.find({ assignedTo: employee._id });

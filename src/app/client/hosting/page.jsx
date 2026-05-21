@@ -68,7 +68,7 @@ const ClientHosting = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: user._id,
+          userId: user.id || user._id,
           ...formData,
         }),
       });

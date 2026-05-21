@@ -43,7 +43,7 @@ const MyHosting = () => {
     }
 
     setUser(parsedUser);
-    fetchUserHostings(parsedUser._id);
+    fetchUserHostings(parsedUser.id || parsedUser._id);
   }, [router]);
 
   const fetchUserHostings = async (userId) => {

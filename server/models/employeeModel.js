@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const employeeSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "auth",
-      required: true,
-    },
     employeeId: {
       type: String,
       required: true,
@@ -22,6 +17,15 @@ const employeeSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: "employee",
+      immutable: true, // Cannot be changed after creation
     },
     phone: {
       type: String,

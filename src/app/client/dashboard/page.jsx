@@ -37,7 +37,7 @@ const ClientDashboard = () => {
     setLoading(false);
 
     // Fetch user plans
-    fetchUserPlans(parsedUser._id);
+    fetchUserPlans(parsedUser.id || parsedUser._id);
 
     // Show welcome toast only once per session
     const welcomeShown = sessionStorage.getItem("welcomeShown");

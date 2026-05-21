@@ -92,6 +92,14 @@ exports.getHostingByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
 
+    // Validate userId
+    if (!userId || userId === "undefined" || userId === "null") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
     const hostings = await Hosting.find({ userId }).sort({ createdAt: -1 });
 
     res.status(200).json({

@@ -4,11 +4,11 @@ const Employee = require("../models/employeeModel");
 // Punch In
 exports.punchIn = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { location } = req.body;
 
     // Get employee
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -72,11 +72,11 @@ exports.punchIn = async (req, res) => {
 // Punch Out
 exports.punchOut = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { location } = req.body;
 
     // Get employee
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -131,10 +131,10 @@ exports.punchOut = async (req, res) => {
 // Get my attendance
 exports.getMyAttendance = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { month, year } = req.query;
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -260,9 +260,9 @@ exports.getAllAttendance = async (req, res) => {
 // Get today's attendance status
 exports.getTodayStatus = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,

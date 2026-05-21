@@ -9,6 +9,7 @@ import { loginToasts } from '@/config/toast';
 
 const AdminLogin = () => {
   const router = useRouter();
+  const [userType, setUserType] = useState("client"); // client, admin, employee
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -34,7 +35,12 @@ const AdminLogin = () => {
     const loadingToast = loginToasts.loading();
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/login`, {
+      // Determine API endpoint based on user type
+      const apiEndpoint = userType === "employee" 
+        ? `${BASE_URL}/employee/login`
+        : `${BASE_URL}/auth/login`;
+
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,105 +55,59 @@ const AdminLogin = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Check if user is admin, employee, or client
+        // Check user role and redirect
         if (data.user.role === "admin") {
-          // Success toast for admin
           toast.update(loadingToast, {
             render: `Welcome back Admin, ${data.user.name}! 🎉`,
             type: "success",
             isLoading: false,
             autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
           });
-
-          // Redirect to admin dashboard
-          setTimeout(() => {
-            router.push("/admin/dashboard");
-          }, 1000);
+          setTimeout(() => router.push("/admin/dashboard"), 1000);
         } else if (data.user.role === "employee") {
-          // Success toast for employee
           toast.update(loadingToast, {
             render: `Welcome back, ${data.user.name}! 👋`,
             type: "success",
             isLoading: false,
             autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
           });
-
-          // Redirect to employee dashboard
-          setTimeout(() => {
-            router.push("/employee/dashboard");
-          }, 1000);
+          setTimeout(() => router.push("/employee/dashboard"), 1000);
         } else if (data.user.role === "client") {
-          // Success toast for client
           toast.update(loadingToast, {
             render: `Welcome back, ${data.user.name}! 🎉`,
             type: "success",
             isLoading: false,
             autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
           });
-
-          // Redirect to client dashboard
-          setTimeout(() => {
-            router.push("/client/dashboard");
-          }, 1000);
+          setTimeout(() => router.push("/client/dashboard"), 1000);
         } else {
-          // Error toast for unknown role
           toast.update(loadingToast, {
             render: "Invalid user role! ❌",
             type: "error",
             isLoading: false,
             autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
           });
-          
           setError("Invalid user role.");
           localStorage.removeItem("token");
           localStorage.removeItem("user");
         }
       } else {
-        // Error toast for login failure
         toast.update(loadingToast, {
           render: data.message || "Login failed. Please try again! ❌",
           type: "error",
           isLoading: false,
           autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
         });
-        
         setError(data.message || "Login failed. Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      
-      // Network error toast
       toast.update(loadingToast, {
         render: "Network error. Please check your connection! 🌐",
         type: "error",
         isLoading: false,
         autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
-      
       setError("Network error. Please check your connection.");
     } finally {
       setLoading(false);
@@ -224,6 +184,48 @@ const AdminLogin = () => {
                     className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+
+              {/* User Type Selection */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Login As
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setUserType("client")}
+                    className={`py-3 px-4 rounded-xl font-semibold transition-all ${
+                      userType === "client"
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    Client
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserType("admin")}
+                    className={`py-3 px-4 rounded-xl font-semibold transition-all ${
+                      userType === "admin"
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    Staff
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserType("employee")}
+                    className={`py-3 px-4 rounded-xl font-semibold transition-all ${
+                      userType === "employee"
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    Employee
                   </button>
                 </div>
               </div>

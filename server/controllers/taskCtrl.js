@@ -90,10 +90,10 @@ exports.getAllTasks = async (req, res) => {
 // Get my tasks (Employee)
 exports.getMyTasks = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { status, priority } = req.query;
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -170,9 +170,9 @@ exports.updateTaskStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     const task = await Task.findById(id);
 
     if (!task) {

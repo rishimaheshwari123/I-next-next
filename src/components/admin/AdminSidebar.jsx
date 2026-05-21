@@ -22,6 +22,10 @@ import {
   FaCalendarCheck,
   FaCalendarAlt,
   FaTasks,
+  FaChartLine,
+  FaShoppingCart,
+  FaClipboardList,
+  FaDollarSign,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from 'react-toastify';
@@ -48,31 +52,78 @@ const AdminSidebar = () => {
       icon: FaTachometerAlt,
       path: "/admin/dashboard",
       color: "from-blue-500 to-blue-600",
+      permission: "dashboard",
     },
-   
+    {
+      name: "Lead Management",
+      icon: FaChartLine,
+      path: "/admin/leads",
+      color: "from-indigo-500 to-purple-600",
+      permission: "leadManagement",
+    },
+    {
+      name: "Company Revenue",
+      icon: FaDollarSign,
+      path: "/admin/revenue",
+      color: "from-green-500 to-emerald-600",
+      permission: "dashboard",
+    },
+    {
+      name: "Staff Management",
+      icon: FaUserTie,
+      path: "/admin/staff",
+      color: "from-violet-500 to-violet-600",
+      permission: "staffManagement",
+    },
+    {
+      name: "Our Projects",
+      icon: FaTasks,
+      path: "/admin/projects",
+      color: "from-teal-500 to-teal-600",
+      permission: "dashboard",
+    },
+    {
+      name: "Services Managment",
+      icon: FaShoppingCart,
+      path: "/admin/services",
+      color: "from-cyan-500 to-blue-600",
+      permission: "dashboard",
+    },
+    {
+      name: "Service Inquiries",
+      icon: FaClipboardList,
+      path: "/admin/service-inquiries",
+      color: "from-lime-500 to-green-600",
+      permission: "dashboard",
+    },
+   {
+      name: "Manage Clients",
+      icon: FaUsers,
+      path: "/admin/clients",
+      color: "from-indigo-500 to-indigo-600",
+      permission: "manageClients",
+    },
     {
       name: "Client Plans",
       icon: FaGlobe,
       path: "/admin/plans",
       color: "from-orange-500 to-orange-600",
+      permission: "clientPlans",
     },
-    {
-      name: "Manage Clients",
-      icon: FaUsers,
-      path: "/admin/clients",
-      color: "from-indigo-500 to-indigo-600",
-    },
+    
     {
       name: "Server Hosting",
       icon: FaGlobe,
       path: "/admin/hosting",
       color: "from-green-500 to-green-600",
+      permission: "serverHosting",
     },
     {
       name: "Contacts",
       icon: FaEnvelope,
       path: "/admin/contacts",
       color: "from-purple-500 to-purple-600",
+      permission: "contacts",
     },
    
     {
@@ -80,62 +131,84 @@ const AdminSidebar = () => {
       icon: FaGlobe,
       path: "/admin/domains",
       color: "from-green-500 to-green-600",
+      permission: "domainInquiries",
     },
      {
       name: "Blogs",
       icon: FaBlog,
       path: "/admin/blogs",
       color: "from-pink-500 to-pink-600",
+      permission: "blogs",
     },
      {
       name: "Advertisements",
       icon: FaBullhorn,
       path: "/admin/advertisements",
       color: "from-yellow-500 to-yellow-600",
+      permission: "advertisements",
     },
     {
       name: "Support Tickets",
       icon: FaHeadset,
       path: "/admin/support",
       color: "from-purple-500 to-purple-600",
+      permission: "supportTickets",
     },
      {
       name: "Contact Inquiries",
       icon: FaInbox,
       path: "/admin/inquiries",
       color: "from-teal-500 to-teal-600",
+      permission: "contactInquiries",
     },
     {
       name: "AI Chatbot",
       icon: FaRobot,
       path: "/admin/chatbot",
       color: "from-blue-500 to-purple-600",
+      permission: "aiChatbot",
     },
     {
       name: "Employees",
       icon: FaUserTie,
       path: "/admin/employees",
       color: "from-cyan-500 to-cyan-600",
+      permission: "employees",
     },
     {
       name: "Attendance",
       icon: FaCalendarCheck,
       path: "/admin/attendance",
       color: "from-emerald-500 to-emerald-600",
+      permission: "attendance",
     },
     {
       name: "Leave Requests",
       icon: FaCalendarAlt,
       path: "/admin/leaves",
       color: "from-amber-500 to-amber-600",
+      permission: "leaveRequests",
     },
     {
       name: "Tasks",
       icon: FaTasks,
       path: "/admin/tasks",
       color: "from-rose-500 to-rose-600",
+      permission: "tasks",
     },
+    
   ];
+
+  // Filter menu items based on user permissions
+  const hasPermission = (permission) => {
+    // Super admin (isStaff = false) has all access
+    if (!user?.isStaff) return true;
+    
+    // Staff members need specific permission
+    return user?.permissions?.[permission] === true;
+  };
+
+  const visibleMenuItems = menuItems.filter((item) => hasPermission(item.permission));
 
   const handleLogout = () => {
     const loadingToast = logoutToasts.loading();
@@ -236,7 +309,7 @@ const AdminSidebar = () => {
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 overflow-y-auto">
             <div className="space-y-2">
-              {menuItems.map((item) => {
+              {visibleMenuItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.path;
 

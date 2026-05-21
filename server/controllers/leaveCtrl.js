@@ -5,11 +5,11 @@ const Attendance = require("../models/attendanceModel");
 // Apply for leave
 exports.applyLeave = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { leaveType, startDate, endDate, reason, attachments } = req.body;
 
     // Get employee
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -61,10 +61,10 @@ exports.applyLeave = async (req, res) => {
 // Get my leaves
 exports.getMyLeaves = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
     const { status } = req.query;
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -242,9 +242,9 @@ exports.rejectLeave = async (req, res) => {
 exports.cancelLeave = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const employeeId = req.user.id; // This is employee._id from JWT
 
-    const employee = await Employee.findOne({ userId });
+    const employee = await Employee.findById(employeeId);
     const leave = await Leave.findById(id);
 
     if (!leave) {

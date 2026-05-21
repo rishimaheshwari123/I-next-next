@@ -15,6 +15,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaCog,
+  FaShoppingCart,
+  FaClipboardList,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from 'react-toastify';
@@ -40,6 +42,25 @@ const ClientSidebar = () => {
       icon: FaTachometerAlt,
       path: "/client/dashboard",
       color: "from-blue-500 to-blue-600",
+    },
+    {
+      name: "My Projects",
+      icon: FaProjectDiagram,
+      path: "/client/projects",
+      color: "from-teal-500 to-teal-600",
+    },
+    
+    {
+      name: "Our Services",
+      icon: FaShoppingCart,
+      path: "/client/services",
+      color: "from-cyan-500 to-blue-600",
+    },
+    {
+      name: "My Service Inquiries",
+      icon: FaClipboardList,
+      path: "/client/my-inquiries",
+      color: "from-lime-500 to-green-600",
     },
     {
       name: "My Plans",

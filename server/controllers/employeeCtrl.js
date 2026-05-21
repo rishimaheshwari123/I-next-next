@@ -1,6 +1,82 @@
 const Employee = require("../models/employeeModel");
-const Auth = require("../models/authModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+// Employee Login
+exports.employeeLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide email and password",
+      });
+    }
+
+    // Find employee by email
+    const employee = await Employee.findOne({ email });
+    if (!employee) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Check if employee is active
+    if (!employee.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been deactivated. Please contact admin.",
+      });
+    }
+
+    // Check password
+    const isPasswordValid = await bcrypt.compare(password, employee.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: employee._id,
+        email: employee.email,
+        role: "employee",
+        employeeId: employee._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // Return success response
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: employee._id,
+        name: employee.name,
+        email: employee.email,
+        role: "employee",
+        employeeId: employee.employeeId,
+        designation: employee.designation,
+        department: employee.department,
+      },
+    });
+  } catch (error) {
+    console.error("Employee login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during login",
+      error: error.message,
+    });
+  }
+};
 
 // Generate unique employee ID
 const generateEmployeeId = async () => {
@@ -103,9 +179,9 @@ exports.registerEmployee = async (req, res) => {
       });
     }
 
-    // Check if email already exists
-    const existingAuth = await Auth.findOne({ email });
-    if (existingAuth) {
+    // Check if email already exists in Employee table
+    const existingEmployee = await Employee.findOne({ email });
+    if (existingEmployee) {
       return res.status(400).json({
         success: false,
         message: "Email already registered",
@@ -135,24 +211,15 @@ exports.registerEmployee = async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create auth entry
-    const authUser = await Auth.create({
-      name,
-      email,
-      phone,
-      password: hashedPassword,
-      role: "employee",
-    });
-
     // Generate employee ID
     const employeeId = await generateEmployeeId();
 
-    // Create employee entry
+    // Create employee entry (no Auth user needed)
     const employee = await Employee.create({
-      userId: authUser._id,
       employeeId,
       name,
       email,
+      password: hashedPassword,
       phone,
       designation,
       department,
@@ -217,7 +284,6 @@ exports.getAllEmployees = async (req, res) => {
     }
 
     const employees = await Employee.find(query)
-      .populate("userId", "name email role")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -240,10 +306,7 @@ exports.getEmployeeById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const employee = await Employee.findById(id).populate(
-      "userId",
-      "name email role"
-    );
+    const employee = await Employee.findById(id);
 
     if (!employee) {
       return res.status(404).json({
@@ -269,12 +332,9 @@ exports.getEmployeeById = async (req, res) => {
 // Get employee profile (for logged-in employee)
 exports.getMyProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // From auth middleware
+    const employeeId = req.user.id; // From auth middleware - this is employee._id
 
-    const employee = await Employee.findOne({ userId }).populate(
-      "userId",
-      "name email role"
-    );
+    const employee = await Employee.findById(employeeId);
 
     if (!employee) {
       return res.status(404).json({
@@ -303,9 +363,23 @@ exports.updateEmployee = async (req, res) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    // Don't allow updating userId or employeeId
-    delete updateData.userId;
+    // Don't allow updating employeeId and password through this endpoint
     delete updateData.employeeId;
+    delete updateData.password;
+
+    // If updating email, check uniqueness
+    if (updateData.email) {
+      const existingEmail = await Employee.findOne({
+        email: updateData.email,
+        _id: { $ne: id },
+      });
+      if (existingEmail) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already registered with another employee",
+        });
+      }
+    }
 
     // If updating PAN, validate and check uniqueness
     if (updateData.panNumber) {
@@ -375,14 +449,6 @@ exports.updateEmployee = async (req, res) => {
       });
     }
 
-    // Update auth table if email or name changed
-    if (updateData.email || updateData.name) {
-      await Auth.findByIdAndUpdate(employee.userId, {
-        email: updateData.email || employee.email,
-        name: updateData.name || employee.name,
-      });
-    }
-
     res.status(200).json({
       success: true,
       message: "Employee updated successfully",
@@ -434,7 +500,7 @@ exports.deleteEmployee = async (req, res) => {
 // Update own profile (for logged-in employee)
 exports.updateMyProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // From auth middleware
+    const employeeId = req.user.id; // From auth middleware - this is employee._id
     let { phone, address, emergencyContact } = req.body;
 
     // Parse JSON strings if they come from FormData
@@ -474,8 +540,8 @@ exports.updateMyProfile = async (req, res) => {
       updateData.profileImage = uploadedImage.secure_url;
     }
 
-    const employee = await Employee.findOneAndUpdate(
-      { userId },
+    const employee = await Employee.findByIdAndUpdate(
+      employeeId,
       updateData,
       {
         new: true,
@@ -488,11 +554,6 @@ exports.updateMyProfile = async (req, res) => {
         success: false,
         message: "Employee profile not found",
       });
-    }
-
-    // Update phone in auth table if changed
-    if (phone) {
-      await Auth.findByIdAndUpdate(userId, { phone });
     }
 
     res.status(200).json({

@@ -53,6 +53,21 @@ app.use("/api/v1/attendance", require("./routes/attendanceRoute"));
 app.use("/api/v1/leave", require("./routes/leaveRoute"));
 app.use("/api/v1/task", require("./routes/taskRoute"));
 app.use("/api/v1/task-chat", require("./routes/taskChatRoute"));
+app.use("/api/v1/lead", require("./routes/leadRoutes"));
+app.use("/api/v1/staff", require("./routes/staffRoutes"));
+
+// Project Management Routes
+app.use("/api/v1/project", require("./routes/projectRoutes"));
+app.use("/api/v1/project-chat", require("./routes/projectChatRoutes"));
+
+// Service Management Routes
+app.use("/api/v1/service", require("./routes/serviceRoutes"));
+
+// Revenue Management Routes
+app.use("/api/v1/revenue", require("./routes/revenueRoute"));
+
+// Dashboard Routes
+app.use("/api/v1/dashboard", require("./routes/dashboardRoute"));
 
 const PORT = process.env.PORT || 8080;
 

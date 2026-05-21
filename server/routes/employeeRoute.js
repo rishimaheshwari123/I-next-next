@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
+  employeeLogin,
   registerEmployee,
   getAllEmployees,
   getEmployeeById,
@@ -11,6 +12,9 @@ const {
   getEmployeeStats,
 } = require("../controllers/employeeCtrl");
 const { auth, isAdmin, isEmployee } = require("../middleware/auth");
+
+// Public routes
+router.post("/login", employeeLogin);
 
 // Admin routes
 router.post("/register", auth, isAdmin, registerEmployee);

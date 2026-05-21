@@ -51,6 +51,83 @@ export const EMPLOYEE_API = {
   MARK_AS_READ: (chatId) => `${BASE_URL}/task-chat/message/${chatId}/read`,
   MARK_ALL_READ: (taskId) => `${BASE_URL}/task-chat/${taskId}/read-all`,
   UNREAD_COUNT: `${BASE_URL}/task-chat/unread-count`,
+
+  // Lead Management
+  CREATE_LEAD: `${BASE_URL}/lead`,
+  GET_ALL_LEADS: `${BASE_URL}/lead/all`,
+  GET_LEAD_STATS: `${BASE_URL}/lead/stats`,
+  GET_FOLLOW_UPS: `${BASE_URL}/lead/follow-ups`,
+  GET_LEAD: (id) => `${BASE_URL}/lead/${id}`,
+  UPDATE_LEAD: (id) => `${BASE_URL}/lead/${id}`,
+  DELETE_LEAD: (id) => `${BASE_URL}/lead/${id}`,
+  UPDATE_LEAD_STATUS: (id) => `${BASE_URL}/lead/${id}/status`,
+  ASSIGN_LEAD: (id) => `${BASE_URL}/lead/${id}/assign`,
+  ADD_ADMIN_NOTES: (id) => `${BASE_URL}/lead/${id}/admin-notes`,
+  
+  // Employee Lead Management
+  MY_LEADS: `${BASE_URL}/lead/my-leads`,
+  UPDATE_MY_LEAD_STATUS: (id) => `${BASE_URL}/lead/${id}/my-status`,
+  ADD_LEAD_NOTES: (id) => `${BASE_URL}/lead/${id}/notes`,
+
+  // Staff Management
+  CREATE_STAFF: `${BASE_URL}/staff`,
+  GET_ALL_STAFF: `${BASE_URL}/staff`,
+  GET_STAFF_STATS: `${BASE_URL}/staff/stats`,
+  GET_STAFF: (id) => `${BASE_URL}/staff/${id}`,
+  UPDATE_STAFF: (id) => `${BASE_URL}/staff/${id}`,
+  UPDATE_STAFF_PERMISSIONS: (id) => `${BASE_URL}/staff/${id}/permissions`,
+  DELETE_STAFF: (id) => `${BASE_URL}/staff/${id}`,
+
+  // Project Management
+  CREATE_PROJECT: `${BASE_URL}/project`,
+  GET_ALL_PROJECTS: `${BASE_URL}/project/all`,
+  GET_PROJECT_STATS: `${BASE_URL}/project/stats`,
+  GET_PROJECT: (id) => `${BASE_URL}/project/${id}`,
+  UPDATE_PROJECT: (id) => `${BASE_URL}/project/${id}`,
+  DELETE_PROJECT: (id) => `${BASE_URL}/project/${id}`,
+  ASSIGN_EMPLOYEES_PROJECT: (id) => `${BASE_URL}/project/${id}/assign`,
+  UPDATE_PROJECT_PROGRESS: (id) => `${BASE_URL}/project/${id}/progress`,
+  GET_CLIENT_PROJECTS: `${BASE_URL}/project/client/my-projects`,
+  GET_EMPLOYEE_PROJECTS: `${BASE_URL}/project/employee/my-projects`,
+  GET_PROJECTS_BY_CLIENT_ID: (clientId) => `${BASE_URL}/project/client/${clientId}`, // New endpoint
+
+  // Project Chat
+  SEND_PROJECT_MESSAGE: (projectId) => `${BASE_URL}/project-chat/${projectId}/message`,
+  GET_PROJECT_MESSAGES: (projectId) => `${BASE_URL}/project-chat/${projectId}/messages`,
+  MARK_MESSAGE_READ: (messageId) => `${BASE_URL}/project-chat/message/${messageId}/read`,
+  MARK_ALL_READ_PROJECT: (projectId) => `${BASE_URL}/project-chat/${projectId}/read-all`,
+  GET_UNREAD_COUNT_PROJECT: `${BASE_URL}/project-chat/unread-count`,
+  GET_UNREAD_COUNT_BY_PROJECT: (projectId) => `${BASE_URL}/project-chat/${projectId}/unread-count`,
+
+  // Service Management
+  CREATE_SERVICE: `${BASE_URL}/service`,
+  GET_ALL_SERVICES: `${BASE_URL}/service/all`,
+  GET_SERVICE: (id) => `${BASE_URL}/service/${id}`,
+  UPDATE_SERVICE: (id) => `${BASE_URL}/service/${id}`,
+  DELETE_SERVICE: (id) => `${BASE_URL}/service/${id}`,
+  GET_SERVICE_STATS: `${BASE_URL}/service/stats`,
+
+  // Service Variants
+  CREATE_VARIANT: (serviceId) => `${BASE_URL}/service/${serviceId}/variant`,
+  GET_VARIANTS: (serviceId) => `${BASE_URL}/service/${serviceId}/variants`,
+  GET_VARIANT: (id) => `${BASE_URL}/service/variant/${id}`,
+  UPDATE_VARIANT: (id) => `${BASE_URL}/service/variant/${id}`,
+  DELETE_VARIANT: (id) => `${BASE_URL}/service/variant/${id}`,
+
+  // Service Inquiries
+  CREATE_INQUIRY: `${BASE_URL}/service/inquiry/create`,
+  GET_ALL_INQUIRIES: `${BASE_URL}/service/inquiry/all`,
+  GET_MY_INQUIRIES: `${BASE_URL}/service/inquiry/my-inquiries`,
+  GET_INQUIRY: (id) => `${BASE_URL}/service/inquiry/${id}`,
+  UPDATE_INQUIRY_STATUS: (id) => `${BASE_URL}/service/inquiry/${id}/status`,
+  GET_INQUIRY_STATS: `${BASE_URL}/service/inquiry/stats`,
+
+  // Revenue Management
+  GET_REVENUE_STATS: `${BASE_URL}/revenue/stats`,
+  GET_REVENUE_DETAILS: `${BASE_URL}/revenue/details`,
+
+  // Dashboard
+  GET_DASHBOARD_STATS: `${BASE_URL}/dashboard/stats`,
 };
 
 export { BASE_URL };

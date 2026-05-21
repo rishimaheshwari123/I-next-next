@@ -42,7 +42,7 @@ const ClientPlans = () => {
     }
 
     setUser(parsedUser);
-    fetchUserPlans(parsedUser._id);
+    fetchUserPlans(parsedUser.id || parsedUser._id);
   }, [router]);
 
   const fetchUserPlans = async (userId) => {

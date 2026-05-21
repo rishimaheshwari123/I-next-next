@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Auth = require("../models/authModel");
+const Employee = require("../models/employeeModel");
 
 // Verify JWT token
 exports.auth = async (req, res, next) => {
@@ -20,23 +21,65 @@ exports.auth = async (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Get user from database
-    const user = await Auth.findById(decoded.id);
+    // Check if user is employee or admin/client based on role in token
+    if (decoded.role === "employee") {
+      // Get employee from database
+      const employee = await Employee.findById(decoded.id);
 
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token. User not found.",
-      });
+      if (!employee) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid token. Employee not found.",
+        });
+      }
+
+      // Check if employee is active
+      if (!employee.isActive) {
+        return res.status(403).json({
+          success: false,
+          message: "Your account has been deactivated.",
+        });
+      }
+
+      // Attach employee to request
+      req.user = {
+        id: employee._id,
+        email: employee.email,
+        role: employee.role || "employee",
+        name: employee.name,
+        employeeId: employee.employeeId,
+        designation: employee.designation,
+        department: employee.department,
+      };
+    } else {
+      // Get admin/client from Auth database
+      const user = await Auth.findById(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid token. User not found.",
+        });
+      }
+
+      // Check if user is active
+      if (!user.isActive) {
+        return res.status(403).json({
+          success: false,
+          message: "Your account has been deactivated.",
+        });
+      }
+
+      // Attach user to request
+      req.user = {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        isStaff: user.isStaff || false,
+        permissions: user.permissions || {},
+      };
     }
-
-    // Attach user to request
-    req.user = {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-      name: user.name,
-    };
 
     next();
   } catch (error) {
