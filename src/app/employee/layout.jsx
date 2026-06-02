@@ -38,9 +38,9 @@ export default function EmployeeLayout({ children }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <EmployeeSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <main className={`flex-1 transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
+      <main className={`transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
         <div className="p-4 md:p-8">
           <div className="">{children}</div>
         </div>
