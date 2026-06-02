@@ -12,7 +12,7 @@ export default function EmployeeProjectsPage() {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
   const [showChatModal, setShowChatModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -24,7 +24,7 @@ export default function EmployeeProjectsPage() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, filterStatus, projects]);
+  }, [searchTerm, activeTab, projects]);
 
   const fetchProjects = async () => {
     try {
@@ -57,8 +57,14 @@ export default function EmployeeProjectsPage() {
       );
     }
 
-    if (filterStatus) {
-      filtered = filtered.filter((project) => project.status === filterStatus);
+    if (activeTab === "ongoing") {
+      filtered = filtered.filter((project) =>
+        ["In Progress", "Testing", "Planning"].includes(project.status)
+      );
+    } else if (activeTab === "completed") {
+      filtered = filtered.filter((project) => project.status === "Completed");
+    } else if (activeTab === "pending") {
+      filtered = filtered.filter((project) => project.status === "On Hold");
     }
 
     setFilteredProjects(filtered);
@@ -134,51 +140,84 @@ export default function EmployeeProjectsPage() {
             <h3 className="text-sm font-semibold opacity-90">Total Projects</h3>
             <p className="text-3xl font-bold mt-2">{projects.length}</p>
           </div>
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-sm font-semibold opacity-90">In Progress</h3>
+          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-xl shadow-lg">
+            <h3 className="text-sm font-semibold opacity-90">Ongoing / Active</h3>
             <p className="text-3xl font-bold mt-2">
-              {projects.filter((p) => p.status === "In Progress").length}
+              {projects.filter((p) => ["In Progress", "Testing", "Planning"].includes(p.status)).length}
             </p>
           </div>
-          <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-6 rounded-xl shadow-lg">
             <h3 className="text-sm font-semibold opacity-90">Completed</h3>
             <p className="text-3xl font-bold mt-2">
               {projects.filter((p) => p.status === "Completed").length}
             </p>
           </div>
-          <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-sm font-semibold opacity-90">Testing</h3>
+          <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-xl shadow-lg">
+            <h3 className="text-sm font-semibold opacity-90">Pending / On Hold</h3>
             <p className="text-3xl font-bold mt-2">
-              {projects.filter((p) => p.status === "Testing").length}
+              {projects.filter((p) => p.status === "On Hold").length}
             </p>
           </div>
         </div>
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="relative">
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+            {/* Status Tab Pills */}
+            <div className="flex flex-wrap gap-2 w-full md:w-auto">
+              <button
+                onClick={() => setActiveTab("all")}
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "all"
+                    ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-100"
+                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                }`}
+              >
+                All ({projects.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("ongoing")}
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "ongoing"
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-100"
+                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                }`}
+              >
+                Ongoing ({projects.filter((p) => ["In Progress", "Testing", "Planning"].includes(p.status)).length})
+              </button>
+              <button
+                onClick={() => setActiveTab("completed")}
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "completed"
+                    ? "bg-green-600 text-white border-green-600 shadow-md shadow-green-100"
+                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                }`}
+              >
+                Completed ({projects.filter((p) => p.status === "Completed").length})
+              </button>
+              <button
+                onClick={() => setActiveTab("pending")}
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "pending"
+                    ? "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-100"
+                    : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
+                }`}
+              >
+                Pending ({projects.filter((p) => p.status === "On Hold").length})
+              </button>
+            </div>
+
+            {/* Search Box */}
+            <div className="relative w-full md:max-w-md">
               <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-12 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
               />
             </div>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Status</option>
-              <option value="Planning">Planning</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Testing">Testing</option>
-              <option value="Completed">Completed</option>
-              <option value="On Hold">On Hold</option>
-            </select>
           </div>
         </div>
 
@@ -190,7 +229,7 @@ export default function EmployeeProjectsPage() {
               No Projects Found
             </h3>
             <p className="text-gray-600">
-              {searchTerm || filterStatus
+              {searchTerm || activeTab !== "all"
                 ? "No projects match your filters"
                 : "No projects assigned to you yet"}
             </p>

@@ -1,11 +1,12 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import EmployeeSidebar from "@/components/employee/EmployeeSidebar";
 
 export default function EmployeeLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     // Skip auth check for login page
@@ -38,10 +39,10 @@ export default function EmployeeLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <EmployeeSidebar />
-      <main className="flex-1 lg:ml-72 transition-all duration-300">
+      <EmployeeSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <main className={`flex-1 transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
         <div className="p-4 md:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="">{children}</div>
         </div>
       </main>
     </div>

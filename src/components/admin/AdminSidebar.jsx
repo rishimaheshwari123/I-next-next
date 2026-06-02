@@ -28,14 +28,23 @@ import {
   FaDollarSign,
 } from "react-icons/fa";
 import Image from "next/image";
-import { toast } from 'react-toastify';
-import { logoutToasts } from '@/config/toast';
+import { toast } from "react-toastify";
+import { logoutToasts } from "@/config/toast";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({
+  isCollapsed: propCollapsed,
+  setIsCollapsed: propSetCollapsed,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+
+  const isCollapsed =
+    propCollapsed !== undefined ? propCollapsed : internalCollapsed;
+  const setIsCollapsed =
+    propSetCollapsed !== undefined ? propSetCollapsed : setInternalCollapsed;
+
   const [user, setUser] = useState(null);
 
   // Get user data from localStorage
@@ -96,7 +105,14 @@ const AdminSidebar = () => {
       color: "from-lime-500 to-green-600",
       permission: "dashboard",
     },
-   {
+    {
+      name: "Employees Management",
+      icon: FaUserTie,
+      path: "/admin/employees",
+      color: "from-cyan-500 to-cyan-600",
+      permission: "employees",
+    },
+    {
       name: "Manage Clients",
       icon: FaUsers,
       path: "/admin/clients",
@@ -110,7 +126,7 @@ const AdminSidebar = () => {
       color: "from-orange-500 to-orange-600",
       permission: "clientPlans",
     },
-    
+
     {
       name: "Server Hosting",
       icon: FaGlobe,
@@ -125,7 +141,7 @@ const AdminSidebar = () => {
       color: "from-purple-500 to-purple-600",
       permission: "contacts",
     },
-   
+
     {
       name: "Domain Inquiries",
       icon: FaGlobe,
@@ -133,14 +149,14 @@ const AdminSidebar = () => {
       color: "from-green-500 to-green-600",
       permission: "domainInquiries",
     },
-     {
+    {
       name: "Blogs",
       icon: FaBlog,
       path: "/admin/blogs",
       color: "from-pink-500 to-pink-600",
       permission: "blogs",
     },
-     {
+    {
       name: "Advertisements",
       icon: FaBullhorn,
       path: "/admin/advertisements",
@@ -154,7 +170,7 @@ const AdminSidebar = () => {
       color: "from-purple-500 to-purple-600",
       permission: "supportTickets",
     },
-     {
+    {
       name: "Contact Inquiries",
       icon: FaInbox,
       path: "/admin/inquiries",
@@ -196,19 +212,20 @@ const AdminSidebar = () => {
       color: "from-rose-500 to-rose-600",
       permission: "tasks",
     },
-    
   ];
 
   // Filter menu items based on user permissions
   const hasPermission = (permission) => {
     // Super admin (isStaff = false) has all access
     if (!user?.isStaff) return true;
-    
+
     // Staff members need specific permission
     return user?.permissions?.[permission] === true;
   };
 
-  const visibleMenuItems = menuItems.filter((item) => hasPermission(item.permission));
+  const visibleMenuItems = menuItems.filter((item) =>
+    hasPermission(item.permission),
+  );
 
   const handleLogout = () => {
     const loadingToast = logoutToasts.loading();
@@ -217,7 +234,7 @@ const AdminSidebar = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       sessionStorage.removeItem("welcomeShown");
-      
+
       toast.update(loadingToast, {
         render: "Logged out successfully! See you soon! 👋",
         type: "success",
@@ -265,12 +282,18 @@ const AdminSidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="hidden lg:flex absolute -right-3 top-8 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 z-50"
           >
-            {isCollapsed ? <FaChevronRight size={12} /> : <FaChevronLeft size={12} />}
+            {isCollapsed ? (
+              <FaChevronRight size={12} />
+            ) : (
+              <FaChevronLeft size={12} />
+            )}
           </button>
 
           {/* Logo Section */}
           <div className="p-6 border-b border-gray-200">
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
+            <div
+              className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-3"}`}
+            >
               <div className="relative">
                 <Image
                   src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
@@ -286,25 +309,13 @@ const AdminSidebar = () => {
                   <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     I Next ETS
                   </h2>
-                  <p className="text-xs text-gray-500 font-medium">Admin Panel</p>
+                  <p className="text-xs text-gray-500 font-medium">
+                    Admin Panel
+                  </p>
                 </div>
               )}
             </div>
           </div>
-
-         
-
-          {/* Collapsed User Avatar */}
-          {user && isCollapsed && (
-            <div className="p-4 border-b border-gray-200 flex justify-center">
-              <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <FaUser className="text-white text-lg" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-              </div>
-            </div>
-          )}
 
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 overflow-y-auto">
@@ -319,15 +330,17 @@ const AdminSidebar = () => {
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
                     className={`group relative flex items-center ${
-                      isCollapsed ? 'justify-center' : 'space-x-3'
+                      isCollapsed ? "justify-center" : "space-x-3"
                     } px-4 py-3 rounded-xl transition-all duration-200 ${
                       isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
-                    title={isCollapsed ? item.name : ''}
+                    title={isCollapsed ? item.name : ""}
                   >
-                    <Icon className={`text-xl ${isActive ? 'animate-pulse' : ''}`} />
+                    <Icon
+                      className={`text-xl ${isActive ? "animate-pulse" : ""}`}
+                    />
                     {!isCollapsed && (
                       <span className="font-semibold">{item.name}</span>
                     )}
@@ -345,9 +358,9 @@ const AdminSidebar = () => {
             <button
               onClick={handleLogout}
               className={`w-full flex items-center ${
-                isCollapsed ? 'justify-center' : 'justify-center space-x-3'
+                isCollapsed ? "justify-center" : "justify-center space-x-3"
               } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
-              title={isCollapsed ? 'Logout' : ''}
+              title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />
               {!isCollapsed && <span>Logout</span>}

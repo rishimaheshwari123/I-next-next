@@ -39,10 +39,10 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <AdminSidebar />
-      <main className="flex-1 lg:ml-72 transition-all duration-300">
+      <AdminSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <main className={`flex-1 transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}>
         <div className="p-4 md:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="">{children}</div>
         </div>
       </main>
     </div>

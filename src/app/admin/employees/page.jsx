@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { EMPLOYEE_API } from "@/config/api";
 import { toast } from "react-toastify";
@@ -10,11 +11,13 @@ import {
   FaTrash,
   FaEye,
   FaSearch,
+  FaBriefcase,
 } from "react-icons/fa";
 import EmployeeModal from "@/components/admin/EmployeeModal";
 import Swal from "sweetalert2";
 
 export default function EmployeesPage() {
+  const router = useRouter();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -407,17 +410,24 @@ export default function EmployeesPage() {
                 </td>
                 <td className="px-6 py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      employee.isActive
+                    className={`px-3 py-1 rounded-full text-sm ${employee.isActive
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
-                    }`}
+                      }`}
                   >
                     {employee.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center items-center gap-2">
+
+                    <button
+                      onClick={() => router.push(`/admin/employees/${employee._id}/projects`)}
+                      className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
+                      title="See Projects"
+                    >
+                      <FaBriefcase /> See Project
+                    </button>
                     <button
                       onClick={() => openModal("view", employee)}
                       className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"

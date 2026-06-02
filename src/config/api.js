@@ -63,7 +63,7 @@ export const EMPLOYEE_API = {
   UPDATE_LEAD_STATUS: (id) => `${BASE_URL}/lead/${id}/status`,
   ASSIGN_LEAD: (id) => `${BASE_URL}/lead/${id}/assign`,
   ADD_ADMIN_NOTES: (id) => `${BASE_URL}/lead/${id}/admin-notes`,
-  
+
   // Employee Lead Management
   MY_LEADS: `${BASE_URL}/lead/my-leads`,
   UPDATE_MY_LEAD_STATUS: (id) => `${BASE_URL}/lead/${id}/my-status`,
