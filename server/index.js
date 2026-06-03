@@ -57,6 +57,8 @@ app.use("/api/v1/staff", require("./routes/staffRoutes"));
 // Project Management Routes
 app.use("/api/v1/project", require("./routes/projectRoutes"));
 app.use("/api/v1/project-chat", require("./routes/projectChatRoutes"));
+app.use("/api/v1/project-tasks", require("./routes/projectTaskRoutes"));
+app.use("/api/v1/category", require("./routes/categoryRoutes"));
 
 // Service Management Routes
 app.use("/api/v1/service", require("./routes/serviceRoutes"));

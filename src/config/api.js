@@ -33,15 +33,21 @@ export const EMPLOYEE_API = {
   CANCEL_LEAVE: (id) => `${BASE_URL}/leave/cancel/${id}`,
   LEAVE_STATS: `${BASE_URL}/leave/stats`,
 
-  // Task
-  CREATE_TASK: `${BASE_URL}/task/create`,
-  ALL_TASKS: `${BASE_URL}/task/all`,
-  MY_TASKS: `${BASE_URL}/task/my-tasks`,
-  GET_TASK: (id) => `${BASE_URL}/task/${id}`,
-  UPDATE_TASK: (id) => `${BASE_URL}/task/${id}`,
-  UPDATE_TASK_STATUS: (id) => `${BASE_URL}/task/update-status/${id}`,
-  DELETE_TASK: (id) => `${BASE_URL}/task/${id}`,
-  TASK_STATS: `${BASE_URL}/task/stats`,
+  // Project Tasks
+  CREATE_PROJECT_TASK: `${BASE_URL}/project-tasks`,
+  GET_PROJECT_TASKS: (projectId) => `${BASE_URL}/project-tasks/project/${projectId}`,
+  UPDATE_PROJECT_TASK_STATUS: (taskId) => `${BASE_URL}/project-tasks/${taskId}/status`,
+  UPDATE_PROJECT_TASK_FEEDBACK: (taskId) => `${BASE_URL}/project-tasks/${taskId}/feedback`,
+  DELETE_PROJECT_TASK: (taskId) => `${BASE_URL}/project-tasks/${taskId}`,
+  GET_EMPLOYEE_PROJECT_TASKS: `${BASE_URL}/project-tasks/employee/my-tasks`,
+  GET_CLIENT_PROJECT_TASKS: `${BASE_URL}/project-tasks/client/client-tasks`,
+  ADD_PROJECT_TASK_COMMENT: (taskId) => `${BASE_URL}/project-tasks/${taskId}/feedback/comment`,
+
+  // Categories
+  CREATE_CATEGORY: `${BASE_URL}/category`,
+  GET_ALL_CATEGORIES: `${BASE_URL}/category/all`,
+  UPDATE_CATEGORY: (id) => `${BASE_URL}/category/${id}`,
+  DELETE_CATEGORY: (id) => `${BASE_URL}/category/${id}`,
 
   // Task Chat
   SEND_MESSAGE: (taskId) => `${BASE_URL}/task-chat/${taskId}/message`,

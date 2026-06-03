@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FaProjectDiagram, FaFileInvoice, FaTicketAlt, FaChartLine, FaClock, FaCheckCircle, FaHourglassHalf, FaTimesCircle } from "react-icons/fa";
+import { FaProjectDiagram, FaFileInvoice, FaTicketAlt, FaChartLine, FaClock, FaCheckCircle, FaHourglassHalf, FaTimesCircle, FaTasks, FaComment, FaSave } from "react-icons/fa";
 import { toast } from 'react-toastify';
-import { BASE_URL } from "@/config/api";
+import { BASE_URL, EMPLOYEE_API } from "@/config/api";
 
 const ClientDashboard = () => {
   const router = useRouter();
@@ -12,6 +12,38 @@ const ClientDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState([]);
   const [plansLoading, setPlansLoading] = useState(true);
+  const [clientTasks, setClientTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
+  const [feedbackInputs, setFeedbackInputs] = useState({});
+  const [newCommentInputs, setNewCommentInputs] = useState({});
+
+  const handleAddComment = async (taskId) => {
+    const commentText = newCommentInputs[taskId] || "";
+    if (!commentText.trim()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${EMPLOYEE_API.ADD_PROJECT_TASK_COMMENT(taskId)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ comment: commentText })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("💬 Feedback comment posted!");
+        setNewCommentInputs(prev => ({ ...prev, [taskId]: "" }));
+        fetchClientTasks();
+      } else {
+        toast.error(data.message || "Failed to post comment");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Something went wrong");
+    }
+  };
 
   useEffect(() => {
     // Check if user is logged in
@@ -38,6 +70,7 @@ const ClientDashboard = () => {
 
     // Fetch user plans
     fetchUserPlans(parsedUser.id || parsedUser._id);
+    fetchClientTasks();
 
     // Show welcome toast only once per session
     const welcomeShown = sessionStorage.getItem("welcomeShown");
@@ -66,6 +99,59 @@ const ClientDashboard = () => {
       setPlansLoading(false);
     }
   };
+
+  const fetchClientTasks = async () => {
+    try {
+      setTasksLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(EMPLOYEE_API.GET_CLIENT_PROJECT_TASKS, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setClientTasks(data.data);
+        // Prepopulate feedback inputs
+        const inputs = {};
+        data.data.forEach(t => {
+          inputs[t._id] = t.clientFeedback || "";
+        });
+        setFeedbackInputs(inputs);
+      }
+    } catch (error) {
+      console.error("Error fetching tasks for client:", error);
+    } finally {
+      setTasksLoading(false);
+    }
+  };
+
+  const handleSaveFeedback = async (taskId, currentStatus) => {
+    const feedback = feedbackInputs[taskId] || "";
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(EMPLOYEE_API.UPDATE_PROJECT_TASK_FEEDBACK(taskId), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          clientFeedback: feedback,
+          status: currentStatus
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("✅ Feedback saved successfully!");
+        fetchClientTasks();
+      } else {
+        toast.error("Failed to save feedback");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+  };
+
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -282,6 +368,113 @@ const ClientDashboard = () => {
                     </ul>
                   </div>
                 )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Project Tasks & Client Feedback Section */}
+      <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <FaTasks className="text-indigo-600" /> Project Tasks & Feedback
+        </h2>
+
+        {tasksLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-indigo-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading project tasks...</p>
+          </div>
+        ) : clientTasks.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 italic bg-gray-50 rounded-xl">
+            No tasks created for your projects yet.
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {clientTasks.map((task) => (
+              <div
+                key={task._id}
+                className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row gap-6 justify-between"
+              >
+                {/* Task Summary */}
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-extrabold rounded-lg">
+                      {task.projectId?.projectName}
+                    </span>
+                    <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-bold rounded">
+                      {task.taskType}
+                    </span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      task.status === "Completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                    }`}>
+                      {task.status}
+                    </span>
+                  </div>
+
+                   <h4 className="text-lg font-bold text-gray-800">{task.taskName}</h4>
+                  {task.description && <p className="text-sm text-gray-600 leading-relaxed">{task.description}</p>}
+                  
+                  {/* Feedback & Replies Thread */}
+                  <div className="mt-3 pt-3 border-t border-gray-150 space-y-2">
+                    <span className="text-[11px] font-bold text-gray-700 block">Feedback & Replies ({task.feedbacks?.length || 0})</span>
+                    {task.feedbacks && task.feedbacks.length > 0 ? (
+                      <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                        {task.feedbacks.map((fb, idx) => (
+                          <div key={idx} className="bg-gray-50 border rounded p-1.5 text-[10px] space-y-1">
+                            <div className="flex justify-between items-center text-gray-550 font-semibold">
+                              <span className="flex items-center gap-1.5">
+                                <span className={`px-1 rounded-[3px] text-[8px] font-extrabold uppercase ${
+                                  fb.sender === "Client"
+                                    ? "bg-blue-100 text-blue-700"
+                                    : fb.sender === "Employee"
+                                      ? "bg-green-100 text-green-700"
+                                      : "bg-purple-100 text-purple-700"
+                                }`}>
+                                  {fb.sender}
+                                </span>
+                                <span className="text-gray-700 font-bold">{fb.senderName}</span>
+                              </span>
+                              <span>{new Date(fb.createdAt).toLocaleString()}</span>
+                            </div>
+                            <p className="text-gray-800 font-medium whitespace-pre-wrap">{fb.comment}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-gray-400 italic">No feedback or replies yet.</p>
+                    )}
+
+                    <div className="flex gap-1.5 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Type a feedback comment or reply..."
+                        value={newCommentInputs[task._id] || ""}
+                        onChange={(e) => setNewCommentInputs({
+                          ...newCommentInputs,
+                          [task._id]: e.target.value
+                        })}
+                        className="flex-1 px-2 py-1 border rounded text-[10px] focus:ring-1 focus:ring-indigo-500 bg-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleAddComment(task._id)}
+                        className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-750 text-white rounded text-[10px] font-bold"
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-gray-400 pt-2 flex flex-wrap gap-x-4 gap-y-1">
+                    <span>Assigned To: <strong>{task.employeeId?.name || "N/A"}</strong></span>
+                    <span>Created: {new Date(task.createdAt).toLocaleString()}</span>
+                    {task.completedAt && (
+                      <span className="text-green-600 font-semibold">Completed: {new Date(task.completedAt).toLocaleString()}</span>
+                    )}
+                  </div>
+                </div>
+
               </div>
             ))}
           </div>

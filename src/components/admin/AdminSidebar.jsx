@@ -92,6 +92,13 @@ const AdminSidebar = ({
       permission: "dashboard",
     },
     {
+      name: "Manage Categories",
+      icon: FaClipboardList,
+      path: "/admin/categories",
+      color: "from-pink-500 to-rose-600",
+      permission: "dashboard",
+    },
+    {
       name: "Services Managment",
       icon: FaShoppingCart,
       path: "/admin/services",

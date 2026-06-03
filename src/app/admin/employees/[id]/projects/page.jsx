@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -20,6 +20,127 @@ import {
 } from "react-icons/fa";
 import { EMPLOYEE_API } from "@/config/api";
 
+const ProjectTasksSection = ({ projectId, employeeId }) => {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+
+  const fetchTasks = useCallback(async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${EMPLOYEE_API.GET_PROJECT_TASKS(projectId)}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTasks(data.data.filter(t => t.employeeId?._id === employeeId || t.employeeId === employeeId));
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }, [projectId, employeeId]);
+
+  useEffect(() => {
+    if (expanded) {
+      fetchTasks();
+    }
+  }, [expanded, fetchTasks]);
+
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-100">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left font-bold text-xs text-cyan-600 hover:text-cyan-800 flex items-center justify-between mb-3"
+      >
+        <span>📋 Employee Tasks ({loading ? "..." : tasks.length})</span>
+        <span>{expanded ? "▲ Hide" : "▼ Show"}</span>
+      </button>
+
+      {expanded && (
+        <div className="space-y-3">
+          {loading ? (
+            <div className="text-center py-4">
+              <FaSpinner className="animate-spin text-xl text-cyan-600 mx-auto" />
+              <p className="mt-2 text-[10px] text-gray-500">Loading tasks...</p>
+            </div>
+          ) : tasks.length === 0 ? (
+            <div className="text-center py-4 text-xs text-gray-400 bg-gray-50 rounded-xl border border-dashed">
+              No tasks assigned to this employee.
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {tasks.map((task) => (
+                <div key={task._id} className="bg-gray-50 rounded-xl p-3 border border-gray-200 shadow-sm space-y-2.5">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <span className="font-bold text-gray-800 text-sm">{task.taskName}</span>
+                      <div className="mt-0.5">
+                        <span className="inline-block px-2 py-0.5 bg-gray-200 text-gray-600 text-[9px] font-bold rounded">
+                          {task.taskType || "General"}
+                        </span>
+                      </div>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${
+                      task.status === "Completed" ? "bg-green-50 text-green-700 border-green-200" : "bg-yellow-50 text-yellow-700 border-yellow-200"
+                    }`}>
+                      {task.status}
+                    </span>
+                  </div>
+
+                  {task.description && (
+                    <p className="text-gray-605 bg-white p-2 rounded border text-[11px] leading-relaxed">
+                      {task.description}
+                    </p>
+                  )}
+
+                  {/* Feedback & Replies Thread */}
+                  <div className="space-y-2 pt-2 border-t border-gray-200">
+                    <span className="text-[10px] font-extrabold text-gray-700 block">Feedback & Replies ({task.feedbacks?.length || 0})</span>
+                    {task.feedbacks && task.feedbacks.length > 0 ? (
+                      <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                        {task.feedbacks.map((fb, idx) => (
+                          <div key={idx} className="bg-white border rounded p-2 text-[10px] space-y-1 shadow-sm">
+                            <div className="flex justify-between items-center text-gray-500 text-[9px] font-semibold">
+                              <span className="flex items-center gap-1.5">
+                                <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase ${
+                                  fb.sender === "Client"
+                                    ? "bg-blue-105 text-blue-700 border border-blue-200"
+                                    : fb.sender === "Employee"
+                                      ? "bg-green-105 text-green-700 border border-green-200"
+                                      : "bg-purple-105 text-purple-700 border border-purple-200"
+                                }`}>
+                                  {fb.sender}
+                                </span>
+                                <span className="text-gray-700 font-bold">{fb.senderName}</span>
+                              </span>
+                              <span>{new Date(fb.createdAt).toLocaleString()}</span>
+                            </div>
+                            <p className="text-gray-800 font-medium whitespace-pre-wrap pl-1">{fb.comment}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-gray-400 italic pl-1">No feedback or replies yet.</p>
+                    )}
+                  </div>
+
+                  <div className="text-[9px] text-gray-400 pt-1.5 flex flex-wrap gap-x-3 border-t border-gray-150">
+                    <span>Created: {new Date(task.createdAt).toLocaleString()}</span>
+                    {task.completedAt && <span className="text-green-600 font-semibold">Completed: {new Date(task.completedAt).toLocaleString()}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function EmployeeProjectsPage() {
   const params = useParams();
   const router = useRouter();
@@ -32,17 +153,7 @@ export default function EmployeeProjectsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all"); // 'all', 'ongoing', 'completed', 'pending'
 
-  useEffect(() => {
-    if (employeeId) {
-      fetchData();
-    }
-  }, [employeeId]);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchTerm, activeTab, projects]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -81,9 +192,9 @@ export default function EmployeeProjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [employeeId]);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...projects];
 
     // Search filter
@@ -92,7 +203,9 @@ export default function EmployeeProjectsPage() {
         (project) =>
           project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           project.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (Array.isArray(project.category)
+            ? project.category.some((cat) => (cat.name || cat).toLowerCase().includes(searchTerm.toLowerCase()))
+            : (project.category?.name || project.category || "").toLowerCase().includes(searchTerm.toLowerCase())) ||
           project.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           project.technologies?.some((tech) =>
             tech.toLowerCase().includes(searchTerm.toLowerCase())
@@ -114,7 +227,17 @@ export default function EmployeeProjectsPage() {
     }
 
     setFilteredProjects(filtered);
-  };
+  }, [searchTerm, activeTab, projects]);
+
+  useEffect(() => {
+    if (employeeId) {
+      fetchData();
+    }
+  }, [employeeId, fetchData]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   // Helper calculation for Stats
   const getStats = () => {
@@ -356,7 +479,7 @@ export default function EmployeeProjectsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {filteredProjects.map((project) => {
             const isOverdue =
               new Date(project.expectedEndDate) < new Date() &&
@@ -402,12 +525,22 @@ export default function EmployeeProjectsPage() {
                   {/* Details block */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                      <span className="text-xs text-gray-500 block mb-0.5 font-medium">
+                      <span className="text-xs text-gray-500 block mb-1 font-medium">
                         Category
                       </span>
-                      <span className="text-sm font-semibold text-gray-800">
-                        {project.category || "N/A"}
-                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {Array.isArray(project.category) ? (
+                          project.category.map((cat, idx) => (
+                            <span key={idx} className="px-2 py-0.5 bg-cyan-50 text-cyan-700 rounded text-[10px] font-bold border border-cyan-100">
+                              {cat.name || cat}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="px-2 py-0.5 bg-cyan-50 text-cyan-700 rounded text-[10px] font-bold border border-cyan-100">
+                            {project.category?.name || project.category || "N/A"}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
                       <span className="text-xs text-gray-500 block mb-0.5 font-medium">
@@ -465,6 +598,9 @@ export default function EmployeeProjectsPage() {
                       </div>
                     </div>
                   )}
+                  
+                  {/* Employee Tasks Section */}
+                  <ProjectTasksSection projectId={project._id} employeeId={employeeId} />
                 </div>
 
                 {/* Progress bar */}

@@ -360,9 +360,21 @@ export default function AdminClientsPage() {
                       <div className="space-y-2 text-sm">
                         <div className="flex items-center justify-between">
                           <span className="text-gray-500">Category:</span>
-                          <span className="font-semibold text-gray-900">
-                            {project.category}
-                          </span>
+                          <div className="flex flex-wrap gap-1 justify-end">
+                            {Array.isArray(project.category) ? (
+                              project.category.map((cat, idx) => (
+                                <span key={idx} className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-semibold border border-blue-100">
+                                  {cat.name || cat}
+                                </span>
+                              ))
+                            ) : project.category ? (
+                              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-semibold border border-blue-100">
+                                {project.category.name || project.category}
+                              </span>
+                            ) : (
+                              <span className="text-gray-400">N/A</span>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-gray-500">Type:</span>

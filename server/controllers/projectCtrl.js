@@ -56,6 +56,7 @@ exports.createProject = async (req, res) => {
     });
 
     // Populate client and employees
+    await project.populate("category", "name");
     await project.populate("client", "name email");
     await project.populate("assignedEmployees", "name email");
 
@@ -86,6 +87,7 @@ exports.getAllProjects = async (req, res) => {
     if (priority) filter.priority = priority;
 
     const projects = await Project.find(filter)
+      .populate("category", "name")
       .populate("client", "name email company")
       .populate("assignedEmployees", "name email")
       .populate("createdBy", "name email")
@@ -112,6 +114,7 @@ exports.getProjectById = async (req, res) => {
     const { id } = req.params;
 
     const project = await Project.findById(id)
+      .populate("category", "name")
       .populate("client", "name email company phone")
       .populate("assignedEmployees", "name email phone")
       .populate("createdBy", "name email");
@@ -147,6 +150,7 @@ exports.updateProject = async (req, res) => {
       new: true,
       runValidators: true,
     })
+      .populate("category", "name")
       .populate("client", "name email company")
       .populate("assignedEmployees", "name email");
 
@@ -266,6 +270,7 @@ exports.assignEmployees = async (req, res) => {
       { assignedEmployees: employeeIds },
       { new: true }
     )
+      .populate("category", "name")
       .populate("client", "name email")
       .populate("assignedEmployees", "name email");
 
@@ -309,6 +314,7 @@ exports.updateProgress = async (req, res) => {
       { progress },
       { new: true }
     )
+      .populate("category", "name")
       .populate("client", "name email")
       .populate("assignedEmployees", "name email");
 
@@ -340,6 +346,7 @@ exports.getClientProjects = async (req, res) => {
     const clientId = req.user.id;
 
     const projects = await Project.find({ client: clientId })
+      .populate("category", "name")
       .populate("assignedEmployees", "name email")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
@@ -365,6 +372,7 @@ exports.getEmployeeProjects = async (req, res) => {
     const employeeId = req.user.id;
 
     const projects = await Project.find({ assignedEmployees: employeeId })
+      .populate("category", "name")
       .populate("client", "name email company")
       .populate("assignedEmployees", "name email")
       .populate("createdBy", "name email")
@@ -391,6 +399,7 @@ exports.getProjectsByClientId = async (req, res) => {
     const { clientId } = req.params;
 
     const projects = await Project.find({ client: clientId })
+      .populate("category", "name")
       .populate("client", "name email company")
       .populate("assignedEmployees", "name email")
       .populate("createdBy", "name email")

@@ -11,21 +11,13 @@ const projectSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    category: {
-      type: String,
-      required: true,
-      enum: [
-        "Web Development",
-        "Mobile App",
-        "E-commerce",
-        "CMS",
-        "Custom Software",
-        "UI/UX Design",
-        "Digital Marketing",
-        "SEO",
-        "Other",
-      ],
-    },
+    category: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true,
+      },
+    ],
     projectType: {
       type: String,
       required: true,

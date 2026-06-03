@@ -1,9 +1,200 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FaSearch, FaComments, FaLink, FaCalendar } from "react-icons/fa";
+import { FaSearch, FaComments, FaLink, FaCalendar, FaSave } from "react-icons/fa";
 import ProjectChatModal from "@/components/admin/projects/ProjectChatModal";
 import { EMPLOYEE_API } from "@/config/api";
+
+const ClientProjectTasksList = ({ projectId, onProgressChange }) => {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [feedbackInputs, setFeedbackInputs] = useState({});
+  const [newCommentInputs, setNewCommentInputs] = useState({});
+
+  const handleAddComment = async (taskId) => {
+    const commentText = newCommentInputs[taskId] || "";
+    if (!commentText.trim()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${EMPLOYEE_API.ADD_PROJECT_TASK_COMMENT(taskId)}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ comment: commentText })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("💬 Feedback comment posted!");
+        setNewCommentInputs(prev => ({ ...prev, [taskId]: "" }));
+        fetchTasks();
+      } else {
+        toast.error(data.message || "Failed to post comment");
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${EMPLOYEE_API.GET_PROJECT_TASKS(projectId)}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTasks(data.data);
+        const inputs = {};
+        data.data.forEach(t => {
+          inputs[t._id] = t.clientFeedback || "";
+        });
+        setFeedbackInputs(inputs);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveFeedback = async (taskId, currentStatus) => {
+    const feedback = feedbackInputs[taskId] || "";
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(EMPLOYEE_API.UPDATE_PROJECT_TASK_FEEDBACK(taskId), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          clientFeedback: feedback,
+          status: currentStatus
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("✅ Feedback saved successfully!");
+        fetchTasks();
+        if (onProgressChange) onProgressChange();
+      } else {
+        toast.error("Failed to save feedback");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+
+  useEffect(() => {
+    if (expanded) {
+      fetchTasks();
+    }
+  }, [expanded]);
+
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-100">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left font-bold text-xs text-indigo-600 hover:text-indigo-850 flex items-center justify-between"
+      >
+        <span> Project Tasks Checklist </span>
+        <span>{expanded ? "▲" : "▼"}</span>
+      </button>
+
+      {expanded && (
+        <div className="mt-2 space-y-3 bg-gray-50 p-3 rounded-xl border">
+          {loading ? (
+            <div className="text-center py-4 text-xs text-gray-500">Loading tasks...</div>
+          ) : tasks.length === 0 ? (
+            <div className="text-center py-4 text-xs text-gray-400">No tasks created for this project yet.</div>
+          ) : (
+            <div className="space-y-3">
+              {tasks.map((task) => (
+                <div key={task._id} className="bg-white p-3 rounded-lg border shadow-sm text-xs flex flex-col md:flex-row gap-4 justify-between">
+                  <div className="flex-1 space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-gray-800 text-sm">{task.taskName}</span>
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${task.status === "Completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                        }`}>
+                        {task.status}
+                      </span>
+                    </div>
+                    {task.description && <p className="text-gray-500 text-[11px]">{task.description}</p>}
+                    
+                    {/* Feedback & Replies Thread */}
+                    <div className="mt-3 pt-3 border-t border-gray-150 space-y-2">
+                      <span className="text-[11px] font-bold text-gray-700 block">Feedback & Replies ({task.feedbacks?.length || 0})</span>
+                      {task.feedbacks && task.feedbacks.length > 0 ? (
+                        <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                          {task.feedbacks.map((fb, idx) => (
+                            <div key={idx} className="bg-gray-50 border rounded p-1.5 text-[10px] space-y-1">
+                              <div className="flex justify-between items-center text-gray-550 font-semibold">
+                                <span className="flex items-center gap-1.5">
+                                  <span className={`px-1 rounded-[3px] text-[8px] font-extrabold uppercase ${
+                                    fb.sender === "Client"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : fb.sender === "Employee"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-purple-100 text-purple-700"
+                                  }`}>
+                                    {fb.sender}
+                                  </span>
+                                  <span className="text-gray-700 font-bold">{fb.senderName}</span>
+                                </span>
+                                <span>{new Date(fb.createdAt).toLocaleString()}</span>
+                              </div>
+                              <p className="text-gray-800 font-medium whitespace-pre-wrap">{fb.comment}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] text-gray-400 italic">No feedback or replies yet.</p>
+                      )}
+
+                      <div className="flex gap-1.5 mt-2">
+                        <input
+                          type="text"
+                          placeholder="Type a feedback comment or reply..."
+                          value={newCommentInputs[task._id] || ""}
+                          onChange={(e) => setNewCommentInputs({
+                            ...newCommentInputs,
+                            [task._id]: e.target.value
+                          })}
+                          className="flex-1 px-2 py-1 border rounded text-[10px] focus:ring-1 focus:ring-indigo-500 bg-white"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddComment(task._id)}
+                          className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-750 text-white rounded text-[10px] font-bold"
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="text-[10px] text-gray-400 pt-1.5 flex flex-wrap gap-x-3">
+                      <span>Assigned to: {task.employeeId?.name || "N/A"}</span>
+                      <span>Created: {new Date(task.createdAt).toLocaleDateString()}</span>
+                      {task.completedAt && <span className="text-green-600 font-semibold">Completed: {new Date(task.completedAt).toLocaleDateString()}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function ClientProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -164,27 +355,33 @@ export default function ClientProjectsPage() {
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                          project.status === "Completed"
+                        className={`px-3 py-1 rounded-full text-xs font-bold border ${project.status === "Completed"
                             ? "bg-green-100 text-green-700 border-green-300"
                             : project.status === "In Progress"
-                            ? "bg-blue-100 text-blue-700 border-blue-300"
-                            : "bg-gray-100 text-gray-700 border-gray-300"
-                        }`}
+                              ? "bg-blue-100 text-blue-700 border-blue-300"
+                              : "bg-gray-100 text-gray-700 border-gray-300"
+                          }`}
                       >
                         {project.status}
                       </span>
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
-                        {project.category}
-                      </span>
+                      {Array.isArray(project.category) ? (
+                        project.category.map((cat, idx) => (
+                          <span key={idx} className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                            {cat.name || cat}
+                          </span>
+                        ))
+                      ) : project.category ? (
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                          {project.category.name || project.category}
+                        </span>
+                      ) : null}
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          project.priority === "Urgent"
+                        className={`px-3 py-1 rounded-full text-xs font-bold ${project.priority === "Urgent"
                             ? "bg-red-500 text-white"
                             : project.priority === "High"
-                            ? "bg-orange-500 text-white"
-                            : "bg-gray-500 text-white"
-                        }`}
+                              ? "bg-orange-500 text-white"
+                              : "bg-gray-500 text-white"
+                          }`}
                       >
                         {project.priority} Priority
                       </span>
@@ -308,6 +505,12 @@ export default function ClientProjectsPage() {
                     <FaComments /> Chat with Team
                   </button>
                 </div>
+
+                {/* Client Project Tasks Checklist */}
+                <ClientProjectTasksList
+                  projectId={project._id}
+                  onProgressChange={fetchProjects}
+                />
               </div>
             ))}
           </div>

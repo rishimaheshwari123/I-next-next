@@ -98,10 +98,20 @@ export default function ProjectCard({
       {/* Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div className="bg-gray-50 p-3 rounded-lg">
-          <span className="text-xs text-gray-500 block mb-1">Category</span>
-          <span className="font-semibold text-gray-800">
-            {project.category}
-          </span>
+          <span className="text-xs text-gray-500 block mb-2">Category</span>
+          <div className="flex flex-wrap gap-1">
+            {Array.isArray(project.category) ? (
+              project.category.map((cat, idx) => (
+                <span key={idx} className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold">
+                  {cat.name || cat}
+                </span>
+              ))
+            ) : (
+              <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold">
+                {project.category?.name || project.category}
+              </span>
+            )}
+          </div>
         </div>
         <div className="bg-gray-50 p-3 rounded-lg">
           <span className="text-xs text-gray-500 block mb-1">Type</span>
@@ -222,7 +232,7 @@ export default function ProjectCard({
           onClick={() => onUpdateProgress(project)}
           className="flex-1 px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 flex items-center justify-center gap-2 font-semibold transition-all text-sm"
         >
-          Update Progress
+          Manage Tasks
         </button>
         <button
           onClick={() => onAssign(project)}

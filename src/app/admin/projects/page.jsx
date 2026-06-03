@@ -7,12 +7,13 @@ import ProjectCard from "@/components/admin/projects/ProjectCard";
 import ProjectFormModal from "@/components/admin/projects/ProjectFormModal";
 import AssignEmployeeModal from "@/components/admin/projects/AssignEmployeeModal";
 import ProjectChatModal from "@/components/admin/projects/ProjectChatModal";
-import ProgressUpdateModal from "@/components/admin/projects/ProgressUpdateModal";
+import ManageTasksModal from "@/components/admin/projects/ManageTasksModal";
 import { EMPLOYEE_API, BASE_URL } from "@/config/api";
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [stats, setStats] = useState(null);
   const [clients, setClients] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -26,7 +27,7 @@ export default function AdminProjectsPage() {
   const [showFormModal, setShowFormModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
-  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [showTasksModal, setShowTasksModal] = useState(false);
   const [modalMode, setModalMode] = useState("add");
   const [selectedProject, setSelectedProject] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +35,7 @@ export default function AdminProjectsPage() {
   const [formData, setFormData] = useState({
     projectName: "",
     description: "",
-    category: "",
+    category: [],
     projectType: "",
     technologies: [],
     startDate: "",
@@ -81,10 +82,17 @@ export default function AdminProjectsPage() {
       });
       const employeesData = await employeesRes.json();
 
+      // Fetch categories
+      const categoriesRes = await fetch(EMPLOYEE_API.GET_ALL_CATEGORIES, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const categoriesData = await categoriesRes.json();
+ 
       if (projectsData.success) setProjects(projectsData.data);
       if (statsData.success) setStats(statsData.data);
       if (clientsData.success) setClients(clientsData.clients);
       if (employeesData.success) setEmployees(employeesData.data);
+      if (categoriesData.success) setCategories(categoriesData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Failed to load data");
@@ -113,7 +121,11 @@ export default function AdminProjectsPage() {
 
     // Category filter
     if (filterCategory) {
-      filtered = filtered.filter((project) => project.category === filterCategory);
+      filtered = filtered.filter((project) =>
+        Array.isArray(project.category)
+          ? project.category.some((c) => (c._id || c) === filterCategory)
+          : (project.category?._id || project.category) === filterCategory
+      );
     }
 
     // Priority filter
@@ -130,7 +142,7 @@ export default function AdminProjectsPage() {
     setFormData({
       projectName: "",
       description: "",
-      category: "",
+      category: [],
       projectType: "",
       technologies: [],
       startDate: "",
@@ -156,7 +168,9 @@ export default function AdminProjectsPage() {
     setFormData({
       projectName: project.projectName,
       description: project.description || "",
-      category: project.category,
+      category: Array.isArray(project.category) 
+        ? project.category.map((c) => c._id || c) 
+        : (project.category ? [project.category._id || project.category] : []),
       projectType: project.projectType,
       technologies: technologies,
       startDate: project.startDate.split("T")[0],
@@ -301,41 +315,7 @@ export default function AdminProjectsPage() {
 
   const handleUpdateProgress = (project) => {
     setSelectedProject(project);
-    setShowProgressModal(true);
-  };
-
-  const handleProgressSubmit = async (progress) => {
-    setSubmitting(true);
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        EMPLOYEE_API.UPDATE_PROJECT_PROGRESS(selectedProject._id),
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ progress }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success("✅ Progress updated successfully!");
-        setShowProgressModal(false);
-        fetchAllData();
-      } else {
-        toast.error(data.message || "Failed to update progress");
-      }
-    } catch (error) {
-      console.error("Error updating progress:", error);
-      toast.error("Something went wrong!");
-    } finally {
-      setSubmitting(false);
-    }
+    setShowTasksModal(true);
   };
 
   const clearFilters = () => {
@@ -406,15 +386,11 @@ export default function AdminProjectsPage() {
               className="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">All Categories</option>
-              <option value="Web Development">Web Development</option>
-              <option value="Mobile App">Mobile App</option>
-              <option value="E-commerce">E-commerce</option>
-              <option value="CMS">CMS</option>
-              <option value="Custom Software">Custom Software</option>
-              <option value="UI/UX Design">UI/UX Design</option>
-              <option value="Digital Marketing">Digital Marketing</option>
-              <option value="SEO">SEO</option>
-              <option value="Other">Other</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
 
             {/* Priority Filter */}
@@ -498,6 +474,7 @@ export default function AdminProjectsPage() {
         onSubmit={handleFormSubmit}
         onClose={() => setShowFormModal(false)}
         clients={clients}
+        categories={categories}
       />
 
       <AssignEmployeeModal
@@ -515,12 +492,11 @@ export default function AdminProjectsPage() {
         onClose={() => setShowChatModal(false)}
       />
 
-      <ProgressUpdateModal
-        show={showProgressModal}
+      <ManageTasksModal
+        show={showTasksModal}
         project={selectedProject}
-        submitting={submitting}
-        onSubmit={handleProgressSubmit}
-        onClose={() => setShowProgressModal(false)}
+        onClose={() => setShowTasksModal(false)}
+        onRefreshProject={fetchAllData}
       />
     </div>
   );

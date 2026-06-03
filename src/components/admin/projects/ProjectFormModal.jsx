@@ -11,20 +11,11 @@ export default function ProjectFormModal({
   onSubmit,
   onClose,
   clients,
+  categories = [],
 }) {
   if (!show) return null;
 
-  const categories = [
-    "Web Development",
-    "Mobile App",
-    "E-commerce",
-    "CMS",
-    "Custom Software",
-    "UI/UX Design",
-    "Digital Marketing",
-    "SEO",
-    "Other",
-  ];
+
 
   const projectTypes = [
     "Custom",
@@ -125,51 +116,75 @@ export default function ProjectFormModal({
             />
           </div>
 
-          {/* Category & Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Category *
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) =>
-                  setFormData({ ...formData, category: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                required
-                disabled={submitting}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+          {/* Category (Full width) */}
+          <div className="w-full">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Category * (Select one or more)
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {categories.map((cat) => {
+                const catId = cat._id || cat;
+                const catName = cat.name || cat;
+                const isSelected = Array.isArray(formData.category)
+                  ? formData.category.includes(catId)
+                  : formData.category === catId;
+                
+                return (
+                  <button
+                    key={catId}
+                    type="button"
+                    disabled={submitting}
+                    onClick={() => {
+                      let updatedCategory;
+                      if (Array.isArray(formData.category)) {
+                        updatedCategory = isSelected
+                          ? formData.category.filter((c) => c !== catId)
+                          : [...formData.category, catId];
+                      } else {
+                        // Handled legacy string categories
+                        updatedCategory = isSelected ? [] : [formData.category, catId].filter(Boolean);
+                        if (formData.category === catId) {
+                          updatedCategory = [];
+                        } else {
+                          updatedCategory = [formData.category, catId].filter((c) => c !== "");
+                        }
+                      }
+                      setFormData({ ...formData, category: updatedCategory });
+                    }}
+                    className={`px-3 py-2 rounded-lg border text-xs font-semibold transition-all text-center ${
+                      isSelected
+                        ? "bg-indigo-600 text-white border-indigo-600 shadow-md"
+                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                    }`}
+                  >
+                    {catName}
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Project Type *
-              </label>
-              <select
-                value={formData.projectType}
-                onChange={(e) =>
-                  setFormData({ ...formData, projectType: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                required
-                disabled={submitting}
-              >
-                <option value="">Select Type</option>
-                {projectTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* Project Type */}
+          <div>
+            <label className="block text-gray-700 font-semibold mb-2">
+              Project Type *
+            </label>
+            <select
+              value={formData.projectType}
+              onChange={(e) =>
+                setFormData({ ...formData, projectType: e.target.value })
+              }
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+              required
+              disabled={submitting}
+            >
+              <option value="">Select Type</option>
+              {projectTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Technologies */}
