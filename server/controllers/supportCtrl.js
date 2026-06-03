@@ -1,9 +1,9 @@
 const Support = require('../models/supportModel');
 
-// Create support ticket (Public)
+// Create support ticket (Public/Authenticated)
 const createSupportTicket = async (req, res) => {
   try {
-    const { name, email, phone, subject, message, priority } = req.body;
+    const { name, email, phone, subject, message, priority, userId, userType } = req.body;
 
     // Validation
     if (!name || !email || !subject || !message) {
@@ -22,14 +22,18 @@ const createSupportTicket = async (req, res) => {
       });
     }
 
-    const ticket = await Support.create({
+    const ticketData = {
       name,
       email,
       phone: phone || '',
       subject,
       message,
-      priority: priority || 'Medium'
-    });
+      priority: priority || 'Medium',
+      userId: userId || null,
+      userType: userType || 'Guest'
+    };
+
+    const ticket = await Support.create(ticketData);
 
     return res.status(201).json({
       success: true,
@@ -52,11 +56,78 @@ const createSupportTicket = async (req, res) => {
   }
 };
 
+// Add note to support ticket
+const addSupportNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { note, addedBy, addedById } = req.body;
+
+    if (!note || !addedBy || !addedById) {
+      return res.status(400).json({
+        success: false,
+        message: 'Note, addedBy and addedById are required'
+      });
+    }
+
+    const ticket = await Support.findById(id);
+
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: 'Support ticket not found'
+      });
+    }
+
+    ticket.notes.push({
+      note,
+      addedBy,
+      addedById,
+      createdAt: new Date()
+    });
+
+    await ticket.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Note added successfully',
+      ticket
+    });
+
+  } catch (error) {
+    console.error('Error adding note to support ticket:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error adding note to support ticket'
+    });
+  }
+};
+
+// Get tickets for a specific user
+const getMySupportTickets = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const tickets = await Support.find({ userId }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      tickets
+    });
+
+  } catch (error) {
+    console.error('Error fetching my support tickets:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error fetching your support tickets'
+    });
+  }
+};
+
 // Get all support tickets (Admin only)
 const getAllSupportTickets = async (req, res) => {
   try {
     const { status } = req.query;
-    
+
     let query = {};
     if (status && status !== 'All') {
       query.status = status;
@@ -215,6 +286,8 @@ const getTicketStats = async (req, res) => {
 
 module.exports = {
   createSupportTicket,
+  addSupportNote,
+  getMySupportTickets,
   getAllSupportTickets,
   getSingleSupportTicket,
   updateSupportTicket,

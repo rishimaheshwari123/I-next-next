@@ -152,7 +152,15 @@ export default function ServiceDetailsPage() {
   };
 
   // Helper function to render variant details based on category
-  const renderVariantDetails = (variant, category) => {
+  const renderVariantDetails = (variant, rawCategory) => {
+    const normalizeCategoryName = (name) => {
+      if (!name) return '';
+      const trimmed = name.trim();
+      if (trimmed === 'Mobile App') return 'Mobile App Development';
+      if (trimmed === 'E-commerce') return 'E-commerce Solutions';
+      return trimmed;
+    };
+    const category = normalizeCategoryName(rawCategory);
     const details = [];
 
     // Web Development Fields
@@ -449,7 +457,7 @@ export default function ServiceDetailsPage() {
         </button>
         <div>
           <h1 className="text-4xl font-bold text-gray-900">{service.serviceName}</h1>
-          <p className="text-gray-600 mt-1">{service.category}</p>
+          <p className="text-gray-600 mt-1">{service.category?.name || service.category}</p>
         </div>
       </div>
 
@@ -469,7 +477,7 @@ export default function ServiceDetailsPage() {
         ) : (
           <div className="space-y-8">
             {service.variants.map((variant, idx) => {
-              const variantDetails = renderVariantDetails(variant, service.category);
+              const variantDetails = renderVariantDetails(variant, service.category?.name || service.category);
               
               return (
                 <div

@@ -17,6 +17,7 @@ import {
   FaCog,
   FaShoppingCart,
   FaClipboardList,
+  FaHeadset,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from 'react-toastify';
@@ -83,6 +84,12 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
       icon: FaProjectDiagram,
       path: "/client/hosting",
       color: "from-orange-500 to-orange-600",
+    },
+    {
+      name: "Customer Support",
+      icon: FaHeadset,
+      path: "/client/support",
+      color: "from-blue-600 to-indigo-600",
     },
   ];
 

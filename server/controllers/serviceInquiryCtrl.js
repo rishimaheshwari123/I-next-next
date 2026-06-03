@@ -64,7 +64,7 @@ exports.createInquiry = async (req, res) => {
 // Get All Inquiries (Admin)
 exports.getAllInquiries = async (req, res) => {
   try {
-    const { status, serviceId, search } = req.query;
+    const { status, serviceId, search, clientId } = req.query;
 
     let query = {};
 
@@ -76,6 +76,10 @@ exports.getAllInquiries = async (req, res) => {
       query.serviceId = serviceId;
     }
 
+    if (clientId) {
+      query.clientId = clientId;
+    }
+
     if (search) {
       query.$or = [
         { clientName: { $regex: search, $options: "i" } },
@@ -85,7 +89,14 @@ exports.getAllInquiries = async (req, res) => {
     }
 
     const inquiries = await ServiceInquiry.find(query)
-      .populate("serviceId", "serviceName category")
+      .populate({
+        path: "serviceId",
+        select: "serviceName category",
+        populate: {
+          path: "category",
+          select: "name",
+        },
+      })
       .populate("clientId", "name email")
       .sort({ createdAt: -1 });
 
@@ -117,7 +128,14 @@ exports.getMyInquiries = async (req, res) => {
     }
 
     const inquiries = await ServiceInquiry.find(query)
-      .populate("serviceId", "serviceName category")
+      .populate({
+        path: "serviceId",
+        select: "serviceName category",
+        populate: {
+          path: "category",
+          select: "name",
+        },
+      })
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -141,7 +159,14 @@ exports.getInquiryById = async (req, res) => {
     const { id } = req.params;
 
     const inquiry = await ServiceInquiry.findById(id)
-      .populate("serviceId", "serviceName category description")
+      .populate({
+        path: "serviceId",
+        select: "serviceName category description",
+        populate: {
+          path: "category",
+          select: "name",
+        },
+      })
       .populate("clientId", "name email phone");
 
     if (!inquiry) {

@@ -7,12 +7,17 @@ const migrateCategories = async () => {
     console.log("Running dynamic categories migration check...");
     const defaultCategories = [
       "Web Development",
+      "Mobile App Development",
+      "Digital Marketing",
+      "Social Media Marketing",
+      "Lead Generation",
+      "UI/UX Design",
+      "E-commerce Solutions",
+      "Branding & Logo Design",
       "Mobile App",
       "E-commerce",
       "CMS",
       "Custom Software",
-      "UI/UX Design",
-      "Digital Marketing",
       "SEO",
       "Other"
     ];
@@ -62,6 +67,28 @@ const migrateCategories = async () => {
         console.log(`[MIGRATION] Migrated project "${project.projectName}" categories to ObjectIds.`);
       }
     }
+
+    // 3. Migrate services (use raw connection to avoid cast issues with service schema update)
+    const servicesCollection = mongoose.connection.db.collection("services");
+    const services = await servicesCollection.find({}).toArray();
+    for (const service of services) {
+      const catVal = service.category;
+      // If the category field exists and is a string, and is NOT a valid ObjectId hex string, migrate it
+      if (typeof catVal === "string" && !mongoose.Types.ObjectId.isValid(catVal)) {
+        let categoryDoc = await Category.findOne({ name: catVal });
+        if (!categoryDoc) {
+          categoryDoc = await Category.create({ name: catVal });
+          categoryMap[catVal] = categoryDoc._id;
+          console.log(`[MIGRATION] Created custom service category: ${catVal}`);
+        }
+        await servicesCollection.updateOne(
+          { _id: service._id },
+          { $set: { category: categoryDoc._id } }
+        );
+        console.log(`[MIGRATION] Migrated service "${service.serviceName}" category to ObjectId.`);
+      }
+    }
+
     console.log("Categories migration check finished successfully!");
   } catch (error) {
     console.error("Error running categories migration:", error);

@@ -38,17 +38,37 @@ const supportSchema = new mongoose.Schema({
     type: String,
     enum: ['Open', 'In Progress', 'Resolved', 'Closed'],
     default: 'Open'
-  }
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'userType'
+  },
+  userType: {
+    type: String,
+    enum: ['Employee', 'Client', 'Guest'],
+    default: 'Guest'
+  },
+  notes: [
+    {
+      note: String,
+      addedBy: String,
+      addedById: mongoose.Schema.Types.ObjectId,
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 }, {
   timestamps: true
 });
 
 // Generate ticket number before saving
-supportSchema.pre('save', async function(next) {
+supportSchema.pre('save', async function (next) {
   if (this.isNew && !this.ticketNumber) {
     const date = new Date();
     const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
-    
+
     // Find the last ticket of the day
     const Support = this.constructor;
     const lastTicket = await Support.findOne({

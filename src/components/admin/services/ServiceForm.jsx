@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { CATEGORY_LIST, SERVICE_CATEGORIES } from '@/config/serviceCategories';
+import { useState, useEffect } from 'react';
+import { SERVICE_CATEGORIES } from '@/config/serviceCategories';
+import { EMPLOYEE_API } from '@/config/api';
 import { FaPlus, FaLightbulb } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import VariantFields from './VariantFields';
@@ -12,12 +13,21 @@ export default function ServiceForm({
   onClose,
   isSubmitting,
 }) {
+  const [categories, setCategories] = useState([]);
+  const [loadingCats, setLoadingCats] = useState(true);
+
+  const getInitialCategory = (cat) => {
+    if (!cat) return '';
+    return typeof cat === 'object' ? cat._id : cat;
+  };
+
   const [formData, setFormData] = useState(() => {
+    const initialCategory = getInitialCategory(editingService?.category);
     if (editingService?.variants && editingService.variants.length > 0) {
       return {
         serviceName: editingService.serviceName || '',
         description: editingService.description || '',
-        category: editingService.category || 'Web Development',
+        category: initialCategory,
         variants: editingService.variants.map((v) => ({
           ...v,
           features: Array.isArray(v.features) && v.features.length > 0 ? v.features : [''],
@@ -27,7 +37,7 @@ export default function ServiceForm({
     return {
       serviceName: editingService?.serviceName || '',
       description: editingService?.description || '',
-      category: editingService?.category || 'Web Development',
+      category: initialCategory,
       variants: [
         {
           name: '',
@@ -39,7 +49,50 @@ export default function ServiceForm({
     };
   });
 
-  const categoryConfig = SERVICE_CATEGORIES[formData.category];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCats(true);
+        const token = localStorage.getItem('token');
+        const response = await fetch(EMPLOYEE_API.GET_ALL_CATEGORIES, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (data.success) {
+          setCategories(data.data);
+          // If creating a new service, default to 'Web Development' category if available, otherwise first category
+          if (!editingService) {
+            const webDevCat = data.data.find((c) => c.name === 'Web Development');
+            const defaultCat = webDevCat ? webDevCat._id : (data.data[0]?._id || '');
+            setFormData((prev) => ({
+              ...prev,
+              category: defaultCat,
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load categories', error);
+        toast.error('Failed to load categories');
+      } finally {
+        setLoadingCats(false);
+      }
+    };
+    fetchCategories();
+  }, [editingService]);
+
+  const normalizeCategoryName = (name) => {
+    if (!name) return '';
+    const trimmed = name.trim();
+    if (trimmed === 'Mobile App') return 'Mobile App Development';
+    if (trimmed === 'E-commerce') return 'E-commerce Solutions';
+    return trimmed;
+  };
+
+  const selectedCatDoc = categories.find((c) => c._id === formData.category);
+  const selectedCatName = selectedCatDoc ? selectedCatDoc.name : '';
+  const normalizedSelectedCatName = normalizeCategoryName(selectedCatName);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -127,7 +180,7 @@ export default function ServiceForm({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.serviceName || !formData.description) {
+    if (!formData.serviceName || !formData.description || !formData.category) {
       toast.error('Please fill all required fields');
       return;
     }
@@ -194,23 +247,31 @@ export default function ServiceForm({
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Service Category *
           </label>
-          <div className="grid grid-cols-2 gap-2">
-            {CATEGORY_LIST.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setFormData((prev) => ({ ...prev, category: cat }))}
-                className={`p-3 rounded-lg border-2 transition-all text-left ${
-                  formData.category === cat
-                    ? 'border-blue-600 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className="text-lg mb-1">{SERVICE_CATEGORIES[cat].icon}</div>
-                <p className="text-sm font-semibold text-gray-900">{cat}</p>
-              </button>
-            ))}
-          </div>
+          {loadingCats ? (
+            <p className="text-sm text-gray-500 animate-pulse">Loading categories...</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((cat) => {
+                const normalizedName = normalizeCategoryName(cat.name);
+                const config = SERVICE_CATEGORIES[normalizedName] || { icon: '📦', color: 'from-gray-500 to-slate-500' };
+                return (
+                  <button
+                    key={cat._id}
+                    type="button"
+                    onClick={() => setFormData((prev) => ({ ...prev, category: cat._id }))}
+                    className={`p-3 rounded-lg border-2 transition-all text-left ${
+                      formData.category === cat._id
+                        ? 'border-blue-600 bg-blue-50'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="text-lg mb-1">{config.icon}</div>
+                    <p className="text-sm font-semibold text-gray-900">{cat.name}</p>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -250,7 +311,7 @@ export default function ServiceForm({
               key={variantIndex}
               variant={variant}
               variantIndex={variantIndex}
-              category={formData.category}
+              category={normalizedSelectedCatName}
               onVariantChange={handleVariantChange}
               onRemoveFeature={removeFeature}
               onAddFeature={addFeature}

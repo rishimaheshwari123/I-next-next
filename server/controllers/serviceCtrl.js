@@ -73,6 +73,7 @@ exports.getAllServices = async (req, res) => {
     }
 
     const services = await Service.find(query)
+      .populate("category", "name")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
@@ -97,6 +98,7 @@ exports.getServiceById = async (req, res) => {
     const { id } = req.params;
 
     const service = await Service.findById(id)
+      .populate("category", "name")
       .populate("createdBy", "name email");
 
     if (!service) {
@@ -152,6 +154,7 @@ exports.updateService = async (req, res) => {
       new: true,
       runValidators: true,
     })
+      .populate("category", "name")
       .populate("createdBy", "name email");
 
     if (!service) {
@@ -216,6 +219,22 @@ exports.getServiceStats = async (req, res) => {
     const servicesByCategory = await Service.aggregate([
       { $match: { isActive: true } },
       { $group: { _id: "$category", count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "_id",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      { $unwind: { path: "$categoryInfo", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 1,
+          categoryName: { $ifNull: ["$categoryInfo.name", "Unknown"] },
+          count: 1,
+        },
+      },
     ]);
 
     res.status(200).json({

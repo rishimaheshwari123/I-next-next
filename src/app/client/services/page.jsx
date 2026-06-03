@@ -15,20 +15,11 @@ export default function ClientServicesPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-
-  const categories = [
-    'Web Development',
-    'Mobile App Development',
-    'Digital Marketing',
-    'Social Media Marketing',
-    'Lead Generation',
-    'UI/UX Design',
-    'E-commerce Solutions',
-    'Branding & Logo Design',
-  ];
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchServices();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -43,7 +34,10 @@ export default function ClientServicesPage() {
     }
 
     if (selectedCategory) {
-      filtered = filtered.filter((service) => service.category === selectedCategory);
+      filtered = filtered.filter((service) => {
+        const catId = typeof service.category === 'object' ? service.category?._id : service.category;
+        return catId === selectedCategory;
+      });
     }
 
     setFilteredServices(filtered);
@@ -63,6 +57,23 @@ export default function ClientServicesPage() {
       toast.error('Failed to load services');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(EMPLOYEE_API.GET_ALL_CATEGORIES, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setCategories(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   };
 
@@ -114,15 +125,15 @@ export default function ClientServicesPage() {
             </button>
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                key={cat._id}
+                onClick={() => setSelectedCategory(cat._id)}
                 className={`px-4 py-2 rounded-full font-semibold transition-all ${
-                  selectedCategory === cat
+                  selectedCategory === cat._id
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {cat}
+                {cat.name}
               </button>
             ))}
           </div>
@@ -167,7 +178,7 @@ export default function ClientServicesPage() {
 
                 <div className="flex items-center justify-between mb-4">
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                    {service.category}
+                    {service.category?.name || service.category}
                   </span>
                   <span className="text-xs text-gray-500 font-semibold">
                     {service.variants?.length || 0} options

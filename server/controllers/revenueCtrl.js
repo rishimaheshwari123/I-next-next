@@ -274,7 +274,7 @@ exports.getRevenueDetails = async (req, res) => {
       const convertedServices = await ServiceInquiry.find({
         status: "converted",
       })
-        .populate("serviceId", "name")
+        .populate("serviceId", "serviceName")
         .sort({ updatedAt: -1 })
         .skip(skip)
         .limit(parseInt(limit));
@@ -287,7 +287,7 @@ exports.getRevenueDetails = async (req, res) => {
         client: service.clientName,
         amount: service.variantAmount || 0,
         date: service.updatedAt,
-        service: service.serviceId?.name || "N/A",
+        service: service.serviceId?.serviceName || "N/A",
         email: service.clientEmail,
       }));
     }

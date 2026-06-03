@@ -23,11 +23,13 @@ export default function AdminServicesPage() {
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = services.filter(
-        (service) =>
+      const filtered = services.filter((service) => {
+        const categoryName = service.category?.name || service.category || '';
+        return (
           service.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          service.category.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+          categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
       setFilteredServices(filtered);
     } else {
       setFilteredServices(services);

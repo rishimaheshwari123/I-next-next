@@ -110,18 +110,9 @@ const serviceSchema = new mongoose.Schema(
       trim: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
-      enum: [
-        "Web Development",
-        "Mobile App Development",
-        "Digital Marketing",
-        "Social Media Marketing",
-        "Lead Generation",
-        "UI/UX Design",
-        "E-commerce Solutions",
-        "Branding & Logo Design",
-      ],
     },
     variants: [variantSchema],
     isActive: {

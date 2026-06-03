@@ -35,7 +35,7 @@ export default function ServicesGrid({
                 {service.serviceName}
               </h3>
               <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-xs font-bold whitespace-nowrap ml-2">
-                {service.category}
+                {service.category?.name || service.category}
               </span>
             </div>
 

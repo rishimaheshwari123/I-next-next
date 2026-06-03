@@ -269,7 +269,7 @@ export default function MyInquiriesPage() {
                   </p>
                   <p>
                     <span className="font-semibold text-gray-700">Category:</span>{' '}
-                    {selectedInquiry.serviceId?.category}
+                    {selectedInquiry.serviceId?.category?.name || selectedInquiry.serviceId?.category}
                   </p>
                   <p>
                     <span className="font-semibold text-gray-700">Variant:</span>{' '}

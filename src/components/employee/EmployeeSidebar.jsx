@@ -15,6 +15,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaChartLine,
+  FaHeadset,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from "react-toastify";
@@ -81,6 +82,12 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
       icon: FaUser,
       path: "/employee/profile",
       color: "from-purple-500 to-purple-600",
+    },
+    {
+      name: "Customer Support",
+      icon: FaHeadset,
+      path: "/employee/support",
+      color: "from-blue-600 to-indigo-600",
     },
   ];
 

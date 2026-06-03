@@ -1,21 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { BASE_URL } from '@/config/api';
-import { 
-  FaHeadset, 
-  FaTrash, 
-  FaUser, 
-  FaEnvelope, 
+import { useState, useEffect } from "react";
+import { BASE_URL } from "@/config/api";
+import {
+  FaHeadset,
+  FaTrash,
+  FaUser,
+  FaEnvelope,
   FaPhone,
   FaTicketAlt,
   FaClock,
   FaExclamationCircle,
   FaCheckCircle,
   FaSpinner,
-  FaFilter
-} from 'react-icons/fa';
-import { toast } from 'react-toastify';
+  FaFilter,
+  FaStickyNote,
+  FaPlus,
+} from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function AdminSupportPage() {
   const [tickets, setTickets] = useState([]);
@@ -26,20 +28,29 @@ export default function AdminSupportPage() {
     open: 0,
     inProgress: 0,
     resolved: 0,
-    closed: 0
+    closed: 0,
   });
-  const [filterStatus, setFilterStatus] = useState('All');
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [newNotes, setNewNotes] = useState({});
+  const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
     fetchTickets();
     fetchStats();
+
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setAdminUser(JSON.parse(userData));
+    }
   }, []);
 
   useEffect(() => {
-    if (filterStatus === 'All') {
+    if (filterStatus === "All") {
       setFilteredTickets(tickets);
     } else {
-      setFilteredTickets(tickets.filter(ticket => ticket.status === filterStatus));
+      setFilteredTickets(
+        tickets.filter((ticket) => ticket.status === filterStatus),
+      );
     }
   }, [filterStatus, tickets]);
 
@@ -52,8 +63,8 @@ export default function AdminSupportPage() {
         setFilteredTickets(data.tickets);
       }
     } catch (error) {
-      console.error('Error fetching tickets:', error);
-      toast.error('Failed to load tickets');
+      console.error("Error fetching tickets:", error);
+      toast.error("Failed to load tickets");
     } finally {
       setLoading(false);
     }
@@ -67,119 +78,173 @@ export default function AdminSupportPage() {
         setStats(data.stats);
       }
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error("Error fetching stats:", error);
     }
   };
 
   const handleStatusChange = async (ticketId, newStatus) => {
-    const toastId = toast.loading('Updating status...');
+    const toastId = toast.loading("Updating status...");
 
     try {
       const response = await fetch(`${BASE_URL}/support/update/${ticketId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
 
       const data = await response.json();
 
       if (data.success) {
         toast.update(toastId, {
-          render: 'Status updated successfully',
-          type: 'success',
+          render: "Status updated successfully",
+          type: "success",
           isLoading: false,
-          autoClose: 2000
+          autoClose: 2000,
         });
         fetchTickets();
         fetchStats();
       } else {
         toast.update(toastId, {
-          render: data.message || 'Failed to update status',
-          type: 'error',
+          render: data.message || "Failed to update status",
+          type: "error",
           isLoading: false,
-          autoClose: 3000
+          autoClose: 3000,
         });
       }
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error("Error updating status:", error);
       toast.update(toastId, {
-        render: 'Failed to update status',
-        type: 'error',
+        render: "Failed to update status",
+        type: "error",
         isLoading: false,
-        autoClose: 3000
+        autoClose: 3000,
+      });
+    }
+  };
+
+  const handleAddNote = async (ticketId) => {
+    const noteText = newNotes[ticketId];
+    if (!noteText?.trim()) return;
+
+    if (!adminUser) {
+      toast.error("Admin user not found. Please login again.");
+      return;
+    }
+
+    const toastId = toast.loading("Adding note...");
+
+    try {
+      const response = await fetch(`${BASE_URL}/support/add-note/${ticketId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          note: noteText,
+          addedBy: adminUser.name,
+          addedById: adminUser._id || adminUser.id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.update(toastId, {
+          render: "Note added successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        setNewNotes((prev) => ({ ...prev, [ticketId]: "" }));
+        fetchTickets();
+      } else {
+        toast.update(toastId, {
+          render: data.message || "Failed to add note",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding note:", error);
+      toast.update(toastId, {
+        render: "Failed to add note",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
       });
     }
   };
 
   const handleDelete = async (ticketId) => {
-    if (!window.confirm('Are you sure you want to delete this ticket?')) {
+    if (!window.confirm("Are you sure you want to delete this ticket?")) {
       return;
     }
 
-    const toastId = toast.loading('Deleting ticket...');
+    const toastId = toast.loading("Deleting ticket...");
 
     try {
       const response = await fetch(`${BASE_URL}/support/delete/${ticketId}`, {
-        method: 'DELETE'
+        method: "DELETE",
       });
 
       const data = await response.json();
 
       if (data.success) {
         toast.update(toastId, {
-          render: 'Ticket deleted successfully',
-          type: 'success',
+          render: "Ticket deleted successfully",
+          type: "success",
           isLoading: false,
-          autoClose: 2000
+          autoClose: 2000,
         });
         fetchTickets();
         fetchStats();
       } else {
         toast.update(toastId, {
-          render: data.message || 'Failed to delete ticket',
-          type: 'error',
+          render: data.message || "Failed to delete ticket",
+          type: "error",
           isLoading: false,
-          autoClose: 3000
+          autoClose: 3000,
         });
       }
     } catch (error) {
-      console.error('Error deleting ticket:', error);
+      console.error("Error deleting ticket:", error);
       toast.update(toastId, {
-        render: 'Failed to delete ticket',
-        type: 'error',
+        render: "Failed to delete ticket",
+        type: "error",
         isLoading: false,
-        autoClose: 3000
+        autoClose: 3000,
       });
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Open':
-        return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'In Progress':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-      case 'Resolved':
-        return 'bg-green-100 text-green-700 border-green-300';
-      case 'Closed':
-        return 'bg-gray-100 text-gray-700 border-gray-300';
+      case "Open":
+        return "bg-blue-100 text-blue-700 border-blue-300";
+      case "In Progress":
+        return "bg-yellow-100 text-yellow-700 border-yellow-300";
+      case "Resolved":
+        return "bg-green-100 text-green-700 border-green-300";
+      case "Closed":
+        return "bg-gray-100 text-gray-700 border-gray-300";
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-300';
+        return "bg-gray-100 text-gray-700 border-gray-300";
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'High':
-        return 'bg-red-100 text-red-700 border-red-300';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-      case 'Low':
-        return 'bg-green-100 text-green-700 border-green-300';
+      case "High":
+        return "bg-red-100 text-red-700 border-red-300";
+      case "Medium":
+        return "bg-yellow-100 text-yellow-700 border-yellow-300";
+      case "Low":
+        return "bg-green-100 text-green-700 border-green-300";
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-300';
+        return "bg-gray-100 text-gray-700 border-gray-300";
     }
   };
 
@@ -201,7 +266,9 @@ export default function AdminSupportPage() {
               <FaHeadset className="text-blue-600" />
               Support Tickets
             </h1>
-            <p className="text-gray-600">Manage customer support requests and tickets</p>
+            <p className="text-gray-600">
+              Manage customer support requests and tickets
+            </p>
           </div>
         </div>
       </div>
@@ -229,7 +296,9 @@ export default function AdminSupportPage() {
             <p className="text-gray-600 text-sm font-medium">In Progress</p>
             <FaSpinner className="text-2xl text-yellow-400" />
           </div>
-          <p className="text-3xl font-bold text-yellow-600">{stats.inProgress}</p>
+          <p className="text-3xl font-bold text-yellow-600">
+            {stats.inProgress}
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
@@ -254,19 +323,21 @@ export default function AdminSupportPage() {
         <div className="flex items-center gap-3 flex-wrap">
           <FaFilter className="text-gray-600" />
           <span className="text-gray-700 font-semibold">Filter by Status:</span>
-          {['All', 'Open', 'In Progress', 'Resolved', 'Closed'].map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                filterStatus === status
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {status}
-            </button>
-          ))}
+          {["All", "Open", "In Progress", "Resolved", "Closed"].map(
+            (status) => (
+              <button
+                key={status}
+                onClick={() => setFilterStatus(status)}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  filterStatus === status
+                    ? "bg-blue-600 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {status}
+              </button>
+            ),
+          )}
         </div>
       </div>
 
@@ -274,8 +345,10 @@ export default function AdminSupportPage() {
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-900">
-            {filterStatus === 'All' ? 'All Tickets' : `${filterStatus} Tickets`}
-            <span className="text-gray-500 font-normal ml-2">({filteredTickets.length})</span>
+            {filterStatus === "All" ? "All Tickets" : `${filterStatus} Tickets`}
+            <span className="text-gray-500 font-normal ml-2">
+              ({filteredTickets.length})
+            </span>
           </h2>
         </div>
 
@@ -287,7 +360,10 @@ export default function AdminSupportPage() {
         ) : (
           <div className="divide-y divide-gray-200">
             {filteredTickets.map((ticket) => (
-              <div key={ticket._id} className="p-6 hover:bg-gray-50 transition-all">
+              <div
+                key={ticket._id}
+                className="p-6 hover:bg-gray-50 transition-all"
+              >
                 <div className="flex flex-col lg:flex-row gap-6">
                   {/* Left Section - Ticket Info */}
                   <div className="flex-1 space-y-3">
@@ -296,16 +372,22 @@ export default function AdminSupportPage() {
                       <span className="px-3 py-1 bg-blue-600 text-white rounded-lg font-bold text-sm">
                         {ticket.ticketNumber}
                       </span>
-                      <span className={`px-3 py-1 rounded-lg font-semibold text-xs border ${getPriorityColor(ticket.priority)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-lg font-semibold text-xs border ${getPriorityColor(ticket.priority)}`}
+                      >
                         {ticket.priority} Priority
                       </span>
-                      <span className={`px-3 py-1 rounded-lg font-semibold text-xs border ${getStatusColor(ticket.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-lg font-semibold text-xs border ${getStatusColor(ticket.status)}`}
+                      >
                         {ticket.status}
                       </span>
                     </div>
 
                     {/* Subject */}
-                    <h3 className="text-xl font-bold text-gray-900">{ticket.subject}</h3>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {ticket.subject}
+                    </h3>
 
                     {/* Customer Info */}
                     <div className="flex flex-wrap gap-4 text-sm text-gray-600">
@@ -327,21 +409,86 @@ export default function AdminSupportPage() {
 
                     {/* Message */}
                     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                      <p className="text-gray-700 text-sm leading-relaxed">{ticket.message}</p>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {ticket.message}
+                      </p>
                     </div>
 
                     {/* Date */}
                     <div className="flex items-center gap-2 text-xs text-gray-500">
                       <FaClock />
                       <span>
-                        Created: {new Date(ticket.createdAt).toLocaleString('en-IN', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
+                        Created:{" "}
+                        {new Date(ticket.createdAt).toLocaleString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
                         })}
                       </span>
+                    </div>
+
+                    {/* Notes Section */}
+                    <div className="mt-6 space-y-4">
+                      <h4 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                        <FaStickyNote className="text-yellow-500" />
+                        Admin Notes
+                      </h4>
+
+                      {/* Notes List */}
+                      <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                        {ticket.notes && ticket.notes.length > 0 ? (
+                          ticket.notes.map((note, index) => (
+                            <div
+                              key={index}
+                              className="bg-yellow-50 border border-yellow-100 rounded-lg p-3"
+                            >
+                              <p className="text-sm text-gray-800 mb-1">
+                                {note.note}
+                              </p>
+                              <div className="flex justify-between items-center text-[10px] text-gray-500">
+                                <span className="font-semibold text-yellow-700">
+                                  Added by: {note.addedBy}
+                                </span>
+                                <span>
+                                  {new Date(note.createdAt).toLocaleString()}
+                                </span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-xs text-gray-400 italic">
+                            No notes added yet
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Add Note Form */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Add a note..."
+                          value={newNotes[ticket._id] || ""}
+                          onChange={(e) =>
+                            setNewNotes((prev) => ({
+                              ...prev,
+                              [ticket._id]: e.target.value,
+                            }))
+                          }
+                          onKeyPress={(e) =>
+                            e.key === "Enter" && handleAddNote(ticket._id)
+                          }
+                          className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+                        <button
+                          onClick={() => handleAddNote(ticket._id)}
+                          className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                          title="Add Note"
+                        >
+                          <FaPlus />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -353,7 +500,9 @@ export default function AdminSupportPage() {
                       </label>
                       <select
                         value={ticket.status}
-                        onChange={(e) => handleStatusChange(ticket._id, e.target.value)}
+                        onChange={(e) =>
+                          handleStatusChange(ticket._id, e.target.value)
+                        }
                         className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-semibold"
                       >
                         <option value="Open">Open</option>
@@ -362,14 +511,6 @@ export default function AdminSupportPage() {
                         <option value="Closed">Closed</option>
                       </select>
                     </div>
-
-                    <button
-                      onClick={() => handleDelete(ticket._id)}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-all"
-                    >
-                      <FaTrash />
-                      Delete Ticket
-                    </button>
                   </div>
                 </div>
               </div>

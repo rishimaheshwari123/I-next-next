@@ -134,6 +134,16 @@ export const EMPLOYEE_API = {
 
   // Dashboard
   GET_DASHBOARD_STATS: `${BASE_URL}/dashboard/stats`,
+
+  // Support Management
+  CREATE_SUPPORT: `${BASE_URL}/support/create`,
+  GET_ALL_SUPPORT: `${BASE_URL}/support/getAll`,
+  GET_SUPPORT_STATS: `${BASE_URL}/support/stats`,
+  GET_SUPPORT: (id) => `${BASE_URL}/support/${id}`,
+  UPDATE_SUPPORT: (id) => `${BASE_URL}/support/update/${id}`,
+  ADD_SUPPORT_NOTE: (id) => `${BASE_URL}/support/add-note/${id}`,
+  DELETE_SUPPORT: (id) => `${BASE_URL}/support/delete/${id}`,
+  GET_MY_SUPPORT: (userId) => `${BASE_URL}/support/my-tickets/${userId}`,
 };
 
 export { BASE_URL };

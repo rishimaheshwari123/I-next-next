@@ -248,7 +248,7 @@ export default function ServiceInquiriesPage() {
                         {inquiry.serviceId?.serviceName}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {inquiry.serviceId?.category}
+                        {inquiry.serviceId?.category?.name || inquiry.serviceId?.category}
                       </p>
                     </td>
                     <td className="px-6 py-4">
