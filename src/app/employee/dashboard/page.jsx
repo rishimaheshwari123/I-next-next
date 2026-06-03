@@ -46,17 +46,8 @@ export default function EmployeeDashboard() {
         setTodayAttendance(attendanceRes.data.data);
       }
 
-      // Fetch tasks
-      const tasksRes = await axios.get(EMPLOYEE_API.MY_TASKS, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
 
-      if (tasksRes.data.success) {
-        setTasks({
-          pending: tasksRes.data.data.pending || [],
-          inProgress: tasksRes.data.data.inProgress || [],
-        });
-      }
+
 
       // Fetch leaves
       const leavesRes = await axios.get(EMPLOYEE_API.MY_LEAVES, {
@@ -118,15 +109,6 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-rose-500 to-pink-600 text-white p-6 rounded-xl shadow-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">Pending Tasks</h3>
-              <p className="text-3xl font-bold mt-2">{tasks.pending.length}</p>
-            </div>
-            <FaTasks className="text-5xl opacity-50" />
-          </div>
-        </div>
 
         <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6 rounded-xl shadow-lg">
           <div className="flex items-center justify-between">
@@ -191,84 +173,7 @@ export default function EmployeeDashboard() {
         </Link>
       </div>
 
-      {/* Tasks Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Pending Tasks */}
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <FaTasks className="text-rose-600" />
-            Pending Tasks ({tasks.pending.length})
-          </h2>
 
-          <div className="space-y-3">
-            {tasks.pending.slice(0, 3).map((task) => (
-              <div
-                key={task._id}
-                className="border-l-4 border-rose-500 bg-rose-50 p-4 rounded-r-lg"
-              >
-                <h3 className="font-semibold text-gray-800">{task.title}</h3>
-                <p className="text-sm text-gray-600 mt-1 line-clamp-1">
-                  {task.description}
-                </p>
-                <p className="text-xs text-red-600 mt-2">
-                  Deadline: {new Date(task.deadline).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
-
-            {tasks.pending.length === 0 && (
-              <p className="text-gray-500 text-center py-8">
-                No pending tasks! 🎉
-              </p>
-            )}
-          </div>
-
-          <Link
-            href="/employee/tasks"
-            className="mt-4 inline-block text-rose-600 hover:text-rose-700 font-semibold"
-          >
-            View All Tasks →
-          </Link>
-        </div>
-
-        {/* In Progress Tasks */}
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <FaCheckCircle className="text-blue-600" />
-            In Progress ({tasks.inProgress.length})
-          </h2>
-
-          <div className="space-y-3">
-            {tasks.inProgress.slice(0, 3).map((task) => (
-              <div
-                key={task._id}
-                className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-r-lg"
-              >
-                <h3 className="font-semibold text-gray-800">{task.title}</h3>
-                <p className="text-sm text-gray-600 mt-1 line-clamp-1">
-                  {task.description}
-                </p>
-                <p className="text-xs text-blue-600 mt-2">
-                  Deadline: {new Date(task.deadline).toLocaleDateString()}
-                </p>
-              </div>
-            ))}
-
-            {tasks.inProgress.length === 0 && (
-              <p className="text-gray-500 text-center py-8">
-                No tasks in progress
-              </p>
-            )}
-          </div>
-
-          <Link
-            href="/employee/tasks"
-            className="mt-4 inline-block text-blue-600 hover:text-blue-700 font-semibold"
-          >
-            View All Tasks →
-          </Link>
-        </div>
-      </div>
 
       {/* Recent Leave Requests */}
       <div className="bg-white rounded-xl shadow-md p-6">

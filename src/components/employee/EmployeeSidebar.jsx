@@ -57,12 +57,7 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
       path: "/employee/leaves",
       color: "from-amber-500 to-amber-600",
     },
-    {
-      name: "My Tasks",
-      icon: FaTasks,
-      path: "/employee/tasks",
-      color: "from-rose-500 to-rose-600",
-    },
+
     {
       name: "My Leads",
       icon: FaChartLine,

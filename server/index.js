@@ -51,8 +51,6 @@ app.use('/api/v1/chatbot', require("./routes/chatbotInquiryRoute"));
 app.use("/api/v1/employee", require("./routes/employeeRoute"));
 app.use("/api/v1/attendance", require("./routes/attendanceRoute"));
 app.use("/api/v1/leave", require("./routes/leaveRoute"));
-app.use("/api/v1/task", require("./routes/taskRoute"));
-app.use("/api/v1/task-chat", require("./routes/taskChatRoute"));
 app.use("/api/v1/lead", require("./routes/leadRoutes"));
 app.use("/api/v1/staff", require("./routes/staffRoutes"));
 
