@@ -192,13 +192,6 @@ const AdminSidebar = ({
       permission: "aiChatbot",
     },
     {
-      name: "Employees",
-      icon: FaUserTie,
-      path: "/admin/employees",
-      color: "from-cyan-500 to-cyan-600",
-      permission: "employees",
-    },
-    {
       name: "Attendance",
       icon: FaCalendarCheck,
       path: "/admin/attendance",
@@ -212,7 +205,6 @@ const AdminSidebar = ({
       color: "from-amber-500 to-amber-600",
       permission: "leaveRequests",
     },
-
   ];
 
   // Filter menu items based on user permissions
@@ -273,8 +265,9 @@ const AdminSidebar = ({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
       >
         <div className="flex flex-col h-full relative">
           {/* Desktop Toggle Button */}
@@ -329,11 +322,13 @@ const AdminSidebar = ({
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
-                    className={`group relative flex items-center ${isCollapsed ? "justify-center" : "space-x-3"
-                      } px-4 py-3 rounded-xl transition-all duration-200 ${isActive
+                    className={`group relative flex items-center ${
+                      isCollapsed ? "justify-center" : "space-x-3"
+                    } px-4 py-3 rounded-xl transition-all duration-200 ${
+                      isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
-                      }`}
+                    }`}
                     title={isCollapsed ? item.name : ""}
                   >
                     <Icon
@@ -355,8 +350,9 @@ const AdminSidebar = ({
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-center space-x-3"
-                } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
+              className={`w-full flex items-center ${
+                isCollapsed ? "justify-center" : "justify-center space-x-3"
+              } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
               title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />

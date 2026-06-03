@@ -97,7 +97,7 @@ exports.getAllInquiries = async (req, res) => {
           select: "name",
         },
       })
-      .populate("clientId", "name email")
+      .populate("clientId", "name email phone company createdAt")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
