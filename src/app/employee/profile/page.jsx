@@ -3,15 +3,33 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { EMPLOYEE_API } from "@/config/api";
 import { toast } from "react-toastify";
-import { FaUser, FaEdit, FaSave, FaTimes, FaIdCard, FaUniversity, FaMapMarkerAlt, FaPhone, FaCamera } from "react-icons/fa";
+import {
+  FaUser,
+  FaEdit,
+  FaSave,
+  FaTimes,
+  FaIdCard,
+  FaUniversity,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaCamera,
+  FaFileUpload,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaClock,
+  FaEye,
+  FaArrowUp,
+} from "react-icons/fa";
 
 export default function EmployeeProfilePage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [docUploading, setDocUploading] = useState(false);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
+  const [selectedDocs, setSelectedDocs] = useState({});
   const [formData, setFormData] = useState({
     phone: "",
     address: {
@@ -82,7 +100,7 @@ export default function EmployeeProfilePage() {
       }
 
       setProfileImageFile(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -99,7 +117,7 @@ export default function EmployeeProfilePage() {
 
       // Create FormData for multipart/form-data
       const formDataToSend = new FormData();
-      
+
       // Add profile image if selected
       if (profileImageFile) {
         formDataToSend.append("profileImage", profileImageFile);
@@ -108,17 +126,20 @@ export default function EmployeeProfilePage() {
       // Add other fields as JSON string
       formDataToSend.append("phone", formData.phone);
       formDataToSend.append("address", JSON.stringify(formData.address));
-      formDataToSend.append("emergencyContact", JSON.stringify(formData.emergencyContact));
+      formDataToSend.append(
+        "emergencyContact",
+        JSON.stringify(formData.emergencyContact),
+      );
 
       const response = await axios.put(
         EMPLOYEE_API.UPDATE_MY_PROFILE,
         formDataToSend,
         {
-          headers: { 
+          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -132,6 +153,79 @@ export default function EmployeeProfilePage() {
       toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDocChange = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type (allow images and pdf)
+      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Please select a JPG, PNG or PDF file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size should be less than 5MB");
+        return;
+      }
+
+      setSelectedDocs({ ...selectedDocs, [type]: file });
+    }
+  };
+
+  const handleDocUpload = async (type) => {
+    if (!selectedDocs[type]) {
+      toast.error("Please select a file first");
+      return;
+    }
+
+    try {
+      setDocUploading(true);
+      const token = localStorage.getItem("token");
+      const formDataToSend = new FormData();
+      formDataToSend.append(type, selectedDocs[type]);
+
+      const response = await axios.post(
+        EMPLOYEE_API.UPLOAD_DOCUMENTS,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      if (response.data.success) {
+        toast.success(
+          `${type.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())} uploaded successfully!`,
+        );
+        setSelectedDocs({ ...selectedDocs, [type]: null });
+        fetchProfile();
+      }
+    } catch (error) {
+      console.error("Error uploading document:", error);
+      toast.error(error.response?.data?.message || "Failed to upload document");
+    } finally {
+      setDocUploading(false);
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "Verified":
+        return <FaCheckCircle className="text-green-500" title="Verified" />;
+      case "Rejected":
+        return <FaTimesCircle className="text-red-500" title="Rejected" />;
+      case "Pending":
+        return (
+          <FaClock className="text-yellow-500" title="Pending Verification" />
+        );
+      default:
+        return null;
     }
   };
 
@@ -217,7 +311,7 @@ export default function EmployeeProfilePage() {
                   <FaUser className="text-5xl text-purple-600" />
                 )}
               </div>
-              
+
               {/* Camera Icon for Upload */}
               {isEditing && (
                 <label
@@ -556,7 +650,8 @@ export default function EmployeeProfilePage() {
           <div>
             <p className="text-gray-600 text-sm mb-1">Account Holder Name</p>
             <p className="text-lg font-semibold">
-              {profile?.salary?.bankDetails?.accountHolderName || "Not provided"}
+              {profile?.salary?.bankDetails?.accountHolderName ||
+                "Not provided"}
             </p>
           </div>
           <div>
@@ -589,6 +684,173 @@ export default function EmployeeProfilePage() {
               {profile?.salary?.bankDetails?.accountType || "Not provided"}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Hike & Salary Info */}
+      {profile?.salary?.lastHike?.amount > 0 && (
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg p-6 mb-6 text-white relative overflow-hidden">
+          <div className="absolute right-0 top-0 opacity-10 translate-x-1/4 -translate-y-1/4">
+            <FaArrowUp className="text-[200px]" />
+          </div>
+          <div className="relative z-10">
+            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <FaArrowUp /> Last Salary Hike
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm opacity-80 uppercase tracking-wider font-semibold">
+                  Hike Amount
+                </p>
+                <p className="text-3xl font-bold mt-1">
+                  +₹{profile.salary.lastHike.amount.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm opacity-80 uppercase tracking-wider font-semibold">
+                  Effective Date
+                </p>
+                <p className="text-3xl font-bold mt-1">
+                  {new Date(profile.salary.lastHike.date).toLocaleDateString(
+                    "en-IN",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    },
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <p className="text-xs opacity-70 italic">
+                * Keep up the great work! Your next review will be based on your
+                performance.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Document Upload Section */}
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+          <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <FaFileUpload className="text-purple-600" />
+            Documents Upload
+          </h3>
+          <div className="bg-purple-50 border border-purple-100 px-4 py-2 rounded-lg">
+            <p className="text-xs text-purple-700 font-semibold flex items-center gap-2">
+              <FaCheckCircle className="text-[10px]" />
+              Acceptable Formats:{" "}
+              <span className="bg-white px-2 py-0.5 rounded border border-purple-200 ml-1 font-bold">
+                JPG, PNG, PDF
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { id: "aadharCard", label: "Aadhar Card" },
+            { id: "panCard", label: "PAN Card" },
+            { id: "bankPassbook", label: "Bank Passbook" },
+            { id: "tenthCertificate", label: "10th Certificate" },
+            { id: "twelfthCertificate", label: "12th Certificate" },
+            { id: "graduationCertificate", label: "Graduation Certificate" },
+            {
+              id: "mastersCertificate",
+              label: "Masters Certificate (Optional)",
+            },
+            { id: "experienceLetter", label: "Experience Letter" },
+            { id: "relievingLetter", label: "Relieving Letter" },
+            { id: "offerLetter", label: "Offer Letter" },
+            { id: "salarySlip1", label: "Salary Slip (Month 1)" },
+            { id: "salarySlip2", label: "Salary Slip (Month 2)" },
+            { id: "salarySlip3", label: "Salary Slip (Month 3)" },
+          ].map((doc) => (
+            <div
+              key={doc.id}
+              className="border border-gray-100 rounded-xl p-4 bg-gray-50/50"
+            >
+              <div className="flex justify-between items-center mb-3">
+                <span className="font-semibold text-gray-700 text-sm">
+                  {doc.label}
+                </span>
+                {profile?.documents?.[doc.id]?.status && (
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(profile.documents[doc.id].status)}
+                    <span
+                      className={`text-[10px] font-bold uppercase ${
+                        profile.documents[doc.id].status === "Verified"
+                          ? "text-green-600"
+                          : profile.documents[doc.id].status === "Rejected"
+                            ? "text-red-600"
+                            : "text-yellow-600"
+                      }`}
+                    >
+                      {profile.documents[doc.id].status}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {profile?.documents?.[doc.id]?.url ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={profile.documents[doc.id].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-medium text-blue-600 hover:bg-blue-50 transition-all"
+                    >
+                      <FaEye /> View Document
+                    </a>
+                  </div>
+                  {profile.documents[doc.id].remarks && (
+                    <p className="text-[10px] text-red-500 italic bg-red-50 p-2 rounded border border-red-100">
+                      Remark: {profile.documents[doc.id].remarks}
+                    </p>
+                  )}
+                  {/* Re-upload if rejected */}
+                  {profile.documents[doc.id].status === "Rejected" && (
+                    <div className="pt-2 border-t border-gray-200">
+                      <input
+                        type="file"
+                        onChange={(e) => handleDocChange(e, doc.id)}
+                        className="block w-full text-xs text-gray-500 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 mb-2"
+                      />
+                      {selectedDocs[doc.id] && (
+                        <button
+                          onClick={() => handleDocUpload(doc.id)}
+                          disabled={docUploading}
+                          className="w-full py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold hover:bg-purple-700 transition-all disabled:opacity-50"
+                        >
+                          {docUploading ? "Uploading..." : "Re-upload"}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <input
+                    type="file"
+                    onChange={(e) => handleDocChange(e, doc.id)}
+                    className="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                  />
+                  {selectedDocs[doc.id] && (
+                    <button
+                      onClick={() => handleDocUpload(doc.id)}
+                      disabled={docUploading}
+                      className="w-full py-2 bg-purple-600 text-white rounded-lg text-xs font-bold hover:bg-purple-700 transition-all disabled:opacity-50"
+                    >
+                      {docUploading ? "Uploading..." : `Upload ${doc.label}`}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 

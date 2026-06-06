@@ -3,21 +3,21 @@
 import { useState, useEffect, useRef } from "react";
 import { IoIosArrowDown, IoMdClose } from "react-icons/io";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { 
-  FaFacebook, 
-  FaBullhorn, 
-  FaUserPlus, 
-  FaChartLine, 
-  FaLaptopCode, 
-  FaMobileAlt, 
-  FaRobot, 
+import {
+  FaFacebook,
+  FaBullhorn,
+  FaUserPlus,
+  FaChartLine,
+  FaLaptopCode,
+  FaMobileAlt,
+  FaRobot,
   FaShieldAlt,
   FaLinkedin,
   FaInstagram,
   FaYoutube,
   FaPhone,
   FaEnvelope,
-  FaMapMarkerAlt
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import { navbar } from "../../constantData/navbarLink";
 import { services } from "../../constantData/servicesData";
@@ -84,58 +84,62 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-12">
             {/* Left - Contact Info */}
             <div className="flex items-center gap-6">
-              <a 
-                href="tel:+919981122493" 
+              <a
+                href="tel:+919981122493"
                 className="flex items-center gap-2 text-white hover:text-orange-400 transition-all duration-200 text-sm"
               >
                 <FaPhone className="w-3.5 h-3.5" />
-                <span className="hidden md:inline font-medium">+91 9981122493</span>
+                <span className="hidden md:inline font-medium">
+                  +91 9981122493
+                </span>
               </a>
-              
-              <a 
-                href="mailto:info.inextets@gmail.com" 
+
+              <a
+                href="mailto:info.inextets@gmail.com"
                 className="flex items-center gap-2 text-white hover:text-orange-400 transition-all duration-200 text-sm"
               >
                 <FaEnvelope className="w-3.5 h-3.5" />
-                <span className="hidden lg:inline font-medium">info.inextets@gmail.com</span>
+                <span className="hidden lg:inline font-medium">
+                  info.inextets@gmail.com
+                </span>
               </a>
             </div>
 
             {/* Right - Social Links */}
             <div className="flex items-center gap-2">
-              <a 
-                href="https://facebook.com" 
-                target="_blank" 
+              <a
+                href="https://facebook.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
                 title="Facebook"
               >
                 <FaFacebook className="w-4 h-4" />
               </a>
-              
-              <a 
-                href="https://linkedin.com" 
-                target="_blank" 
+
+              <a
+                href="https://linkedin.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
                 title="LinkedIn"
               >
                 <FaLinkedin className="w-4 h-4" />
               </a>
-              
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
+
+              <a
+                href="https://instagram.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
                 title="Instagram"
               >
                 <FaInstagram className="w-4 h-4" />
               </a>
-              
-              <a 
-                href="https://youtube.com" 
-                target="_blank" 
+
+              <a
+                href="https://youtube.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
                 title="YouTube"
@@ -150,9 +154,7 @@ const Navbar = () => {
       {/* Main Navbar */}
       <nav
         className={`fixed top-12 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white shadow-lg"
-            : "bg-white shadow-md"
+          isScrolled ? "bg-white shadow-lg" : "bg-white shadow-md"
         }`}
       >
         <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
@@ -179,7 +181,7 @@ const Navbar = () => {
                   <li key={link.id}>
                     {link.title === "Services" ? (
                       <div
-                        className="relative group"
+                        className="group"
                         onMouseEnter={() => setIsServicesOpen(true)}
                         onMouseLeave={() => setIsServicesOpen(false)}
                       >
@@ -195,158 +197,181 @@ const Navbar = () => {
                         {/* Mega Menu */}
                         <div
                           ref={megaMenuRef}
-                          className={`absolute left-1/2 -translate-x-1/2 top-full pt-6 transition-all duration-300 ${
+                          className={`absolute left-0 right-0 top-full pt-1 transition-all duration-300 ${
                             isServicesOpen
                               ? "opacity-100 visible translate-y-0"
                               : "opacity-0 invisible -translate-y-4"
                           }`}
-                          style={{ width: "95vw", maxWidth: "1400px" }}
                         >
-                          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
-                            <div className="grid grid-cols-12 gap-0">
-                              {/* Left Section - Services (75%) */}
-                              <div className="col-span-9 p-10">
-                                <div className="mb-6">
-                                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Services</h3>
-                                  <p className="text-sm text-gray-500">Comprehensive solutions to grow your business</p>
+                          <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
+                            <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+                              <div className="grid grid-cols-12 gap-0">
+                                {/* Left Section - Services (75%) */}
+                                <div className="col-span-9 p-10">
+                                  <div className="mb-6">
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                      Our Services
+                                    </h3>
+                                    <p className="text-sm text-gray-500">
+                                      Comprehensive solutions to grow your
+                                      business
+                                    </p>
+                                  </div>
+
+                                  <div className="grid grid-cols-3 gap-4">
+                                    {services.map((service) => {
+                                      const IconComponent =
+                                        serviceIcons[service.id];
+                                      return (
+                                        <Link
+                                          key={service.id}
+                                          href={service.path}
+                                          onClick={() =>
+                                            setIsServicesOpen(false)
+                                          }
+                                          className="group/item p-5 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:shadow-lg"
+                                        >
+                                          <div className="flex items-start space-x-4">
+                                            <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white group-hover/item:bg-orange-500 group-hover/item:scale-110 transition-all duration-300 shadow-md">
+                                              <IconComponent className="w-6 h-6" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                              <h4 className="font-bold text-gray-900 mb-1.5 text-base group-hover/item:text-blue-600 transition-colors duration-200">
+                                                {service.title}
+                                              </h4>
+                                              <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                                                {service.description}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </Link>
+                                      );
+                                    })}
+                                  </div>
                                 </div>
-                                
-                                <div className="grid grid-cols-3 gap-4">
-                                  {services.map((service) => {
-                                    const IconComponent = serviceIcons[service.id];
-                                    return (
-                                      <Link
-                                        key={service.id}
-                                        href={service.path}
-                                        onClick={() => setIsServicesOpen(false)}
-                                        className="group/item p-5 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:shadow-lg"
-                                      >
-                                        <div className="flex items-start space-x-4">
-                                          <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white group-hover/item:bg-orange-500 group-hover/item:scale-110 transition-all duration-300 shadow-md">
-                                            <IconComponent className="w-6 h-6" />
+
+                                {/* Right Section - Contact & Social (25%) */}
+                                <div className="col-span-3 bg-gradient-to-br from-gray-50 to-blue-50 p-8 border-l border-gray-100">
+                                  <div className="space-y-8">
+                                    {/* Contact Info */}
+                                    <div>
+                                      <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
+                                        <span className="w-1 h-6 bg-blue-600 rounded-full mr-3"></span>
+                                        Get In Touch
+                                      </h4>
+                                      <div className="space-y-4">
+                                        <a
+                                          href="tel:+919981122493"
+                                          className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
+                                        >
+                                          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
+                                            <FaPhone className="w-4 h-4" />
                                           </div>
                                           <div className="flex-1 min-w-0">
-                                            <h4 className="font-bold text-gray-900 mb-1.5 text-base group-hover/item:text-blue-600 transition-colors duration-200">
-                                              {service.title}
-                                            </h4>
-                                            <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
-                                              {service.description}
-                                            </p>
+                                            <div className="text-xs text-gray-500 mb-0.5">
+                                              Call Us
+                                            </div>
+                                            <div className="font-semibold text-gray-900">
+                                              +91 9981122493
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                    );
-                                  })}
-                                </div>
-                              </div>
+                                        </a>
 
-                              {/* Right Section - Contact & Social (25%) */}
-                              <div className="col-span-3 bg-gradient-to-br from-gray-50 to-blue-50 p-8 border-l border-gray-100">
-                                <div className="space-y-8">
-                                  {/* Contact Info */}
-                                  <div>
-                                    <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
-                                      <span className="w-1 h-6 bg-blue-600 rounded-full mr-3"></span>
-                                      Get In Touch
-                                    </h4>
-                                    <div className="space-y-4">
-                                      <a 
-                                        href="tel:+919981122493" 
-                                        className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
-                                      >
-                                        <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
-                                          <FaPhone className="w-4 h-4" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                          <div className="text-xs text-gray-500 mb-0.5">Call Us</div>
-                                          <div className="font-semibold text-gray-900">+91 9981122493</div>
-                                        </div>
-                                      </a>
+                                        <a
+                                          href="mailto:info.inextets@gmail.com"
+                                          className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
+                                        >
+                                          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
+                                            <FaEnvelope className="w-4 h-4" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="text-xs text-gray-500 mb-0.5">
+                                              Email Us
+                                            </div>
+                                            <div className="font-semibold text-gray-900 text-xs break-all">
+                                              info.inextets@gmail.com
+                                            </div>
+                                          </div>
+                                        </a>
 
-                                      <a 
-                                        href="mailto:info.inextets@gmail.com" 
-                                        className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
-                                      >
-                                        <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
-                                          <FaEnvelope className="w-4 h-4" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                          <div className="text-xs text-gray-500 mb-0.5">Email Us</div>
-                                          <div className="font-semibold text-gray-900 text-xs break-all">info.inextets@gmail.com</div>
-                                        </div>
-                                      </a>
-
-                                      <div className="flex items-start space-x-3 text-sm text-gray-700 p-3 rounded-lg bg-white/50">
-                                        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm flex-shrink-0">
-                                          <FaMapMarkerAlt className="w-4 h-4" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                          <div className="text-xs text-gray-500 mb-0.5">Visit Us</div>
-                                          <div className="font-semibold text-gray-900 leading-tight text-xs">Plot No - 11, 2nd floor, near MANOHAR DAIRY, Zone-I, Maharana Pratap Nagar, Bhopal, MP 462011</div>
+                                        <div className="flex items-start space-x-3 text-sm text-gray-700 p-3 rounded-lg bg-white/50">
+                                          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm flex-shrink-0">
+                                            <FaMapMarkerAlt className="w-4 h-4" />
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="text-xs text-gray-500 mb-0.5">
+                                              Visit Us
+                                            </div>
+                                            <div className="font-semibold text-gray-900 leading-tight text-xs">
+                                              Plot No - 11, 2nd floor, near
+                                              MANOHAR DAIRY, Zone-I, Maharana
+                                              Pratap Nagar, Bhopal, MP 462011
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
 
-                                  {/* Social Media */}
-                                  <div>
-                                    <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
-                                      <span className="w-1 h-6 bg-orange-500 rounded-full mr-3"></span>
-                                      Follow Us
-                                    </h4>
-                                    <div className="flex items-center justify-center gap-3">
-                                      <a 
-                                        href="https://facebook.com" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                                        title="Facebook"
-                                      >
-                                        <FaFacebook className="w-6 h-6 text-white" />
-                                      </a>
+                                    {/* Social Media */}
+                                    <div>
+                                      <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
+                                        <span className="w-1 h-6 bg-orange-500 rounded-full mr-3"></span>
+                                        Follow Us
+                                      </h4>
+                                      <div className="flex items-center justify-center gap-3">
+                                        <a
+                                          href="https://facebook.com"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          title="Facebook"
+                                        >
+                                          <FaFacebook className="w-6 h-6 text-white" />
+                                        </a>
 
-                                      <a 
-                                        href="https://linkedin.com" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-all duration-200 shadow-md hover:shadow-lg"
-                                        title="LinkedIn"
-                                      >
-                                        <FaLinkedin className="w-6 h-6 text-white" />
-                                      </a>
+                                        <a
+                                          href="https://linkedin.com"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          title="LinkedIn"
+                                        >
+                                          <FaLinkedin className="w-6 h-6 text-white" />
+                                        </a>
 
-                                      <a 
-                                        href="https://instagram.com" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 bg-pink-600 rounded-lg flex items-center justify-center hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                                        title="Instagram"
-                                      >
-                                        <FaInstagram className="w-6 h-6 text-white" />
-                                      </a>
+                                        <a
+                                          href="https://instagram.com"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="w-12 h-12 bg-pink-600 rounded-lg flex items-center justify-center hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          title="Instagram"
+                                        >
+                                          <FaInstagram className="w-6 h-6 text-white" />
+                                        </a>
 
-                                      <a 
-                                        href="https://youtube.com" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center hover:bg-red-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                                        title="YouTube"
-                                      >
-                                        <FaYoutube className="w-6 h-6 text-white" />
-                                      </a>
+                                        <a
+                                          href="https://youtube.com"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center hover:bg-red-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          title="YouTube"
+                                        >
+                                          <FaYoutube className="w-6 h-6 text-white" />
+                                        </a>
+                                      </div>
                                     </div>
-                                  </div>
 
-                                  {/* CTA Button */}
-                                  <button
-                                    onClick={() => {
-                                      setIsModalOpen(true);
-                                      setIsServicesOpen(false);
-                                    }}
-                                    className="w-full px-5 py-4 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl text-sm transform hover:scale-105"
-                                  >
-                                    Request a Quote →
-                                  </button>
+                                    {/* CTA Button */}
+                                    <button
+                                      onClick={() => {
+                                        setIsModalOpen(true);
+                                        setIsServicesOpen(false);
+                                      }}
+                                      className="w-full px-5 py-4 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl text-sm transform hover:scale-105"
+                                    >
+                                      Request a Quote →
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -372,7 +397,7 @@ const Navbar = () => {
                   onClick={() => setIsModalOpen(true)}
                   className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
                 >
-Book Domain
+                  Book Domain
                 </button>
                 <Link
                   href="/login"
@@ -401,9 +426,7 @@ Book Domain
       {/* Mobile Sidebar */}
       <div
         className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
-          isMobileMenuOpen
-            ? "opacity-100 visible"
-            : "opacity-0 invisible"
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
         {/* Backdrop */}
@@ -432,8 +455,12 @@ Book Domain
                     className="rounded-lg"
                   />
                   <div>
-                    <h2 className="text-xl font-bold text-blue-600">I Next ETS</h2>
-                    <p className="text-xs text-gray-500">Navigate our services</p>
+                    <h2 className="text-xl font-bold text-blue-600">
+                      I Next ETS
+                    </h2>
+                    <p className="text-xs text-gray-500">
+                      Navigate our services
+                    </p>
                   </div>
                 </div>
               </div>
@@ -528,11 +555,10 @@ Book Domain
         </div>
       </div>
 
-      
       {/* Domain Booking Modal */}
-      <DomainBookingModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <DomainBookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </>
   );

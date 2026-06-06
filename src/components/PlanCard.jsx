@@ -1,13 +1,31 @@
 "use client";
 import React, { useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import PlanPurchaseModal from "./PlanPurchaseModal";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const PlanCard = ({ plan, serviceName }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleChoosePlan = () => {
-    setIsModalOpen(true);
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    if (!token || !userData) {
+      toast.info("Please login to purchase a plan");
+      router.push("/login");
+      return;
+    }
+
+    const user = JSON.parse(userData);
+    if (user.role !== "client") {
+      toast.error("Only clients can purchase plans. Please login as a client.");
+      router.push("/login");
+      return;
+    }
+
+    // Navigate to client plans page
+    router.push("/client/plans");
   };
 
   return (
@@ -28,7 +46,9 @@ const PlanCard = ({ plan, serviceName }) => {
         <div className="text-center mb-6">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
           <div className="flex items-center justify-center mb-4">
-            <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+            <span className="text-4xl font-bold text-gray-900">
+              {plan.price}
+            </span>
             {plan.period && (
               <span className="text-gray-600 ml-2">/{plan.period}</span>
             )}
@@ -56,14 +76,6 @@ const PlanCard = ({ plan, serviceName }) => {
           Choose Plan
         </button>
       </div>
-
-      {/* Purchase Modal */}
-      <PlanPurchaseModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        plan={plan}
-        serviceName={serviceName}
-      />
     </>
   );
 };

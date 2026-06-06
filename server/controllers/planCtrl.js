@@ -1,173 +1,314 @@
 const Plan = require("../models/planModel");
+const PlanPurchase = require("../models/planPurchaseModel");
 const Auth = require("../models/authModel");
 
-// Create a new plan purchase
-exports.createPlan = async (req, res) => {
-  try {
-    const { userId, serviceName, planType, planPrice, planFeatures } = req.body;
+// --- Plan Template Controllers (Admin) ---
 
-    // Validate required fields
-    if (!userId || !serviceName || !planType || !planPrice) {
+// Create a new plan template
+exports.createPlanTemplate = async (req, res) => {
+  try {
+    const { name, description, category, priceRange, durationDays, benefits, keyFeatures, additionalFeatures } = req.body;
+
+    if (!name || !category || !priceRange || !durationDays) {
       return res.status(400).json({
         success: false,
-        message: "Please provide all required fields",
+        message: "Please provide all required fields (name, category, priceRange, durationDays)",
       });
     }
 
-    // Check if user exists
-    const user = await Auth.findById(userId);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    // Create new plan
     const newPlan = await Plan.create({
-      userId,
-      serviceName,
-      planType,
-      planPrice,
-      planFeatures: planFeatures || [],
-      status: "inactive",
+      name,
+      description,
+      category,
+      priceRange,
+      durationDays,
+      benefits: benefits || [],
+      keyFeatures: keyFeatures || [],
+      additionalFeatures,
     });
 
     res.status(201).json({
       success: true,
-      message: "Plan purchased successfully! Waiting for admin approval.",
-      plan: newPlan,
+      message: "Plan template created successfully",
+      data: newPlan,
     });
   } catch (error) {
-    console.error("Error creating plan:", error);
+    console.error("Error creating plan template:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to create plan",
+      message: "Failed to create plan template",
       error: error.message,
     });
   }
 };
 
-// Get all plans (Admin)
-exports.getAllPlans = async (req, res) => {
+// Get all plan templates
+exports.getAllPlanTemplates = async (req, res) => {
   try {
-    console.log("Fetching all plans...");
-    
-    const plans = await Plan.find()
+    const plans = await Plan.find().populate("category", "name").sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: plans.length,
+      data: plans,
+    });
+  } catch (error) {
+    console.error("Error fetching plan templates:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch plan templates",
+      error: error.message,
+    });
+  }
+};
+
+// Update plan template
+exports.updatePlanTemplate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const plan = await Plan.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: "Plan template not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Plan template updated successfully",
+      data: plan,
+    });
+  } catch (error) {
+    console.error("Error updating plan template:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update plan template",
+      error: error.message,
+    });
+  }
+};
+
+// Delete plan template
+exports.deletePlanTemplate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const plan = await Plan.findByIdAndDelete(id);
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: "Plan template not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Plan template deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting plan template:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete plan template",
+      error: error.message,
+    });
+  }
+};
+
+// --- Plan Purchase Controllers ---
+
+// Purchase a plan (Client)
+exports.purchasePlan = async (req, res) => {
+  try {
+    const { userId, planId, paymentMethod = "Cash" } = req.body;
+
+    if (!userId || !planId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID and Plan ID are required",
+      });
+    }
+
+    // Check if plan exists
+    const planTemplate = await Plan.findById(planId);
+    if (!planTemplate) {
+      return res.status(404).json({
+        success: false,
+        message: "Plan template not found",
+      });
+    }
+
+    const purchase = await PlanPurchase.create({
+      userId,
+      planId,
+      paymentMethod,
+      status: "pending",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Plan purchase initiated. Waiting for admin approval.",
+      data: purchase,
+    });
+  } catch (error) {
+    console.error("Error purchasing plan:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to initiate plan purchase",
+      error: error.message,
+    });
+  }
+};
+
+// Get all purchases (Admin)
+exports.getAllPurchases = async (req, res) => {
+  try {
+    const purchases = await PlanPurchase.find()
       .populate("userId", "name email phone company")
-      .sort({ createdAt: -1 })
-      .lean();
-
-    console.log(`Found ${plans.length} plans`);
+      .populate({
+        path: "planId",
+        populate: { path: "category", select: "name" }
+      })
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
-      count: plans.length,
-      plans,
+      count: purchases.length,
+      purchases,
     });
   } catch (error) {
-    console.error("Error fetching plans:", error);
+    console.error("Error fetching purchases:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to fetch plans",
+      message: "Failed to fetch purchases",
       error: error.message,
     });
   }
 };
 
-// Get plans by user ID (Client)
-exports.getPlansByUserId = async (req, res) => {
+// Update purchase status (Admin)
+exports.updatePurchaseStatus = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { purchaseId } = req.params;
+    const { status, adminNotes } = req.body;
 
-    const plans = await Plan.find({ userId }).sort({ createdAt: -1 });
-
-    res.status(200).json({
-      success: true,
-      count: plans.length,
-      plans,
-    });
-  } catch (error) {
-    console.error("Error fetching user plans:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch plans",
-      error: error.message,
-    });
-  }
-};
-
-// Update plan status (Admin only)
-exports.updatePlanStatus = async (req, res) => {
-  try {
-    const { planId } = req.params;
-    const { status } = req.body;
-
-    if (!["inactive", "active", "expired"].includes(status)) {
+    if (!["pending", "active", "expired", "rejected"].includes(status)) {
       return res.status(400).json({
         success: false,
         message: "Invalid status value",
       });
     }
 
-    const updateData = { status };
-
-    // If activating, set activation date and expiry date (30 days from now)
-    if (status === "active") {
-      updateData.activationDate = new Date();
-      updateData.expiryDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-    }
-
-    const plan = await Plan.findByIdAndUpdate(planId, updateData, {
-      new: true,
-      runValidators: true,
-    }).populate("userId", "name email phone company");
-
-    if (!plan) {
+    const purchase = await PlanPurchase.findById(purchaseId).populate("planId");
+    if (!purchase) {
       return res.status(404).json({
         success: false,
-        message: "Plan not found",
+        message: "Purchase record not found",
       });
     }
 
+    const updateData = { status, adminNotes };
+
+    if (status === "active" && purchase.status !== "active") {
+      const durationDays = purchase.planId.durationDays || 30;
+      updateData.activationDate = new Date();
+      updateData.expiryDate = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+    }
+
+    const updatedPurchase = await PlanPurchase.findByIdAndUpdate(purchaseId, updateData, { new: true })
+      .populate("userId", "name email")
+      .populate("planId");
+
     res.status(200).json({
       success: true,
-      message: `Plan ${status} successfully`,
-      plan,
+      message: `Purchase status updated to ${status}`,
+      purchase: updatedPurchase,
     });
   } catch (error) {
-    console.error("Error updating plan status:", error);
+    console.error("Error updating purchase status:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to update plan status",
+      message: "Failed to update purchase status",
       error: error.message,
     });
   }
 };
 
-// Delete plan (Admin only)
-exports.deletePlan = async (req, res) => {
+// Get user purchases (Client)
+exports.getUserPurchases = async (req, res) => {
   try {
-    const { planId } = req.params;
+    const { userId } = req.params;
+    const purchases = await PlanPurchase.find({ userId })
+      .populate({
+        path: "planId",
+        populate: { path: "category", select: "name" }
+      })
+      .sort({ createdAt: -1 });
 
-    const plan = await Plan.findByIdAndDelete(planId);
+    res.status(200).json({
+      success: true,
+      count: purchases.length,
+      purchases,
+    });
+  } catch (error) {
+    console.error("Error fetching user purchases:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch purchases",
+      error: error.message,
+    });
+  }
+};
 
-    if (!plan) {
+// Get single purchase by ID
+exports.getPurchaseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const purchase = await PlanPurchase.findById(id)
+      .populate({
+        path: "planId",
+        populate: { path: "category", select: "name" }
+      })
+      .populate("userId", "name email phone company");
+
+    if (!purchase) {
       return res.status(404).json({
         success: false,
-        message: "Plan not found",
+        message: "Purchase record not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      message: "Plan deleted successfully",
+      purchase,
     });
   } catch (error) {
-    console.error("Error deleting plan:", error);
+    console.error("Error fetching purchase by ID:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to delete plan",
+      message: "Failed to fetch purchase details",
+      error: error.message,
+    });
+  }
+};
+
+// Delete purchase (Admin)
+exports.deletePurchase = async (req, res) => {
+  try {
+    const { purchaseId } = req.params;
+    await PlanPurchase.findByIdAndDelete(purchaseId);
+    res.status(200).json({
+      success: true,
+      message: "Purchase record deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting purchase:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete purchase record",
       error: error.message,
     });
   }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -18,28 +18,57 @@ import {
   FaShoppingCart,
   FaClipboardList,
   FaHeadset,
+  FaGem,
+  FaChevronDown,
+  FaChevronUp,
 } from "react-icons/fa";
 import Image from "next/image";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { BASE_URL } from "@/config/api";
 
-const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCollapsed }) => {
+const ClientSidebar = ({
+  isCollapsed: propCollapsed,
+  setIsCollapsed: propSetCollapsed,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const [activePlans, setActivePlans] = useState([]);
+  const [showPlansDropdown, setShowPlansDropdown] = useState(true);
 
-  const isCollapsed = propCollapsed !== undefined ? propCollapsed : internalCollapsed;
-  const setIsCollapsed = propSetCollapsed !== undefined ? propSetCollapsed : setInternalCollapsed;
+  const isCollapsed =
+    propCollapsed !== undefined ? propCollapsed : internalCollapsed;
+  const setIsCollapsed =
+    propSetCollapsed !== undefined ? propSetCollapsed : setInternalCollapsed;
 
   const [user, setUser] = useState(null);
 
   // Get user data from localStorage
-  React.useEffect(() => {
+  useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+      fetchActivePlans(parsedUser.id || parsedUser._id);
     }
   }, []);
+
+  const fetchActivePlans = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${BASE_URL}/plan/user/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Filter only active plans
+        setActivePlans(data.purchases.filter((p) => p.status === "active"));
+      }
+    } catch (error) {
+      console.error("Error fetching sidebar plans:", error);
+    }
+  };
 
   const menuItems = [
     {
@@ -137,8 +166,9 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
       >
         <div className="flex flex-col h-full relative">
           {/* Desktop Toggle Button */}
@@ -146,12 +176,18 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="hidden lg:flex absolute -right-3 top-8 w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 z-50"
           >
-            {isCollapsed ? <FaChevronRight size={12} /> : <FaChevronLeft size={12} />}
+            {isCollapsed ? (
+              <FaChevronRight size={12} />
+            ) : (
+              <FaChevronLeft size={12} />
+            )}
           </button>
 
           {/* Logo Section */}
           <div className="p-6 border-b border-gray-200">
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
+            <div
+              className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-3"}`}
+            >
               <div className="relative">
                 <Image
                   src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
@@ -167,7 +203,9 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
                   <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     I Next ETS
                   </h2>
-                  <p className="text-xs text-gray-500 font-medium">Client Portal</p>
+                  <p className="text-xs text-gray-500 font-medium">
+                    Client Portal
+                  </p>
                 </div>
               )}
             </div>
@@ -191,10 +229,8 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
             </div>
           )} */}
 
-
-
           {/* Navigation Menu */}
-          <nav className="flex-1 p-4 overflow-y-auto">
+          <nav className="flex-1 p-4 overflow-y-auto custom-scrollbar">
             <div className="space-y-2">
               {menuItems.map((item) => {
                 const Icon = item.icon;
@@ -205,14 +241,18 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
-                    className={`group relative flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'
-                      } px-4 py-3 rounded-xl transition-all duration-200 ${isActive
+                    className={`group relative flex items-center ${
+                      isCollapsed ? "justify-center" : "space-x-3"
+                    } px-4 py-3 rounded-xl transition-all duration-200 ${
+                      isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
-                      }`}
-                    title={isCollapsed ? item.name : ''}
+                    }`}
+                    title={isCollapsed ? item.name : ""}
                   >
-                    <Icon className={`text-xl ${isActive ? 'animate-pulse' : ''}`} />
+                    <Icon
+                      className={`text-xl ${isActive ? "animate-pulse" : ""}`}
+                    />
                     {!isCollapsed && (
                       <span className="font-semibold">{item.name}</span>
                     )}
@@ -222,6 +262,55 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
                   </Link>
                 );
               })}
+
+              {/* Active Plans Submenu */}
+              {activePlans.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  {!isCollapsed && (
+                    <button
+                      onClick={() => setShowPlansDropdown(!showPlansDropdown)}
+                      className="w-full flex items-center justify-between px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors"
+                    >
+                      <span>Active Subscriptions</span>
+                      {showPlansDropdown ? <FaChevronUp /> : <FaChevronDown />}
+                    </button>
+                  )}
+
+                  {showPlansDropdown && (
+                    <div className="mt-2 space-y-1">
+                      {activePlans.map((purchase) => (
+                        <Link
+                          key={purchase._id}
+                          href={`/client/plans/${purchase._id}`}
+                          onClick={() => setIsSidebarOpen(false)}
+                          className={`group flex items-center ${
+                            isCollapsed ? "justify-center" : "space-x-3"
+                          } px-4 py-2.5 rounded-xl transition-all duration-200 ${
+                            pathname === `/client/plans/${purchase._id}`
+                              ? "bg-blue-50 text-blue-600 font-bold"
+                              : "text-gray-600 hover:bg-gray-50"
+                          }`}
+                          title={isCollapsed ? purchase.planId?.name : ""}
+                        >
+                          <FaGem
+                            className={`text-sm ${pathname === `/client/plans/${purchase._id}` ? "text-blue-600" : "text-gray-400 group-hover:text-blue-500"}`}
+                          />
+                          {!isCollapsed && (
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-sm truncate">
+                                {purchase.planId?.name}
+                              </span>
+                              <span className="text-[10px] text-gray-400 font-medium truncate uppercase tracking-tighter">
+                                {purchase.planId?.category?.name}
+                              </span>
+                            </div>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </nav>
 
@@ -229,9 +318,10 @@ const ClientSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetColl
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-center space-x-3'
-                } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
-              title={isCollapsed ? 'Logout' : ''}
+              className={`w-full flex items-center ${
+                isCollapsed ? "justify-center" : "justify-center space-x-3"
+              } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
+              title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />
               {!isCollapsed && <span>Logout</span>}

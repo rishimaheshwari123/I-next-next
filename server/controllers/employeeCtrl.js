@@ -605,3 +605,141 @@ exports.getEmployeeStats = async (req, res) => {
     });
   }
 };
+
+// Upload employee documents
+exports.uploadEmployeeDocuments = async (req, res) => {
+  try {
+    const employeeId = req.user.id;
+    const employee = await Employee.findById(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found",
+      });
+    }
+
+    if (!req.files) {
+      return res.status(400).json({
+        success: false,
+        message: "No files uploaded",
+      });
+    }
+
+    const { uploadImageToCloudinary } = require("../config/imageUploader");
+    const folder = `employee-documents/${employee.employeeId}`;
+    const updateData = { documents: { ...employee.documents } };
+
+    const docTypes = [
+      "aadharCard",
+      "panCard",
+      "bankPassbook",
+      "tenthCertificate",
+      "twelfthCertificate",
+      "graduationCertificate",
+      "mastersCertificate",
+      "experienceLetter",
+      "relievingLetter",
+      "offerLetter",
+      "salarySlip1",
+      "salarySlip2",
+      "salarySlip3",
+    ];
+
+    for (const type of docTypes) {
+      if (req.files[type]) {
+        const result = await uploadImageToCloudinary(req.files[type], folder);
+        updateData.documents[type] = {
+          url: result.secure_url,
+          status: "Pending",
+          remarks: ""
+        };
+      }
+    }
+
+    // Handle salary slips (multiple)
+    if (req.files.salarySlips) {
+      const slips = Array.isArray(req.files.salarySlips)
+        ? req.files.salarySlips
+        : [req.files.salarySlips];
+
+      const uploadedSlips = [];
+      for (const slip of slips) {
+        const result = await uploadImageToCloudinary(slip, `${folder}/salary-slips`);
+        uploadedSlips.push({
+          url: result.secure_url,
+          status: "Pending",
+          remarks: ""
+        });
+      }
+      updateData.documents.salarySlips = [...(employee.documents?.salarySlips || []), ...uploadedSlips];
+    }
+
+    const updatedEmployee = await Employee.findByIdAndUpdate(
+      employeeId,
+      updateData,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Documents uploaded successfully",
+      data: updatedEmployee.documents,
+    });
+  } catch (error) {
+    console.error("Error uploading documents:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error uploading documents",
+      error: error.message,
+    });
+  }
+};
+
+// Verify employee document (Admin)
+exports.verifyEmployeeDocument = async (req, res) => {
+  try {
+    const { id } = req.params; // Employee ID
+    const { docType, status, remarks, slipId } = req.body;
+
+    const employee = await Employee.findById(id);
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found",
+      });
+    }
+
+    if (docType === "salarySlips" && slipId) {
+      const slip = employee.documents.salarySlips.id(slipId);
+      if (slip) {
+        slip.status = status;
+        slip.remarks = remarks || "";
+      }
+    } else if (employee.documents[docType]) {
+      employee.documents[docType].status = status;
+      employee.documents[docType].remarks = remarks || "";
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid document type",
+      });
+    }
+
+    await employee.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Document status updated successfully",
+      data: employee.documents,
+    });
+  } catch (error) {
+    console.error("Error verifying document:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error verifying document",
+      error: error.message,
+    });
+  }
+};

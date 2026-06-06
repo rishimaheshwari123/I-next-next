@@ -20,14 +20,19 @@ import {
 import Image from "next/image";
 import { toast } from "react-toastify";
 
-const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCollapsed }) => {
+const EmployeeSidebar = ({
+  isCollapsed: propCollapsed,
+  setIsCollapsed: propSetCollapsed,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [internalCollapsed, setInternalCollapsed] = useState(false);
 
-  const isCollapsed = propCollapsed !== undefined ? propCollapsed : internalCollapsed;
-  const setIsCollapsed = propSetCollapsed !== undefined ? propSetCollapsed : setInternalCollapsed;
+  const isCollapsed =
+    propCollapsed !== undefined ? propCollapsed : internalCollapsed;
+  const setIsCollapsed =
+    propSetCollapsed !== undefined ? propSetCollapsed : setInternalCollapsed;
 
   const [user, setUser] = useState(null);
 
@@ -59,12 +64,12 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
       color: "from-amber-500 to-amber-600",
     },
 
-    {
-      name: "My Leads",
-      icon: FaChartLine,
-      path: "/employee/leads",
-      color: "from-indigo-500 to-purple-600",
-    },
+    // {
+    //   name: "My Leads",
+    //   icon: FaChartLine,
+    //   path: "/employee/leads",
+    //   color: "from-indigo-500 to-purple-600",
+    // },
     {
       name: "My Assigned Projects",
       icon: FaTasks,
@@ -136,8 +141,9 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
       >
         <div className="flex flex-col h-full relative">
           {/* Desktop Toggle Button */}
@@ -155,8 +161,9 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
           {/* Logo Section */}
           <div className="p-6 border-b border-gray-200">
             <div
-              className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-3"
-                }`}
+              className={`flex items-center ${
+                isCollapsed ? "justify-center" : "space-x-3"
+              }`}
             >
               <div className="relative">
                 <Image
@@ -201,8 +208,6 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
             </div>
           )} */}
 
-
-
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 overflow-y-auto">
             <div className="space-y-2">
@@ -215,11 +220,13 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
-                    className={`group relative flex items-center ${isCollapsed ? "justify-center" : "space-x-3"
-                      } px-4 py-3 rounded-xl transition-all duration-200 ${isActive
+                    className={`group relative flex items-center ${
+                      isCollapsed ? "justify-center" : "space-x-3"
+                    } px-4 py-3 rounded-xl transition-all duration-200 ${
+                      isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
-                      }`}
+                    }`}
                     title={isCollapsed ? item.name : ""}
                   >
                     <Icon
@@ -241,8 +248,9 @@ const EmployeeSidebar = ({ isCollapsed: propCollapsed, setIsCollapsed: propSetCo
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-center space-x-3"
-                } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
+              className={`w-full flex items-center ${
+                isCollapsed ? "justify-center" : "justify-center space-x-3"
+              } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
               title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />

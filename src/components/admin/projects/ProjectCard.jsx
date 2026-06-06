@@ -8,6 +8,9 @@ import {
   FaLink,
   FaComments,
   FaExclamationCircle,
+  FaFileUpload,
+  FaFilePdf,
+  FaEye,
 } from "react-icons/fa";
 
 export default function ProjectCard({
@@ -72,14 +75,14 @@ export default function ProjectCard({
           <div className="flex flex-wrap gap-2">
             <span
               className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(
-                project.status
+                project.status,
               )}`}
             >
               {project.status}
             </span>
             <span
               className={`px-3 py-1 rounded-full text-xs font-bold ${getPriorityColor(
-                project.priority
+                project.priority,
               )}`}
             >
               {project.priority} Priority
@@ -90,9 +93,7 @@ export default function ProjectCard({
 
       {/* Description */}
       {project.description && (
-        <p className="text-gray-600 mb-4 line-clamp-2">
-          {project.description}
-        </p>
+        <p className="text-gray-600 mb-4 line-clamp-2">{project.description}</p>
       )}
 
       {/* Details Grid */}
@@ -102,7 +103,10 @@ export default function ProjectCard({
           <div className="flex flex-wrap gap-1">
             {Array.isArray(project.category) ? (
               project.category.map((cat, idx) => (
-                <span key={idx} className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold">
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold"
+                >
                   {cat.name || cat}
                 </span>
               ))
@@ -124,9 +128,7 @@ export default function ProjectCard({
       {/* Technologies */}
       {project.technologies && project.technologies.length > 0 && (
         <div className="mb-4">
-          <span className="text-xs text-gray-500 block mb-2">
-            Technologies
-          </span>
+          <span className="text-xs text-gray-500 block mb-2">Technologies</span>
           <div className="flex flex-wrap gap-2">
             {project.technologies.map((tech, index) => (
               <span
@@ -178,7 +180,9 @@ export default function ProjectCard({
             isOverdue ? "bg-red-50" : "bg-gray-50"
           }`}
         >
-          <FaCalendar className={isOverdue ? "text-red-600" : "text-gray-400"} />
+          <FaCalendar
+            className={isOverdue ? "text-red-600" : "text-gray-400"}
+          />
           <div>
             <span className="text-xs text-gray-500 block">Expected End</span>
             <span
@@ -225,6 +229,50 @@ export default function ProjectCard({
           ></div>
         </div>
       </div>
+
+      {/* Legal Documents Section */}
+      {project.legalDocuments && project.legalDocuments.length > 0 && (
+        <div className="mb-4 bg-purple-50 p-4 rounded-xl border border-purple-100">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-sm font-bold text-purple-800 flex items-center gap-2">
+              <FaFilePdf className="text-purple-600" />
+              Legal Documents ({project.legalDocuments.length})
+            </h4>
+          </div>
+          <div className="space-y-2">
+            {project.legalDocuments.map((doc, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between bg-white p-3 rounded-lg border border-purple-100 shadow-sm hover:shadow-md transition-all group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2 bg-red-50 text-red-500 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
+                    <FaFilePdf />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-gray-800 truncate">
+                      {doc.name}
+                    </p>
+                    <p className="text-[10px] text-gray-500">
+                      Uploaded by: {doc.uploadedBy} •{" "}
+                      {new Date(doc.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                  title="View Document"
+                >
+                  <FaEye />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-2 pt-4 border-t">

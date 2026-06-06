@@ -69,9 +69,12 @@ export default function EmployeesPage() {
         accountHolderName: "",
         accountNumber: "",
         ifscCode: "",
-        bankName: "",
         branchName: "",
         accountType: "Savings",
+      },
+      lastHike: {
+        amount: 0,
+        date: "",
       },
     },
   });
@@ -120,7 +123,7 @@ export default function EmployeesPage() {
     setSubmitting(true);
 
     const loadingToast = toast.loading(
-      modalMode === "add" ? "Creating employee..." : "Updating employee..."
+      modalMode === "add" ? "Creating employee..." : "Updating employee...",
     );
 
     try {
@@ -149,7 +152,7 @@ export default function EmployeesPage() {
           formData,
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
 
         if (response.data.success) {
@@ -249,7 +252,15 @@ export default function EmployeesPage() {
           phone: "",
           relation: "",
         },
-        salary: employee.salary || formData.salary,
+        salary: employee.salary
+          ? {
+              ...employee.salary,
+              lastHike: {
+                amount: employee.salary.lastHike?.amount || 0,
+                date: employee.salary.lastHike?.date?.split("T")[0] || "",
+              },
+            }
+          : formData.salary,
       });
     } else if (mode === "add") {
       resetForm();
@@ -290,6 +301,10 @@ export default function EmployeesPage() {
           branchName: "",
           accountType: "Savings",
         },
+        lastHike: {
+          amount: 0,
+          date: "",
+        },
       },
     });
   };
@@ -312,9 +327,7 @@ export default function EmployeesPage() {
               <FaUserTie className="text-3xl" />
               Employee Management
             </h1>
-            <p className="text-cyan-100 text-lg">
-              Manage your workforce
-            </p>
+            <p className="text-cyan-100 text-lg">Manage your workforce</p>
           </div>
           <button
             onClick={() => openModal("add")}
@@ -329,19 +342,29 @@ export default function EmployeesPage() {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-blue-600">
-            <p className="text-gray-600 text-sm font-semibold">Total Employees</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalEmployees}</p>
+            <p className="text-gray-600 text-sm font-semibold">
+              Total Employees
+            </p>
+            <p className="text-3xl font-bold text-gray-900 mt-2">
+              {stats.totalEmployees}
+            </p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-green-600">
             <p className="text-gray-600 text-sm font-semibold">Active</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalEmployees}</p>
+            <p className="text-3xl font-bold text-gray-900 mt-2">
+              {stats.totalEmployees}
+            </p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-red-600">
             <p className="text-gray-600 text-sm font-semibold">Inactive</p>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalInactive}</p>
+            <p className="text-3xl font-bold text-gray-900 mt-2">
+              {stats.totalInactive}
+            </p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md border-l-4 border-purple-600">
-            <p className="text-gray-600 text-sm font-semibold">Monthly Salary</p>
+            <p className="text-gray-600 text-sm font-semibold">
+              Monthly Salary
+            </p>
             <p className="text-3xl font-bold text-gray-900 mt-2">
               ₹{stats.totalSalaryExpense?.toLocaleString()}
             </p>
@@ -386,11 +409,18 @@ export default function EmployeesPage() {
           <table className="w-full min-w-max border-collapse">
             <thead className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm uppercase tracking-wider">
               <tr>
-                <th className="px-6 py-4 text-left font-semibold">Employee ID</th>
+                <th className="px-6 py-4 text-left font-semibold">Image</th>
+                <th className="px-6 py-4 text-left font-semibold">
+                  Employee ID
+                </th>
                 <th className="px-6 py-4 text-left font-semibold">Name</th>
                 <th className="px-6 py-4 text-left font-semibold">Email</th>
-                <th className="px-6 py-4 text-left font-semibold">Designation</th>
-                <th className="px-6 py-4 text-left font-semibold">Department</th>
+                <th className="px-6 py-4 text-left font-semibold">
+                  Designation
+                </th>
+                <th className="px-6 py-4 text-left font-semibold">
+                  Department
+                </th>
                 <th className="px-6 py-4 text-left font-semibold">Salary</th>
                 <th className="px-6 py-4 text-left font-semibold">Status</th>
                 <th className="px-6 py-4 text-center font-semibold">Actions</th>
@@ -399,35 +429,79 @@ export default function EmployeesPage() {
             <tbody className="divide-y divide-gray-200">
               {employees.map((employee) => (
                 <tr key={employee._id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-cyan-600">
-                    {employee.employeeId}
+                  <td className="px-6 py-4">
+                    <div 
+                      className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
+                      onClick={() => openModal("view", employee)}
+                    >
+                      {employee.profileImage ? (
+                        <img
+                          src={employee.profileImage}
+                          alt={employee.name}
+                          className="w-10 h-10 rounded-full object-cover border-2 border-cyan-100 shadow-sm"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold border-2 border-cyan-50 shadow-sm">
+                          {employee.name?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">{employee.name}</td>
+                  <td className="px-6 py-4">
+                    <span 
+                      className="font-semibold text-cyan-600 cursor-pointer hover:text-cyan-700 hover:underline transition-all"
+                      onClick={() => openModal("view", employee)}
+                    >
+                      {employee.employeeId}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span 
+                      className="font-bold text-gray-800 cursor-pointer hover:text-cyan-600 transition-colors"
+                      onClick={() => openModal("view", employee)}
+                    >
+                      {employee.name}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-gray-600">{employee.email}</td>
-                  <td className="px-6 py-4 text-gray-600">{employee.designation}</td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {employee.designation}
+                  </td>
                   <td className="px-6 py-4">
                     <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">
                       {employee.department}
                     </span>
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900">
-                    ₹{employee.salary?.netSalary?.toLocaleString()}
+                    <div className="flex flex-col">
+                      <span>₹{((employee.salary?.netSalary || 0) + (employee.salary?.lastHike?.amount || 0)).toLocaleString()}</span>
+                      {employee.salary?.lastHike?.amount > 0 && (
+                        <span className="text-[10px] text-green-600 font-bold flex items-center gap-1">
+                          <FaPlus className="text-[8px]" />
+                          ₹{employee.salary.lastHike.amount.toLocaleString()} Hike
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold ${employee.isActive
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
+                        employee.isActive
                           ? "bg-green-50 text-green-700"
                           : "bg-red-50 text-red-700"
-                        }`}
+                      }`}
                     >
                       {employee.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex justify-center items-center gap-2">
-
                       <button
-                        onClick={() => router.push(`/admin/employees/${employee._id}/projects`)}
+                        onClick={() =>
+                          router.push(
+                            `/admin/employees/${employee._id}/projects`,
+                          )
+                        }
                         className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
                         title="See Projects"
                       >
@@ -448,7 +522,9 @@ export default function EmployeesPage() {
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => handleDelete(employee._id, employee.name)}
+                        onClick={() =>
+                          handleDelete(employee._id, employee.name)
+                        }
                         className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
                         title="Delete"
                       >
@@ -480,6 +556,7 @@ export default function EmployeesPage() {
         handleSubmit={handleSubmit}
         resetForm={resetForm}
         submitting={submitting}
+        onRefresh={fetchEmployees}
       />
     </div>
   );

@@ -7,7 +7,6 @@ import ProjectChatModal from "@/components/admin/projects/ProjectChatModal";
 import ProgressUpdateModal from "@/components/admin/projects/ProgressUpdateModal";
 import { EMPLOYEE_API } from "@/config/api";
 
-
 const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,18 +20,21 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${EMPLOYEE_API.ADD_PROJECT_TASK_COMMENT(taskId)}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+      const res = await fetch(
+        `${EMPLOYEE_API.ADD_PROJECT_TASK_COMMENT(taskId)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ comment: commentText }),
         },
-        body: JSON.stringify({ comment: commentText })
-      });
+      );
       const data = await res.json();
       if (data.success) {
         toast.success("💬 Reply posted!");
-        setNewCommentInputs(prev => ({ ...prev, [taskId]: "" }));
+        setNewCommentInputs((prev) => ({ ...prev, [taskId]: "" }));
         fetchTasks();
       } else {
         toast.error(data.message || "Failed to post reply");
@@ -52,11 +54,16 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
       const employeeId = user?.id || user?._id;
 
       const res = await fetch(`${EMPLOYEE_API.GET_PROJECT_TASKS(projectId)}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) {
-        setTasks(data.data.filter(t => t.employeeId?._id === employeeId || t.employeeId === employeeId));
+        setTasks(
+          data.data.filter(
+            (t) =>
+              t.employeeId?._id === employeeId || t.employeeId === employeeId,
+          ),
+        );
       }
     } catch (e) {
       console.error(e);
@@ -122,32 +129,48 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
       {expanded && (
         <div className="mt-2 space-y-2 bg-gray-55 p-2.5 rounded-lg border">
           {loading ? (
-            <div className="text-center py-2 text-xs text-gray-500">Loading tasks...</div>
+            <div className="text-center py-2 text-xs text-gray-500">
+              Loading tasks...
+            </div>
           ) : tasks.length === 0 ? (
-            <div className="text-center py-2 text-xs text-gray-400">No tasks assigned to you on this project.</div>
+            <div className="text-center py-2 text-xs text-gray-400">
+              No tasks assigned to you on this project.
+            </div>
           ) : (
             <div className="space-y-2">
               {tasks.map((task) => (
-                <div key={task._id} className="bg-white p-2.5 rounded border shadow-sm text-xs">
+                <div
+                  key={task._id}
+                  className="bg-white p-2.5 rounded border shadow-sm text-xs"
+                >
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="font-bold text-gray-800">{task.taskName}</span>
+                        <span className="font-bold text-gray-800">
+                          {task.taskName}
+                        </span>
                         {task.taskType && (
-                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${getTaskTypeBadge(task.taskType)}`}>
+                          <span
+                            className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${getTaskTypeBadge(task.taskType)}`}
+                          >
                             {task.taskType}
                           </span>
                         )}
                       </div>
-                      {task.description && <p className="text-gray-500 mt-0.5 text-[11px]">{task.description}</p>}
+                      {task.description && (
+                        <p className="text-gray-500 mt-0.5 text-[11px]">
+                          {task.description}
+                        </p>
+                      )}
                     </div>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${task.status === "Completed"
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        task.status === "Completed"
                           ? "bg-green-100 text-green-700"
                           : task.status === "In Progress"
                             ? "bg-blue-100 text-blue-700"
                             : "bg-yellow-100 text-yellow-750"
-                        }`}
+                      }`}
                     >
                       {task.status}
                     </span>
@@ -159,32 +182,47 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
                   )}
                   {/* Feedback & Replies Thread */}
                   <div className="mt-2.5 pt-2.5 border-t border-gray-100 space-y-2">
-                    <span className="text-[10px] font-bold text-gray-700 block">Feedback & Replies ({task.feedbacks?.length || 0})</span>
+                    <span className="text-[10px] font-bold text-gray-700 block">
+                      Feedback & Replies ({task.feedbacks?.length || 0})
+                    </span>
                     {task.feedbacks && task.feedbacks.length > 0 ? (
                       <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                         {task.feedbacks.map((fb, idx) => (
-                          <div key={idx} className="bg-gray-50 border rounded p-1.5 text-[10px] space-y-1">
+                          <div
+                            key={idx}
+                            className="bg-gray-50 border rounded p-1.5 text-[10px] space-y-1"
+                          >
                             <div className="flex justify-between items-center text-gray-550 font-semibold">
                               <span className="flex items-center gap-1.5">
-                                <span className={`px-1 rounded-[3px] text-[8px] font-extrabold uppercase ${
-                                  fb.sender === "Client"
-                                    ? "bg-blue-100 text-blue-700"
-                                    : fb.sender === "Employee"
-                                      ? "bg-green-100 text-green-700"
-                                      : "bg-purple-100 text-purple-700"
-                                }`}>
+                                <span
+                                  className={`px-1 rounded-[3px] text-[8px] font-extrabold uppercase ${
+                                    fb.sender === "Client"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : fb.sender === "Employee"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-purple-100 text-purple-700"
+                                  }`}
+                                >
                                   {fb.sender}
                                 </span>
-                                <span className="text-gray-700 font-bold">{fb.senderName}</span>
+                                <span className="text-gray-700 font-bold">
+                                  {fb.senderName}
+                                </span>
                               </span>
-                              <span>{new Date(fb.createdAt).toLocaleString()}</span>
+                              <span>
+                                {new Date(fb.createdAt).toLocaleString()}
+                              </span>
                             </div>
-                            <p className="text-gray-800 font-medium whitespace-pre-wrap">{fb.comment}</p>
+                            <p className="text-gray-800 font-medium whitespace-pre-wrap">
+                              {fb.comment}
+                            </p>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[10px] text-gray-400 italic">No feedback or replies yet.</p>
+                      <p className="text-[10px] text-gray-400 italic">
+                        No feedback or replies yet.
+                      </p>
                     )}
 
                     <div className="flex gap-1.5 mt-2">
@@ -192,10 +230,12 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
                         type="text"
                         placeholder="Reply to feedback..."
                         value={newCommentInputs[task._id] || ""}
-                        onChange={(e) => setNewCommentInputs({
-                          ...newCommentInputs,
-                          [task._id]: e.target.value
-                        })}
+                        onChange={(e) =>
+                          setNewCommentInputs({
+                            ...newCommentInputs,
+                            [task._id]: e.target.value,
+                          })
+                        }
                         className="flex-1 px-2 py-1 border rounded text-[10px] focus:ring-1 focus:ring-indigo-500 bg-white"
                       />
                       <button
@@ -209,14 +249,22 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
                   </div>
                   {/* Dropdown and Button for status update */}
                   <div className="mt-2.5 pt-2.5 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50 p-1.5 rounded">
-                    <span className="text-[10px] font-semibold text-gray-500">Change Status:</span>
+                    <span className="text-[10px] font-semibold text-gray-500">
+                      Change Status:
+                    </span>
                     <div className="flex items-center gap-1.5">
                       <select
-                        value={taskStatusUpdates[task._id] !== undefined ? taskStatusUpdates[task._id] : task.status}
-                        onChange={(e) => setTaskStatusUpdates({
-                          ...taskStatusUpdates,
-                          [task._id]: e.target.value
-                        })}
+                        value={
+                          taskStatusUpdates[task._id] !== undefined
+                            ? taskStatusUpdates[task._id]
+                            : task.status
+                        }
+                        onChange={(e) =>
+                          setTaskStatusUpdates({
+                            ...taskStatusUpdates,
+                            [task._id]: e.target.value,
+                          })
+                        }
                         className="px-1.5 py-0.5 border border-gray-200 rounded text-[10px] focus:ring-1 focus:ring-indigo-500 bg-white text-gray-700 font-medium"
                       >
                         <option value="Pending">Pending</option>
@@ -225,10 +273,14 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
                       </select>
                       <button
                         type="button"
-                        onClick={() => handleUpdateStatus(
-                          task._id,
-                          taskStatusUpdates[task._id] !== undefined ? taskStatusUpdates[task._id] : task.status
-                        )}
+                        onClick={() =>
+                          handleUpdateStatus(
+                            task._id,
+                            taskStatusUpdates[task._id] !== undefined
+                              ? taskStatusUpdates[task._id]
+                              : task.status,
+                          )
+                        }
                         className="px-2 py-0.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold transition-all shadow-sm"
                       >
                         Update Status
@@ -236,8 +288,14 @@ const EmployeeProjectTasksList = ({ projectId, onProgressChange }) => {
                     </div>
                   </div>
                   <div className="mt-2 text-[9px] text-gray-400 flex flex-wrap gap-x-2 border-t pt-1.5">
-                    <span>Created: {new Date(task.createdAt).toLocaleString()}</span>
-                    {task.completedAt && <span className="text-green-600 font-semibold">Completed: {new Date(task.completedAt).toLocaleString()}</span>}
+                    <span>
+                      Created: {new Date(task.createdAt).toLocaleString()}
+                    </span>
+                    {task.completedAt && (
+                      <span className="text-green-600 font-semibold">
+                        Completed: {new Date(task.completedAt).toLocaleString()}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -294,14 +352,16 @@ export default function EmployeeProjectsPage() {
     if (searchTerm) {
       filtered = filtered.filter(
         (project) =>
-          project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.description?.toLowerCase().includes(searchTerm.toLowerCase())
+          project.projectName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          project.description?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (activeTab === "ongoing") {
       filtered = filtered.filter((project) =>
-        ["In Progress", "Testing", "Planning"].includes(project.status)
+        ["In Progress", "Testing", "Planning"].includes(project.status),
       );
     } else if (activeTab === "completed") {
       filtered = filtered.filter((project) => project.status === "Completed");
@@ -336,7 +396,7 @@ export default function EmployeeProjectsPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ progress }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -361,7 +421,9 @@ export default function EmployeeProjectsPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-semibold">Loading projects...</p>
+          <p className="mt-4 text-gray-600 font-semibold">
+            Loading projects...
+          </p>
         </div>
       </div>
     );
@@ -383,9 +445,15 @@ export default function EmployeeProjectsPage() {
             <p className="text-3xl font-bold mt-2">{projects.length}</p>
           </div>
           <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-sm font-semibold opacity-90">Ongoing / Active</h3>
+            <h3 className="text-sm font-semibold opacity-90">
+              Ongoing / Active
+            </h3>
             <p className="text-3xl font-bold mt-2">
-              {projects.filter((p) => ["In Progress", "Testing", "Planning"].includes(p.status)).length}
+              {
+                projects.filter((p) =>
+                  ["In Progress", "Testing", "Planning"].includes(p.status),
+                ).length
+              }
             </p>
           </div>
           <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-6 rounded-xl shadow-lg">
@@ -395,7 +463,9 @@ export default function EmployeeProjectsPage() {
             </p>
           </div>
           <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-sm font-semibold opacity-90">Pending / On Hold</h3>
+            <h3 className="text-sm font-semibold opacity-90">
+              Pending / On Hold
+            </h3>
             <p className="text-3xl font-bold mt-2">
               {projects.filter((p) => p.status === "On Hold").length}
             </p>
@@ -409,39 +479,51 @@ export default function EmployeeProjectsPage() {
             <div className="flex flex-wrap gap-2 w-full md:w-auto">
               <button
                 onClick={() => setActiveTab("all")}
-                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${activeTab === "all"
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "all"
                     ? "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-100"
                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                  }`}
+                }`}
               >
                 All ({projects.length})
               </button>
               <button
                 onClick={() => setActiveTab("ongoing")}
-                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${activeTab === "ongoing"
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "ongoing"
                     ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-100"
                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                  }`}
+                }`}
               >
-                Ongoing ({projects.filter((p) => ["In Progress", "Testing", "Planning"].includes(p.status)).length})
+                Ongoing (
+                {
+                  projects.filter((p) =>
+                    ["In Progress", "Testing", "Planning"].includes(p.status),
+                  ).length
+                }
+                )
               </button>
               <button
                 onClick={() => setActiveTab("completed")}
-                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${activeTab === "completed"
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "completed"
                     ? "bg-green-600 text-white border-green-600 shadow-md shadow-green-100"
                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                  }`}
+                }`}
               >
-                Completed ({projects.filter((p) => p.status === "Completed").length})
+                Completed (
+                {projects.filter((p) => p.status === "Completed").length})
               </button>
               <button
                 onClick={() => setActiveTab("pending")}
-                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${activeTab === "pending"
+                className={`px-4 py-2 rounded-xl font-bold text-sm transition-all border ${
+                  activeTab === "pending"
                     ? "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-100"
                     : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
-                  }`}
+                }`}
               >
-                Pending ({projects.filter((p) => p.status === "On Hold").length})
+                Pending ({projects.filter((p) => p.status === "On Hold").length}
+                )
               </button>
             </div>
 
@@ -487,18 +569,22 @@ export default function EmployeeProjectsPage() {
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold border ${project.status === "Completed"
+                        className={`px-3 py-1 rounded-full text-xs font-bold border ${
+                          project.status === "Completed"
                             ? "bg-green-100 text-green-700 border-green-300"
                             : project.status === "In Progress"
                               ? "bg-blue-100 text-blue-700 border-blue-300"
                               : "bg-gray-100 text-gray-700 border-gray-300"
-                          }`}
+                        }`}
                       >
                         {project.status}
                       </span>
                       {Array.isArray(project.category) ? (
                         project.category.map((cat, idx) => (
-                          <span key={idx} className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">
+                          <span
+                            key={idx}
+                            className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 border border-indigo-200"
+                          >
                             {cat.name || cat}
                           </span>
                         ))
@@ -550,23 +636,24 @@ export default function EmployeeProjectsPage() {
                 </div>
 
                 {/* Team Members */}
-                {project.assignedEmployees && project.assignedEmployees.length > 0 && (
-                  <div className="mb-4 bg-gray-50 p-3 rounded-lg">
-                    <span className="text-xs text-gray-500 block mb-2 font-semibold">
-                      Assigned Team Members
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.assignedEmployees.map((emp) => (
-                        <span
-                          key={emp._id}
-                          className="px-2.5 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded text-xs font-semibold"
-                        >
-                          {emp.name}
-                        </span>
-                      ))}
+                {project.assignedEmployees &&
+                  project.assignedEmployees.length > 0 && (
+                    <div className="mb-4 bg-gray-50 p-3 rounded-lg">
+                      <span className="text-xs text-gray-500 block mb-2 font-semibold">
+                        Assigned Team Members
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.assignedEmployees.map((emp) => (
+                          <span
+                            key={emp._id}
+                            className="px-2.5 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded text-xs font-semibold"
+                          >
+                            {emp.name}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Progress */}
                 <div className="mb-4">

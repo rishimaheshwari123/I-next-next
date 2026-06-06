@@ -78,7 +78,7 @@ exports.createProject = async (req, res) => {
 // Get All Projects (Admin)
 exports.getAllProjects = async (req, res) => {
   try {
-    const { status, category, priority } = req.query;
+    const { status, category, priority, search, page = 1, limit = 10 } = req.query;
 
     // Build filter
     const filter = {};
@@ -86,16 +86,32 @@ exports.getAllProjects = async (req, res) => {
     if (category) filter.category = category;
     if (priority) filter.priority = priority;
 
+    if (search) {
+      filter.$or = [
+        { projectName: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
     const projects = await Project.find(filter)
       .populate("category", "name")
       .populate("client", "name email company")
       .populate("assignedEmployees", "name email")
       .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Project.countDocuments(filter);
 
     res.status(200).json({
       success: true,
       count: projects.length,
+      total,
+      page: parseInt(page),
+      totalPages: Math.ceil(total / parseInt(limit)),
       data: projects,
     });
   } catch (error) {
@@ -302,10 +318,10 @@ exports.updateProgress = async (req, res) => {
     const { id } = req.params;
     const { progress } = req.body;
 
-    if (progress < 0 || progress > 100) {
+    if (progress === undefined || progress < 0 || progress > 100) {
       return res.status(400).json({
         success: false,
-        message: "Progress must be between 0 and 100",
+        message: "Please provide a valid progress (0-100)",
       });
     }
 
@@ -327,7 +343,7 @@ exports.updateProgress = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Progress updated successfully",
+      message: "Project progress updated successfully",
       data: project,
     });
   } catch (error) {
@@ -335,6 +351,83 @@ exports.updateProgress = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error updating progress",
+      error: error.message,
+    });
+  }
+};
+
+// Upload Project Legal Documents
+exports.uploadProjectDocuments = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.user;
+
+    const project = await Project.findById(id);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    // Check if user is the client of this project
+    if (project.client.toString() !== user.id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to upload documents for this project",
+      });
+    }
+
+    if (!req.files || !req.files.legalDocs) {
+      return res.status(400).json({
+        success: false,
+        message: "No files uploaded",
+      });
+    }
+
+    const files = Array.isArray(req.files.legalDocs) ? req.files.legalDocs : [req.files.legalDocs];
+
+    // Limit to 5 documents total
+    if ((project.legalDocuments?.length || 0) + files.length > 5) {
+      return res.status(400).json({
+        success: false,
+        message: "Maximum 5 legal documents are allowed per project",
+      });
+    }
+
+    const { uploadImageToCloudinary } = require("../config/imageUploader");
+    const folder = `projects/${project.projectName}/legal-docs`;
+    const newDocs = [];
+
+    for (const file of files) {
+      if (file.mimetype !== "application/pdf") {
+        return res.status(400).json({
+          success: false,
+          message: "Only PDF files are allowed",
+        });
+      }
+
+      const result = await uploadImageToCloudinary(file, folder);
+      newDocs.push({
+        name: file.name,
+        url: result.secure_url,
+        uploadedBy: "Client",
+      });
+    }
+
+    project.legalDocuments.push(...newDocs);
+    await project.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Documents uploaded successfully",
+      data: project.legalDocuments,
+    });
+  } catch (error) {
+    console.error("Error uploading project documents:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error uploading documents",
       error: error.message,
     });
   }

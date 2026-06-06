@@ -1,7 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
+import {
+  FaPlus,
+  FaSearch,
+  FaFilter,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import ProjectStats from "@/components/admin/projects/ProjectStats";
 import ProjectCard from "@/components/admin/projects/ProjectCard";
 import ProjectFormModal from "@/components/admin/projects/ProjectFormModal";
@@ -19,9 +25,17 @@ export default function AdminProjectsPage() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterPriority, setFilterPriority] = useState("");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [customLimit, setCustomLimit] = useState("");
 
   // Modals
   const [showFormModal, setShowFormModal] = useState(false);
@@ -49,21 +63,36 @@ export default function AdminProjectsPage() {
 
   useEffect(() => {
     fetchAllData();
-  }, []);
-
-  useEffect(() => {
-    applyFilters();
-  }, [searchTerm, filterStatus, filterCategory, filterPriority, projects]);
+  }, [
+    currentPage,
+    limit,
+    activeSearch,
+    filterStatus,
+    filterCategory,
+    filterPriority,
+  ]);
 
   const fetchAllData = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      // Fetch projects
-      const projectsRes = await fetch(EMPLOYEE_API.GET_ALL_PROJECTS, {
-        headers: { Authorization: `Bearer ${token}` },
+      // Fetch projects with pagination and backend search
+      const queryParams = new URLSearchParams({
+        page: currentPage,
+        limit: limit,
+        search: activeSearch,
+        status: filterStatus,
+        category: filterCategory,
+        priority: filterPriority,
       });
+
+      const projectsRes = await fetch(
+        `${EMPLOYEE_API.GET_ALL_PROJECTS}?${queryParams}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       const projectsData = await projectsRes.json();
 
       // Fetch stats
@@ -87,8 +116,13 @@ export default function AdminProjectsPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const categoriesData = await categoriesRes.json();
- 
-      if (projectsData.success) setProjects(projectsData.data);
+
+      if (projectsData.success) {
+        setProjects(projectsData.data);
+        setFilteredProjects(projectsData.data);
+        setTotalPages(projectsData.totalPages);
+        setTotalProjects(projectsData.total);
+      }
       if (statsData.success) setStats(statsData.data);
       if (clientsData.success) setClients(clientsData.clients);
       if (employeesData.success) setEmployees(employeesData.data);
@@ -101,39 +135,36 @@ export default function AdminProjectsPage() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1);
+    setActiveSearch(searchTerm);
+  };
+
   const applyFilters = () => {
-    let filtered = [...projects];
+    // This is now handled by the backend through useEffect dependencies
+    setCurrentPage(1);
+  };
 
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (project) =>
-          project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.client?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  const handleLimitChange = (e) => {
+    const value = e.target.value;
+    if (value === "custom") {
+      setLimit(10); // Default to 10 when switching to custom
+      setCustomLimit("10");
+    } else {
+      setLimit(parseInt(value));
+      setCustomLimit("");
     }
+    setCurrentPage(1);
+  };
 
-    // Status filter
-    if (filterStatus) {
-      filtered = filtered.filter((project) => project.status === filterStatus);
+  const handleCustomLimitSubmit = (e) => {
+    e.preventDefault();
+    const val = parseInt(customLimit);
+    if (val > 0) {
+      setLimit(val);
+      setCurrentPage(1);
     }
-
-    // Category filter
-    if (filterCategory) {
-      filtered = filtered.filter((project) =>
-        Array.isArray(project.category)
-          ? project.category.some((c) => (c._id || c) === filterCategory)
-          : (project.category?._id || project.category) === filterCategory
-      );
-    }
-
-    // Priority filter
-    if (filterPriority) {
-      filtered = filtered.filter((project) => project.priority === filterPriority);
-    }
-
-    setFilteredProjects(filtered);
   };
 
   const handleAddProject = () => {
@@ -159,18 +190,20 @@ export default function AdminProjectsPage() {
   const handleEditProject = (project) => {
     setModalMode("edit");
     setSelectedProject(project);
-    
+
     // Ensure technologies is always an array
-    const technologies = Array.isArray(project.technologies) 
-      ? project.technologies 
+    const technologies = Array.isArray(project.technologies)
+      ? project.technologies
       : [];
-    
+
     setFormData({
       projectName: project.projectName,
       description: project.description || "",
-      category: Array.isArray(project.category) 
-        ? project.category.map((c) => c._id || c) 
-        : (project.category ? [project.category._id || project.category] : []),
+      category: Array.isArray(project.category)
+        ? project.category.map((c) => c._id || c)
+        : project.category
+          ? [project.category._id || project.category]
+          : [],
       projectType: project.projectType,
       technologies: technologies,
       startDate: project.startDate.split("T")[0],
@@ -213,7 +246,7 @@ export default function AdminProjectsPage() {
 
       if (data.success) {
         toast.success(
-          `✅ Project ${modalMode === "add" ? "created" : "updated"} successfully!`
+          `✅ Project ${modalMode === "add" ? "created" : "updated"} successfully!`,
         );
         setShowFormModal(false);
         fetchAllData();
@@ -288,7 +321,7 @@ export default function AdminProjectsPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ employeeIds }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -330,7 +363,9 @@ export default function AdminProjectsPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-semibold">Loading projects...</p>
+          <p className="mt-4 text-gray-600 font-semibold">
+            Loading projects...
+          </p>
         </div>
       </div>
     );
@@ -352,59 +387,84 @@ export default function AdminProjectsPage() {
 
         {/* Filters & Search */}
         <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {/* Search */}
-            <div className="md:col-span-2 relative">
-              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-              />
+          <div className="flex flex-col md:flex-row gap-4">
+            <form
+              onSubmit={handleSearch}
+              className="flex-1 relative flex gap-2"
+            >
+              <div className="relative flex-1">
+                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search projects by name or description..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all shadow-md flex items-center gap-2"
+              >
+                <FaSearch /> Search
+              </button>
+            </form>
+
+            <div className="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0">
+              <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <FaFilter className="text-gray-400 text-sm" />
+                <select
+                  value={filterStatus}
+                  onChange={(e) => {
+                    setFilterStatus(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-transparent text-sm font-semibold outline-none min-w-[120px]"
+                >
+                  <option value="">All Status</option>
+                  <option value="Planning">Planning</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Testing">Testing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="On Hold">On Hold</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <select
+                  value={filterCategory}
+                  onChange={(e) => {
+                    setFilterCategory(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-transparent text-sm font-semibold outline-none min-w-[120px]"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <select
+                  value={filterPriority}
+                  onChange={(e) => {
+                    setFilterPriority(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-transparent text-sm font-semibold outline-none min-w-[120px]"
+                >
+                  <option value="">All Priorities</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                  <option value="Urgent">Urgent</option>
+                </select>
+              </div>
             </div>
-
-            {/* Status Filter */}
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Status</option>
-              <option value="Planning">Planning</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Testing">Testing</option>
-              <option value="Completed">Completed</option>
-              <option value="On Hold">On Hold</option>
-            </select>
-
-            {/* Category Filter */}
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-
-            {/* Priority Filter */}
-            <select
-              value={filterPriority}
-              onChange={(e) => setFilterPriority(e.target.value)}
-              className="px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="">All Priorities</option>
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
           </div>
 
           {/* Action Buttons */}
@@ -415,7 +475,10 @@ export default function AdminProjectsPage() {
             >
               <FaPlus /> Add New Project
             </button>
-            {(searchTerm || filterStatus || filterCategory || filterPriority) && (
+            {(searchTerm ||
+              filterStatus ||
+              filterCategory ||
+              filterPriority) && (
               <button
                 onClick={clearFilters}
                 className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-semibold transition-all"
@@ -438,14 +501,17 @@ export default function AdminProjectsPage() {
                 ? "No projects match your filters"
                 : "Get started by creating your first project"}
             </p>
-            {!searchTerm && !filterStatus && !filterCategory && !filterPriority && (
-              <button
-                onClick={handleAddProject}
-                className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:shadow-lg font-semibold transition-all"
-              >
-                Create First Project
-              </button>
-            )}
+            {!searchTerm &&
+              !filterStatus &&
+              !filterCategory &&
+              !filterPriority && (
+                <button
+                  onClick={handleAddProject}
+                  className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:shadow-lg font-semibold transition-all"
+                >
+                  Create First Project
+                </button>
+              )}
           </div>
         ) : (
           <div className="space-y-6">
@@ -460,6 +526,116 @@ export default function AdminProjectsPage() {
                 onUpdateProgress={handleUpdateProgress}
               />
             ))}
+          </div>
+        )}
+
+        {/* Pagination & Limit Control */}
+        {!loading && projects.length > 0 && (
+          <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-gray-500">Show:</span>
+                <select
+                  value={
+                    limit === 10 || limit === 50 || limit === 100
+                      ? limit
+                      : "custom"
+                  }
+                  onChange={handleLimitChange}
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  <option value="10">10</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+
+              {((limit !== 10 && limit !== 50 && limit !== 100) ||
+                customLimit !== "") && (
+                <form
+                  onSubmit={handleCustomLimitSubmit}
+                  className="flex items-center gap-2"
+                >
+                  <input
+                    type="number"
+                    placeholder="Limit"
+                    value={customLimit}
+                    onChange={(e) => setCustomLimit(e.target.value)}
+                    className="w-20 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none"
+                    min="1"
+                  />
+                  <button
+                    type="submit"
+                    className="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition-colors"
+                  >
+                    Apply
+                  </button>
+                </form>
+              )}
+
+              <span className="text-sm text-gray-400 font-medium ml-2">
+                Total:{" "}
+                <span className="font-bold text-gray-700">{totalProjects}</span>{" "}
+                projects
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <FaChevronLeft />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {[...Array(totalPages)].map((_, i) => {
+                  const pageNum = i + 1;
+                  // Only show current page, first, last, and pages around current
+                  if (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-10 h-10 rounded-xl font-bold transition-all ${
+                          currentPage === pageNum
+                            ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                            : "text-gray-500 hover:bg-gray-50 border border-transparent"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  } else if (
+                    pageNum === currentPage - 2 ||
+                    pageNum === currentPage + 2
+                  ) {
+                    return (
+                      <span key={pageNum} className="px-1 text-gray-300">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <FaChevronRight />
+              </button>
+            </div>
           </div>
         )}
       </div>

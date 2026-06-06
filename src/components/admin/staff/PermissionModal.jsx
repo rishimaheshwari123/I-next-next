@@ -11,22 +11,27 @@ export default function PermissionModal({
 }) {
   const [permissions, setPermissions] = useState({
     dashboard: false,
-    blogs: false,
-    clientPlans: false,
+    leadManagement: false,
+    revenue: false,
+    staffManagement: false,
+    projects: false,
+    categories: false,
+    services: false,
+    serviceInquiries: false,
+    employees: false,
     manageClients: false,
+    clientPlans: false,
     serverHosting: false,
     contacts: false,
     domainInquiries: false,
+    blogs: false,
     advertisements: false,
     supportTickets: false,
     contactInquiries: false,
     aiChatbot: false,
-    employees: false,
     attendance: false,
     leaveRequests: false,
     tasks: false,
-    leadManagement: false,
-    staffManagement: false,
   });
 
   useEffect(() => {
@@ -65,28 +70,33 @@ export default function PermissionModal({
   const permissionGroups = {
     "General Management": [
       { key: "dashboard", label: "Dashboard" },
+      { key: "revenue", label: "Company Revenue" },
+      { key: "projects", label: "Projects" },
+      { key: "categories", label: "Categories" },
       { key: "blogs", label: "Blogs" },
-      { key: "clientPlans", label: "Client Plans" },
+    ],
+    "Sales & Clients": [
+      { key: "leadManagement", label: "Lead Management" },
       { key: "manageClients", label: "Manage Clients" },
+      { key: "clientPlans", label: "Client Plans" },
     ],
     "Services & Support": [
+      { key: "services", label: "Services Management" },
+      { key: "serviceInquiries", label: "Service Inquiries" },
       { key: "serverHosting", label: "Server Hosting" },
-      { key: "contacts", label: "Contacts" },
       { key: "domainInquiries", label: "Domain Inquiries" },
-      { key: "advertisements", label: "Advertisements" },
       { key: "supportTickets", label: "Support Tickets" },
       { key: "contactInquiries", label: "Contact Inquiries" },
+      { key: "contacts", label: "Contacts" },
+      { key: "advertisements", label: "Advertisements" },
       { key: "aiChatbot", label: "AI Chatbot" },
     ],
-    "Employee Management": [
+    "Staff & HR": [
+      { key: "staffManagement", label: "Staff Management" },
       { key: "employees", label: "Employees" },
       { key: "attendance", label: "Attendance" },
       { key: "leaveRequests", label: "Leave Requests" },
       { key: "tasks", label: "Tasks" },
-    ],
-    "Advanced": [
-      { key: "leadManagement", label: "Lead Management" },
-      { key: "staffManagement", label: "Staff Management" },
     ],
   };
 

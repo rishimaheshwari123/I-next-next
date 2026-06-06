@@ -77,6 +77,14 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "auth",
     },
+    legalDocuments: [
+      {
+        name: { type: String, required: true },
+        url: { type: String, required: true },
+        uploadedBy: { type: String, enum: ["Client", "Admin"], default: "Client" },
+        createdAt: { type: Date, default: Date.now },
+      }
+    ],
   },
   { timestamps: true }
 );

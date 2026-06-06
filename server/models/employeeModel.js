@@ -156,6 +156,19 @@ const employeeSchema = new mongoose.Schema(
           default: "Savings",
         },
       },
+      lastHike: {
+        amount: { type: Number, default: 0 },
+        date: { type: Date },
+        percentage: { type: Number, default: 0 }
+      },
+      hikeHistory: [
+        {
+          amount: Number,
+          date: Date,
+          percentage: Number,
+          remarks: String
+        }
+      ]
     },
     leaveBalance: {
       casual: { type: Number, default: 12 },
@@ -166,6 +179,81 @@ const employeeSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    documents: {
+      aadharCard: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      panCard: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      bankPassbook: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      tenthCertificate: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      twelfthCertificate: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      graduationCertificate: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      mastersCertificate: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      experienceLetter: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      relievingLetter: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      offerLetter: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      salarySlip1: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      salarySlip2: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      salarySlip3: {
+        url: { type: String, default: "" },
+        status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+        remarks: { type: String, default: "" }
+      },
+      salarySlips: [
+        {
+          url: { type: String, default: "" },
+          month: { type: String, default: "" },
+          status: { type: String, enum: ["Pending", "Verified", "Rejected"], default: "Pending" },
+          remarks: { type: String, default: "" }
+        }
+      ]
+    }
   },
   { timestamps: true }
 );

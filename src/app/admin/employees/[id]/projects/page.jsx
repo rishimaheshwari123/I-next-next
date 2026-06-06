@@ -337,9 +337,17 @@ export default function EmployeeProjectsPage() {
       {employee && (
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100 transition-all hover:shadow-2xl">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="w-20 h-20 bg-gradient-to-tr from-cyan-500 to-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-lg">
-              {employee.name?.charAt(0).toUpperCase()}
-            </div>
+            {employee.profileImage ? (
+              <img
+                src={employee.profileImage}
+                alt={employee.name}
+                className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg ring-4 ring-cyan-50"
+              />
+            ) : (
+              <div className="w-24 h-24 bg-gradient-to-tr from-cyan-500 to-blue-600 text-white rounded-full flex items-center justify-center text-4xl font-bold shadow-lg border-4 border-white">
+                {employee.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
             <div className="flex-1 text-center md:text-left">
               <h2 className="text-3xl font-extrabold text-gray-800 flex items-center justify-center md:justify-start gap-3">
                 {employee.name}

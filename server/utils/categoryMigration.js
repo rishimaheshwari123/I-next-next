@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 const migrateCategories = async () => {
   try {
-    console.log("Running dynamic categories migration check...");
     const defaultCategories = [
       "Web Development",
       "Mobile App Development",
@@ -39,8 +38,8 @@ const migrateCategories = async () => {
       let needsMigration = false;
       const newCategories = [];
 
-      const currentCats = Array.isArray(project.category) 
-        ? project.category 
+      const currentCats = Array.isArray(project.category)
+        ? project.category
         : [project.category].filter(Boolean);
 
       for (const catVal of currentCats) {
@@ -85,11 +84,9 @@ const migrateCategories = async () => {
           { _id: service._id },
           { $set: { category: categoryDoc._id } }
         );
-        console.log(`[MIGRATION] Migrated service "${service.serviceName}" category to ObjectId.`);
       }
     }
 
-    console.log("Categories migration check finished successfully!");
   } catch (error) {
     console.error("Error running categories migration:", error);
   }

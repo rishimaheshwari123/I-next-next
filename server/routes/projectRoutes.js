@@ -12,11 +12,13 @@ const {
   getClientProjects,
   getEmployeeProjects,
   getProjectsByClientId,
+  uploadProjectDocuments,
 } = require("../controllers/projectCtrl");
 const { auth, isAdmin, isClient } = require("../middleware/auth");
 
 // Client routes (must come before dynamic routes)
 router.get("/client/my-projects", auth, isClient, getClientProjects);
+router.post("/:id/upload-docs", auth, isClient, uploadProjectDocuments);
 
 // Employee routes
 router.get("/employee/my-projects", auth, getEmployeeProjects);

@@ -63,14 +63,12 @@ exports.createHostingInquiry = async (req, res) => {
 // Get all hosting inquiries (Admin)
 exports.getAllHostingInquiries = async (req, res) => {
   try {
-    console.log("Fetching all hosting inquiries...");
 
     const hostings = await Hosting.find()
       .populate("userId", "name email phone company")
       .sort({ createdAt: -1 })
       .lean();
 
-    console.log(`Found ${hostings.length} hosting inquiries`);
 
     res.status(200).json({
       success: true,
@@ -140,7 +138,7 @@ exports.updateHostingStatus = async (req, res) => {
       const hosting = await Hosting.findById(hostingId);
       if (hosting) {
         updateData.activationDate = new Date();
-        
+
         // Set expiry based on plan duration
         if (hosting.planDuration === "Yearly") {
           updateData.expiryDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // 1 year

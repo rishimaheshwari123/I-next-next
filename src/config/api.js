@@ -1,6 +1,6 @@
 // API Configuration
-const BASE_URL = 'http://localhost:8080/api/v1';
-// const BASE_URL = 'https://i-next-next.onrender.com/api/v1';
+// export const BASE_URL = 'http://localhost:8080/api/v1';
+const BASE_URL = 'https://i-next-next.onrender.com/api/v1';
 
 // Employee Management API Endpoints
 export const EMPLOYEE_API = {
@@ -13,6 +13,8 @@ export const EMPLOYEE_API = {
   UPDATE: (id) => `${BASE_URL}/employee/${id}`,
   DELETE: (id) => `${BASE_URL}/employee/${id}`,
   GET_STATS: `${BASE_URL}/employee/stats`,
+  UPLOAD_DOCUMENTS: `${BASE_URL}/employee/profile/documents`,
+  VERIFY_DOCUMENT: (id) => `${BASE_URL}/employee/${id}/documents/verify`,
 
   // Attendance
   PUNCH_IN: `${BASE_URL}/attendance/punch-in`,
@@ -96,6 +98,7 @@ export const EMPLOYEE_API = {
   GET_CLIENT_PROJECTS: `${BASE_URL}/project/client/my-projects`,
   GET_EMPLOYEE_PROJECTS: `${BASE_URL}/project/employee/my-projects`,
   GET_PROJECTS_BY_CLIENT_ID: (clientId) => `${BASE_URL}/project/client/${clientId}`, // New endpoint
+  UPLOAD_PROJECT_DOCS: (id) => `${BASE_URL}/project/${id}/upload-docs`,
 
   // Project Chat
   SEND_PROJECT_MESSAGE: (projectId) => `${BASE_URL}/project-chat/${projectId}/message`,

@@ -65,8 +65,15 @@ exports.createInquiry = async (req, res) => {
 exports.getAllInquiries = async (req, res) => {
   try {
     const { status, serviceId, search, clientId } = req.query;
+    const user = req.user;
 
     let query = {};
+
+    // If user is staff, only show assigned inquiries
+    const currentUser = await Auth.findById(user.id);
+    if (currentUser && currentUser.isStaff) {
+      query.assignedTo = user.id;
+    }
 
     if (status) {
       query.status = status;
@@ -98,6 +105,7 @@ exports.getAllInquiries = async (req, res) => {
         },
       })
       .populate("clientId", "name email phone company createdAt")
+      .populate("assignedTo", "name email")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -194,28 +202,9 @@ exports.getInquiryById = async (req, res) => {
 exports.updateInquiryStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, adminNotes } = req.body;
+    const { status, adminNotes, assignedTo } = req.body;
 
-    // Validate status
-    const validStatuses = ["pending", "contacted", "converted", "rejected"];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid status",
-      });
-    }
-
-    const updateData = { status };
-    if (adminNotes) {
-      updateData.adminNotes = adminNotes;
-    }
-
-    const inquiry = await ServiceInquiry.findByIdAndUpdate(id, updateData, {
-      new: true,
-    })
-      .populate("serviceId", "serviceName")
-      .populate("clientId", "name email");
-
+    const inquiry = await ServiceInquiry.findById(id);
     if (!inquiry) {
       return res.status(404).json({
         success: false,
@@ -223,10 +212,38 @@ exports.updateInquiryStatus = async (req, res) => {
       });
     }
 
+    const updateData = {};
+    if (status) {
+      // Validate status
+      const validStatuses = ["pending", "contacted", "converted", "rejected"];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid status",
+        });
+      }
+      updateData.status = status;
+    }
+
+    if (adminNotes !== undefined) {
+      updateData.adminNotes = adminNotes;
+    }
+
+    if (assignedTo !== undefined) {
+      updateData.assignedTo = assignedTo;
+    }
+
+    const updatedInquiry = await ServiceInquiry.findByIdAndUpdate(id, updateData, {
+      new: true,
+    })
+      .populate("serviceId", "serviceName")
+      .populate("clientId", "name email")
+      .populate("assignedTo", "name email");
+
     res.status(200).json({
       success: true,
-      message: "Inquiry status updated successfully",
-      data: inquiry,
+      message: "Inquiry updated successfully",
+      data: updatedInquiry,
     });
   } catch (error) {
     console.error("Error updating inquiry:", error);

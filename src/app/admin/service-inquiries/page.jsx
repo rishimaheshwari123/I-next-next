@@ -14,6 +14,7 @@ import {
   FaProjectDiagram,
   FaClipboardList,
   FaTasks,
+  FaUserTie,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ManageTasksModal from "@/components/admin/projects/ManageTasksModal";
@@ -28,6 +29,9 @@ export default function ServiceInquiriesPage() {
   const [selectedInquiry, setSelectedInquiry] = useState(null);
   const [statusUpdate, setStatusUpdate] = useState("");
   const [adminNotes, setAdminNotes] = useState("");
+  const [assignedTo, setAssignedTo] = useState("");
+  const [staffList, setStaffList] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Client History States (Now Inline)
   const [showHistory, setShowHistory] = useState(false);
@@ -50,7 +54,12 @@ export default function ServiceInquiriesPage() {
   };
 
   useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
     fetchInquiries();
+    fetchStaffList();
   }, []);
 
   useEffect(() => {
@@ -98,10 +107,28 @@ export default function ServiceInquiriesPage() {
     }
   };
 
+  const fetchStaffList = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(EMPLOYEE_API.GET_ALL_STAFF, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setStaffList(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching staff list:", error);
+    }
+  };
+
   const handleOpenModal = (inquiry) => {
     setSelectedInquiry(inquiry);
     setStatusUpdate(inquiry.status);
     setAdminNotes(inquiry.adminNotes || "");
+    setAssignedTo(inquiry.assignedTo?._id || inquiry.assignedTo || "");
     setShowModal(true);
   };
 
@@ -110,6 +137,7 @@ export default function ServiceInquiriesPage() {
     setSelectedInquiry(null);
     setStatusUpdate("");
     setAdminNotes("");
+    setAssignedTo("");
     setShowHistory(false);
     setHistoryData({ client: null, projects: [], inquiries: [] });
   };
@@ -199,17 +227,18 @@ export default function ServiceInquiriesPage() {
           body: JSON.stringify({
             status: statusUpdate,
             adminNotes,
+            assignedTo: assignedTo || null,
           }),
         },
       );
 
       const data = await response.json();
       if (data.success) {
-        toast.success("Inquiry status updated successfully");
+        toast.success("Inquiry updated successfully");
         fetchInquiries();
         handleCloseModal();
       } else {
-        toast.error(data.message || "Failed to update status");
+        toast.error(data.message || "Failed to update inquiry");
       }
     } catch (error) {
       console.error("Error updating status:", error);
@@ -314,6 +343,9 @@ export default function ServiceInquiriesPage() {
                   Variant
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-bold uppercase">
+                  Assigned To
+                </th>
+                <th className="px-6 py-4 text-left text-sm font-bold uppercase">
                   Status
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-bold uppercase">
@@ -370,6 +402,25 @@ export default function ServiceInquiriesPage() {
                       <p className="text-sm text-gray-600">
                         ₹{inquiry.variantAmount?.toLocaleString("en-IN") || "0"}
                       </p>
+                    </td>
+                    <td className="px-6 py-4">
+                      {inquiry.assignedTo ? (
+                        <div className="flex items-center gap-2">
+                          <FaUserTie className="text-blue-500" />
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">
+                              {inquiry.assignedTo.name}
+                            </p>
+                            <p className="text-[10px] text-gray-500">
+                              {inquiry.assignedTo.email}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-gray-400 italic">
+                          Not Assigned
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -755,6 +806,26 @@ export default function ServiceInquiriesPage() {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     />
                   </div>
+
+                  {currentUser?.role === "admin" && (
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Assign to Staff
+                      </label>
+                      <select
+                        value={assignedTo}
+                        onChange={(e) => setAssignedTo(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      >
+                        <option value="">Select Staff</option>
+                        {staffList.map((staff) => (
+                          <option key={staff._id} value={staff._id}>
+                            {staff.name} ({staff.email})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -777,7 +848,6 @@ export default function ServiceInquiriesPage() {
           </div>
         </div>
       )}
-
 
       {/* Tasks Modal */}
       {showTasksModal && selectedProject && (

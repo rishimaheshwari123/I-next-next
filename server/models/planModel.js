@@ -1,51 +1,49 @@
 const mongoose = require("mongoose");
 
 const planSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "auth",
-      required: true,
+    {
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        description: {
+            type: String,
+            trim: true,
+        },
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+            required: true,
+        },
+        priceRange: {
+            type: String,
+            required: true,
+        },
+        durationDays: {
+            type: Number,
+            required: true,
+        },
+        benefits: {
+            type: [String],
+            default: [],
+        },
+        keyFeatures: {
+            type: [String],
+            default: [],
+        },
+        additionalFeatures: {
+            type: String,
+            trim: true,
+        },
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
     },
-    serviceName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    planType: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    planPrice: {
-      type: String,
-      required: true,
-    },
-    planFeatures: {
-      type: [String],
-      default: [],
-    },
-    status: {
-      type: String,
-      enum: ["inactive", "active", "expired"],
-      default: "inactive",
-    },
-    purchaseDate: {
-      type: Date,
-      default: Date.now,
-    },
-    activationDate: {
-      type: Date,
-      default: null,
-    },
-    expiryDate: {
-      type: Date,
-      default: null,
-    },
-  },
-  {
-    timestamps: true,
-  }
+    {
+        timestamps: true,
+    }
 );
 
 module.exports = mongoose.model("Plan", planSchema);
