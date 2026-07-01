@@ -1,8 +1,8 @@
 const careerEmail = (
-    name, 
-    email, 
-    contact, 
-    applicationFor, 
+    name,
+    email,
+    contact,
+    applicationFor,
     resume,
     totalExperience,
     currentCTC,
@@ -181,7 +181,7 @@ const careerEmail = (
 
             <div class="footer">
                 <p style="font-size: 16px; font-weight: bold; color: #2563EB; margin-bottom: 10px;">I Next ETS - Digital Marketing Agency</p>
-                <p>📧 <a href="mailto:${email}" style="color: #2563EB; text-decoration: none;">${email}</a> | 📞 <a href="tel:${contact}" style="color: #2563EB; text-decoration: none;">${contact}</a></p>
+                <p>📧 <a href="mailto:${email}" style="color: #2563EB; text-decoration: none;">info.inextets@gmail.com</a> | 📞 <a href="tel:+919981122493" style="color: #2563EB; text-decoration: none;">+919981122493</a></p>
                 <p style="margin-top: 15px; color: #991b1b; font-weight: bold;">⚠️ Please review the application and respond within 48 hours</p>
                 <p style="margin-top: 10px; font-size: 12px; color: #9ca3af;">This is an automated notification from your career application form.</p>
             </div>
