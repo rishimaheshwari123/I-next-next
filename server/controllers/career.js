@@ -1,42 +1,15 @@
-const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { careerEmail } = require("../template/career");
 const resumeSender = require("../utils/resumeSender");
 
-// Configure multer for memory storage (no local save)
-const storage = multer.memoryStorage();
-
-const upload = multer({ 
-    storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
-    },
-    fileFilter: (req, file, cb) => {
-        const allowedTypes = /pdf|doc|docx/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
-        
-        if (extname && mimetype) {
-            return cb(null, true);
-        } else {
-            cb(new Error('Only PDF, DOC, and DOCX files are allowed'));
-        }
-    }
-});
-
 const careerCtrl = async (req, res) => {
-    upload.single('resume')(req, res, async (err) => {
-        if (err) {
-            return res.status(500).send({
-                message: err.message || "Error uploading resume",
-                success: false
-            });
-        }
-
-        const { 
-            name, 
-            email, 
-            contact, 
+    let tempFilePath = null;
+    try {
+        const {
+            name,
+            email,
+            contact,
             applicationFor,
             totalExperience,
             currentCTC,
@@ -46,55 +19,104 @@ const careerCtrl = async (req, res) => {
             highestEducation,
             passoutYear
         } = req.body;
-        
-        const resume = req.file;
 
-        if (!email || !name || !contact || !resume || !applicationFor) {
+        const resumeFile = req.files ? req.files.resume : null;
+
+        if (!email || !name || !contact || !resumeFile || !applicationFor) {
             return res.status(400).send({
                 message: "Please provide all required fields including resume",
                 success: false
             });
         }
 
-        try {
-            // Send email with resume attachment (from memory buffer)
-            await resumeSender(
-                // "info.inextets@gmail.com",
-                'rishimaheshwari040@gmail.com',
-                "New Career Application - I Next ETS",
-                careerEmail(
-                    name, 
-                    email, 
-                    contact, 
-                    applicationFor, 
-                    resume,
-                    totalExperience,
-                    currentCTC,
-                    expectedCTC,
-                    noticePeriod,
-                    currentCompany,
-                    highestEducation,
-                    passoutYear
-                ),
-                [{
-                    filename: resume.originalname,
-                    content: resume.buffer // Use buffer from memory
-                }]
-            );
+        tempFilePath = resumeFile.tempFilePath;
 
-            res.status(200).send({
-                message: "Application submitted successfully! Our team will contact you soon.",
-                success: true
-            });
-        } catch (error) {
-            console.error("Error sending career application email:", error);
-            res.status(500).send({
-                message: "Error submitting application. Please try again.",
-                success: false,
-                error: error.message
+        // Validate file type
+        const allowedTypes = /pdf|doc|docx/;
+        const extname = allowedTypes.test(path.extname(resumeFile.name).toLowerCase());
+        const mimetype = allowedTypes.test(resumeFile.mimetype);
+
+        if (!extname || !mimetype) {
+            // Delete temp file if invalid type
+            if (tempFilePath && fs.existsSync(tempFilePath)) {
+                fs.unlinkSync(tempFilePath);
+            }
+            return res.status(400).send({
+                message: 'Only PDF, DOC, and DOCX files are allowed',
+                success: false
             });
         }
-    });
+
+        // Validate file size (5MB limit)
+        if (resumeFile.size > 5 * 1024 * 1024) {
+            // Delete temp file if too large
+            if (tempFilePath && fs.existsSync(tempFilePath)) {
+                fs.unlinkSync(tempFilePath);
+            }
+            return res.status(400).send({
+                message: 'File size must be less than 5MB',
+                success: false
+            });
+        }
+
+        // Send email with resume attachment (from tempFilePath or reading it)
+        await resumeSender(
+            'info.inextets@gmail.com',
+            // 'rishimaheshwari040@gmail.com',
+
+            "New Career Application - I Next ETS",
+            careerEmail(
+                name,
+                email,
+                contact,
+                applicationFor,
+                resumeFile,
+                totalExperience,
+                currentCTC,
+                expectedCTC,
+                noticePeriod,
+                currentCompany,
+                highestEducation,
+                passoutYear
+            ),
+            [{
+                filename: resumeFile.name,
+                path: resumeFile.tempFilePath // Let nodemailer read it from disk
+            }]
+        );
+
+        // Delete temporary file after sending email successfully
+        if (tempFilePath && fs.existsSync(tempFilePath)) {
+            try {
+                fs.unlinkSync(tempFilePath);
+            } catch (err) {
+                console.error("Error deleting temp file:", err);
+            }
+        }
+
+        res.status(200).send({
+            message: "Application submitted successfully! Our team will contact you soon.",
+            success: true
+        });
+    } catch (error) {
+        console.error("Error sending career application email:", error);
+
+        // Clean up temp file on error
+        if (tempFilePath && fs.existsSync(tempFilePath)) {
+            try {
+                fs.unlinkSync(tempFilePath);
+            } catch (err) {
+                console.error("Error deleting temp file on error:", err);
+            }
+        }
+
+        res.status(500).send({
+            message: "Error submitting application. Please try again.",
+            success: false,
+            error: error.message
+        });
+    }
 };
 
 module.exports = { careerCtrl };
+

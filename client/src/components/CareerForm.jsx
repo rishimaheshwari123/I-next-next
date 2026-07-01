@@ -81,12 +81,7 @@ const CareerForm = () => {
     try {
       const response = await axios.post(
         `${BASE_URL}/contact/career`,
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        data
       );
 
       if (response?.data?.success) {
