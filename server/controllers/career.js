@@ -11,13 +11,14 @@ const careerCtrl = async (req, res) => {
             email,
             contact,
             applicationFor,
+            experienceType,
             totalExperience,
             currentCTC,
-            expectedCTC,
             noticePeriod,
             currentCompany,
             highestEducation,
-            passoutYear
+            passoutYear,
+            technologies
         } = req.body;
 
         const resumeFile = req.files ? req.files.resume : null;
@@ -59,6 +60,20 @@ const careerCtrl = async (req, res) => {
             });
         }
 
+        // Parse technologies array safely
+        let techArray = [];
+        if (technologies) {
+            try {
+                techArray = JSON.parse(technologies);
+            } catch (e) {
+                if (Array.isArray(technologies)) {
+                    techArray = technologies;
+                } else if (typeof technologies === 'string') {
+                    techArray = technologies.split(',').map(t => t.trim()).filter(Boolean);
+                }
+            }
+        }
+
         // Send email with resume attachment (from tempFilePath or reading it)
         await resumeSender(
             'info.inextets@gmail.com',
@@ -73,11 +88,12 @@ const careerCtrl = async (req, res) => {
                 resumeFile,
                 totalExperience,
                 currentCTC,
-                expectedCTC,
                 noticePeriod,
                 currentCompany,
                 highestEducation,
-                passoutYear
+                passoutYear,
+                experienceType,
+                techArray
             ),
             [{
                 filename: resumeFile.name,

@@ -6,11 +6,12 @@ const careerEmail = (
     resume,
     totalExperience,
     currentCTC,
-    expectedCTC,
     noticePeriod,
     currentCompany,
     highestEducation,
-    passoutYear
+    passoutYear,
+    experienceType,
+    technologies
 ) => {
     return `<!DOCTYPE html>
     <html>
@@ -122,6 +123,12 @@ const careerEmail = (
                     <span class="value">${name || 'N/A'}</span>
                 </div>
                 <div class="info-row">
+                    <span class="label">Candidate Profile:</span>
+                    <span class="value" style="display: inline-block; background-color: ${experienceType === 'fresher' ? '#dcfce7' : '#ffedd5'}; color: ${experienceType === 'fresher' ? '#15803d' : '#c2410c'}; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 14px;">
+                        ${experienceType === 'fresher' ? 'Fresher' : 'Experienced'}
+                    </span>
+                </div>
+                <div class="info-row">
                     <span class="label">Email Address:</span>
                     <span class="value"><a href="mailto:${email}" style="color: #2563EB; text-decoration: none;">${email || 'N/A'}</a></span>
                 </div>
@@ -139,7 +146,23 @@ const careerEmail = (
                 </div>
             </div>
 
+            <!-- Technologies / Skills -->
+            <div class="section">
+                <div class="section-title">🛠️ Technologies / Skills</div>
+                <div style="margin-top: 10px;">
+                    ${(technologies && Array.isArray(technologies) && technologies.length > 0)
+                        ? technologies.map(tech => `
+                            <span style="display: inline-block; background-color: #eff6ff; color: #1d4ed8; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid #bfdbfe; margin-right: 8px; margin-bottom: 8px;">
+                                ${tech}
+                            </span>
+                          `).join('')
+                        : '<span style="color: #6b7280; font-style: italic;">None provided</span>'
+                    }
+                </div>
+            </div>
+
             <!-- Professional Details -->
+            ${experienceType === 'fresher' ? '' : `
             <div class="section">
                 <div class="section-title">💼 Professional Information</div>
                 <div class="info-row">
@@ -155,14 +178,11 @@ const careerEmail = (
                     <span class="value">${currentCTC || 'Not Provided'}</span>
                 </div>
                 <div class="info-row">
-                    <span class="label">Expected CTC:</span>
-                    <span class="value">${expectedCTC || 'Not Provided'}</span>
-                </div>
-                <div class="info-row">
                     <span class="label">Notice Period:</span>
                     <span class="value">${noticePeriod || 'Not Provided'}</span>
                 </div>
             </div>
+            `}
 
             <!-- Educational Details -->
             <div class="section">

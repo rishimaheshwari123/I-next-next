@@ -11,16 +11,18 @@ const CareerForm = () => {
     email: "",
     contact: "",
     applicationFor: "",
+    experienceType: "experienced", // default to experienced
     totalExperience: "",
     currentCTC: "",
-    expectedCTC: "",
     noticePeriod: "",
     currentCompany: "",
     highestEducation: "",
     passoutYear: "",
+    technologies: [],
     resume: null,
   });
 
+  const [techInput, setTechInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -29,6 +31,32 @@ const CareerForm = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleAddTech = (e) => {
+    e.preventDefault();
+    const trimmed = techInput.trim();
+    if (trimmed && !formData.technologies.includes(trimmed)) {
+      setFormData(prev => ({
+        ...prev,
+        technologies: [...prev.technologies, trimmed]
+      }));
+      setTechInput("");
+    }
+  };
+
+  const handleRemoveTech = (indexToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      technologies: prev.technologies.filter((_, idx) => idx !== indexToRemove)
+    }));
+  };
+
+  const handleTechKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTech(e);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -62,6 +90,17 @@ const CareerForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (formData.technologies.length === 0) {
+      Swal.fire({
+        title: "Missing Skills",
+        text: "Please add at least one technology / skill that you work on.",
+        icon: "warning",
+        confirmButtonColor: "#2563EB",
+      });
+      return;
+    }
+
     setLoading(true);
 
     const data = new FormData();
@@ -69,13 +108,17 @@ const CareerForm = () => {
     data.append("email", formData.email);
     data.append("contact", formData.contact);
     data.append("applicationFor", formData.applicationFor);
-    data.append("totalExperience", formData.totalExperience);
-    data.append("currentCTC", formData.currentCTC);
-    data.append("expectedCTC", formData.expectedCTC);
-    data.append("noticePeriod", formData.noticePeriod);
-    data.append("currentCompany", formData.currentCompany);
+    data.append("experienceType", formData.experienceType);
+    
+    // Clear experience fields if candidate is a fresher
+    data.append("totalExperience", formData.experienceType === "fresher" ? "" : formData.totalExperience);
+    data.append("currentCTC", formData.experienceType === "fresher" ? "" : formData.currentCTC);
+    data.append("noticePeriod", formData.experienceType === "fresher" ? "" : formData.noticePeriod);
+    data.append("currentCompany", formData.experienceType === "fresher" ? "" : formData.currentCompany);
+    
     data.append("highestEducation", formData.highestEducation);
     data.append("passoutYear", formData.passoutYear);
+    data.append("technologies", JSON.stringify(formData.technologies));
     data.append("resume", formData.resume);
 
     try {
@@ -98,15 +141,17 @@ const CareerForm = () => {
           email: "",
           contact: "",
           applicationFor: "",
+          experienceType: "experienced",
           totalExperience: "",
           currentCTC: "",
-          expectedCTC: "",
           noticePeriod: "",
           currentCompany: "",
           highestEducation: "",
           passoutYear: "",
+          technologies: [],
           resume: null,
         });
+        setTechInput("");
         
         // Reset file input
         document.getElementById("resume").value = "";
@@ -229,103 +274,174 @@ const CareerForm = () => {
 
           {/* Professional Information */}
           <div className="border-t border-gray-200 pt-6 mt-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Professional Details</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Professional Details</h3>
+
+            {/* Experience Type Segmented Toggle */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, experienceType: "fresher" }))}
+                className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                  formData.experienceType === "fresher"
+                    ? "border-blue-600 bg-blue-50/50 text-blue-700 shadow-sm"
+                    : "border-gray-200 hover:border-gray-300 text-gray-500"
+                }`}
+              >
+                <FaGraduationCap className={`text-2xl mb-2 ${formData.experienceType === 'fresher' ? 'text-blue-600' : 'text-gray-400'}`} />
+                <span className="font-semibold text-sm">Fresher</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, experienceType: "experienced" }))}
+                className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                  formData.experienceType === "experienced"
+                    ? "border-blue-600 bg-blue-50/50 text-blue-700 shadow-sm"
+                    : "border-gray-200 hover:border-gray-300 text-gray-500"
+                }`}
+              >
+                <FaBriefcase className={`text-2xl mb-2 ${formData.experienceType === 'experienced' ? 'text-blue-600' : 'text-gray-400'}`} />
+                <span className="font-semibold text-sm">Experienced</span>
+              </button>
+            </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Total Experience */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="totalExperience">
-                  <FaBriefcase className="inline mr-2 text-orange-600" />
-                  Total Years of Experience <span className="text-red-500">*</span>
-                </label>
+            {formData.experienceType === "experienced" && (
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Total Experience */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="totalExperience">
+                    <FaBriefcase className="inline mr-2 text-orange-600" />
+                    Total Years of Experience <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="totalExperience"
+                    name="totalExperience"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                    value={formData.totalExperience}
+                    onChange={handleChange}
+                    required={formData.experienceType === "experienced"}
+                    placeholder="e.g., 3 years"
+                  />
+                </div>
+
+                {/* Current Company */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="currentCompany">
+                    <FaBriefcase className="inline mr-2 text-orange-600" />
+                    Current Company Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="currentCompany"
+                    name="currentCompany"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                    value={formData.currentCompany}
+                    onChange={handleChange}
+                    required={formData.experienceType === "experienced"}
+                    placeholder="e.g., ABC Technologies"
+                  />
+                </div>
+
+                {/* Current CTC */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="currentCTC">
+                    <FaMoneyBillWave className="inline mr-2 text-orange-600" />
+                    Current CTC <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="currentCTC"
+                    name="currentCTC"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                    value={formData.currentCTC}
+                    onChange={handleChange}
+                    required={formData.experienceType === "experienced"}
+                    placeholder="e.g., ₹5 LPA"
+                  />
+                </div>
+
+                {/* Notice Period */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="noticePeriod">
+                    <FaClock className="inline mr-2 text-orange-600" />
+                    Notice Period <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    id="noticePeriod"
+                    name="noticePeriod"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                    value={formData.noticePeriod}
+                    onChange={handleChange}
+                    required={formData.experienceType === "experienced"}
+                  >
+                    <option value="">-- Select Notice Period --</option>
+                    <option value="Immediate">Immediate</option>
+                    <option value="15 Days">15 Days</option>
+                    <option value="1 Month">1 Month</option>
+                    <option value="2 Months">2 Months</option>
+                    <option value="3 Months">3 Months</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Technologies / Skills */}
+          <div className="border-t border-gray-200 pt-6 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Technologies / Skills</h3>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="techInput">
+                <FaBriefcase className="inline mr-2 text-blue-600" />
+                Technologies You Work On <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-2">
                 <input
                   type="text"
-                  id="totalExperience"
-                  name="totalExperience"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
-                  value={formData.totalExperience}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g., 3 years"
+                  id="techInput"
+                  name="techInput"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  value={techInput}
+                  onChange={(e) => setTechInput(e.target.value)}
+                  onKeyDown={handleTechKeyDown}
+                  placeholder="e.g., React, Node.js, Express, Python (type and press Enter)"
                 />
-              </div>
-
-              {/* Current CTC */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="currentCTC">
-                  <FaMoneyBillWave className="inline mr-2 text-orange-600" />
-                  Current CTC <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="currentCTC"
-                  name="currentCTC"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
-                  value={formData.currentCTC}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g., ₹5 LPA"
-                />
-              </div>
-
-              {/* Expected CTC */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="expectedCTC">
-                  <FaMoneyBillWave className="inline mr-2 text-orange-600" />
-                  Expected CTC <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="expectedCTC"
-                  name="expectedCTC"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
-                  value={formData.expectedCTC}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g., ₹7 LPA"
-                />
-              </div>
-
-              {/* Notice Period */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="noticePeriod">
-                  <FaClock className="inline mr-2 text-orange-600" />
-                  Notice Period <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="noticePeriod"
-                  name="noticePeriod"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
-                  value={formData.noticePeriod}
-                  onChange={handleChange}
-                  required
+                <button
+                  type="button"
+                  onClick={handleAddTech}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-sm"
                 >
-                  <option value="">-- Select Notice Period --</option>
-                  <option value="Immediate">Immediate</option>
-                  <option value="15 Days">15 Days</option>
-                  <option value="1 Month">1 Month</option>
-                  <option value="2 Months">2 Months</option>
-                  <option value="3 Months">3 Months</option>
-                </select>
+                  Add
+                </button>
               </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Type each technology/skill and press Enter or click Add to build your list.
+              </p>
 
-              {/* Current Company */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2" htmlFor="currentCompany">
-                  <FaBriefcase className="inline mr-2 text-orange-600" />
-                  Current Company Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="currentCompany"
-                  name="currentCompany"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
-                  value={formData.currentCompany}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g., ABC Technologies"
-                />
-              </div>
+              {/* Technologies Badges */}
+              {formData.technologies.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                  {formData.technologies.map((tech, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold border border-blue-100 transition-all duration-200 hover:bg-blue-100"
+                    >
+                      {tech}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTech(index)}
+                        className="text-blue-500 hover:text-blue-700 font-bold focus:outline-none"
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              {formData.technologies.length === 0 && (
+                <p className="text-sm text-red-500 mt-2">
+                  Please add at least one technology.
+                </p>
+              )}
             </div>
           </div>
 
