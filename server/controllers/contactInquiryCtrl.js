@@ -1,4 +1,6 @@
 const ContactInquiry = require('../models/contactInquiryModel');
+const mailSender = require('../utils/mailSenderr');
+const contactInquiryTemplate = require('../template/contactInquiryTemplate');
 
 // Create contact inquiry (Public)
 const createContactInquiry = async (req, res) => {
@@ -39,6 +41,22 @@ const createContactInquiry = async (req, res) => {
       subject,
       message
     });
+
+    // Send email to admin
+    try {
+      // const adminEmail = "info.inextets@gmail.com";
+
+      const adminEmail = "rishimaheshwari040@gmail.com";
+      const emailBody = contactInquiryTemplate(name, email, phone, subject, message);
+      await mailSender(
+        adminEmail,
+        `New Website Inquiry: ${subject}`,
+        emailBody
+      );
+    } catch (emailError) {
+      console.error('Failed to send inquiry email:', emailError.message);
+      // We don't block response because database save succeeded
+    }
 
     return res.status(201).json({
       success: true,
@@ -83,7 +101,7 @@ const getAllContactInquiries = async (req, res) => {
 const getInquiryStats = async (req, res) => {
   try {
     const total = await ContactInquiry.countDocuments();
-    
+
     // Get today's inquiries
     const today = new Date();
     today.setHours(0, 0, 0, 0);

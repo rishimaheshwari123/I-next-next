@@ -11,7 +11,7 @@ const Career = () => {
           <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-300 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-md rounded-full mb-6 border border-white/30">
             <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
@@ -19,14 +19,14 @@ const Career = () => {
               Join Our Team
             </span>
           </div>
-          
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6">
+
+          <h1 className="text-xl md:text-4xl font-extrabold text-white mb-6">
             Build Your Career at <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-white">
               I Next ETS
             </span>
           </h1>
-          
+
           <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
             Join a team of innovators, creators, and problem-solvers who are shaping the future of digital marketing and technology
           </p>
@@ -34,10 +34,10 @@ const Career = () => {
       </section>
 
       {/* Why Join Us Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
               Why <span className="text-blue-600">I Next ETS</span>?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -94,10 +94,10 @@ const Career = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-white">
+      <section className="py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
               Perks & <span className="text-orange-600">Benefits</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -172,7 +172,7 @@ const Career = () => {
               Fill out the application form below and take the first step towards an exciting career
             </p>
           </div>
-          
+
           <CareerForm />
         </div>
       </section>

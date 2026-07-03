@@ -66,7 +66,7 @@ export default function NewsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-xl md:text-4xl font-bold text-gray-900 mb-4">
             Latest News & Blogs
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -93,11 +93,10 @@ export default function NewsPage() {
               <button
                 key={category}
                 onClick={() => setFilter(category)}
-                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                  filter === category
+                className={`px-6 py-2 rounded-full font-medium transition-all ${filter === category
                     ? 'bg-blue-600 text-white shadow-lg'
                     : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-                }`}
+                  }`}
               >
                 {category.charAt(0).toUpperCase() + category.slice(1)}
               </button>
@@ -106,7 +105,7 @@ export default function NewsPage() {
         </div>
 
         {/* Blog Count */}
-      
+
 
         {/* Blogs Grid */}
         {filteredBlogs.length === 0 ? (
@@ -189,7 +188,7 @@ export default function NewsPage() {
         )}
 
         {/* Create Blog Button (Optional - for admin) */}
-      
+
       </div>
     </div>
   );

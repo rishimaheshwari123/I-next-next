@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { BASE_URL } from '@/config/api';
-import { 
-  FaUser, 
-  FaEnvelope, 
-  FaPhone, 
-  FaEdit, 
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaEdit,
   FaCommentAlt,
   FaPaperPlane,
   FaCheckCircle,
@@ -97,7 +97,7 @@ export default function ContactInquiry() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-6 shadow-xl">
             <FaPaperPlane className="text-3xl text-white" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             Get In Touch
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

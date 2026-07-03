@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  FaLaptopCode, 
-  FaMobileAlt, 
+import {
+  FaLaptopCode,
+  FaMobileAlt,
   FaRobot,
   FaReact,
   FaNodeJs,
@@ -41,10 +41,10 @@ import {
   FaNetworkWired,
   FaCertificate
 } from "react-icons/fa";
-import { 
-  SiTensorflow, 
-  SiPytorch, 
-  SiFlutter, 
+import {
+  SiTensorflow,
+  SiPytorch,
+  SiFlutter,
   SiReact,
   SiNextdotjs,
   SiMongodb,
@@ -195,7 +195,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
               {currentTech.subtitle}
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             {currentTech.title}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -207,11 +207,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
         <div className="flex justify-center gap-3 mb-12 flex-wrap">
           <button
             onClick={() => setActiveService(1)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 1
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 1
                 ? "bg-blue-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaFacebook className="w-4 h-4" />
             <span className="hidden md:inline">Social Media</span>
@@ -219,11 +218,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(2)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 2
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 2
                 ? "bg-orange-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaBullhorn className="w-4 h-4" />
             <span className="hidden md:inline">Digital Marketing</span>
@@ -231,11 +229,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(3)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 3
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 3
                 ? "bg-purple-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaUsers className="w-4 h-4" />
             <span className="hidden md:inline">Lead Generation</span>
@@ -243,11 +240,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(4)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 4
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 4
                 ? "bg-green-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaChartLine className="w-4 h-4" />
             <span className="hidden md:inline">Business Growth</span>
@@ -255,11 +251,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(5)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 5
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 5
                 ? "bg-indigo-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaLaptopCode className="w-4 h-4" />
             <span className="hidden md:inline">Website Dev</span>
@@ -267,11 +262,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(6)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 6
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 6
                 ? "bg-pink-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaMobileAlt className="w-4 h-4" />
             <span className="hidden md:inline">Mobile App</span>
@@ -279,11 +273,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(7)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 7
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 7
                 ? "bg-cyan-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaRobot className="w-4 h-4" />
             <span className="hidden md:inline">AI Solutions</span>
@@ -291,11 +284,10 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
 
           <button
             onClick={() => setActiveService(8)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${
-              activeService === 8
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 8
                 ? "bg-red-600 text-white shadow-lg scale-105"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             <FaShieldAlt className="w-4 h-4" />
             <span className="hidden md:inline">Cyber Security</span>
@@ -325,7 +317,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
         </div>
 
         {/* Bottom CTA */}
-       
+
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const AboutHero = () => {
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+    <div className="relative w-full min-h-[580px] md:h-[600px] overflow-hidden flex flex-col justify-center py-16 md:py-0">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -19,7 +19,7 @@ const AboutHero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center">
+      <div className="relative z-10 w-full flex items-center my-auto pt-10 md:pt-0">
         <div className="max-w-[90vw] mx-auto px-4 lg:px-6 w-full">
           <div className="max-w-4xl text-center mx-auto">
             {/* Badge */}
@@ -30,7 +30,7 @@ const AboutHero = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-xl md:text-4xl font-bold text-white mb-6 leading-tight">
               Transforming Ideas Into Digital Reality
             </h1>
 

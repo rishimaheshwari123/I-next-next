@@ -132,7 +132,7 @@ const Testimonials = () => {
               Client Testimonials
             </span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3">
             What Our Clients Say
           </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
@@ -144,21 +144,19 @@ const Testimonials = () => {
         <div className="flex justify-center gap-3 mb-8">
           <button
             onClick={() => setActiveTab("indian")}
-            className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
-              activeTab === "indian"
+            className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${activeTab === "indian"
                 ? "bg-orange-500 text-white shadow-lg"
                 : "bg-white text-gray-700 hover:bg-gray-100 border-2 border-gray-200"
-            }`}
+              }`}
           >
             🇮🇳 Indian Clients
           </button>
           <button
             onClick={() => setActiveTab("worldwide")}
-            className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
-              activeTab === "worldwide"
+            className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${activeTab === "worldwide"
                 ? "bg-blue-600 text-white shadow-lg"
                 : "bg-white text-gray-700 hover:bg-gray-100 border-2 border-gray-200"
-            }`}
+              }`}
           >
             🌍 Worldwide Clients
           </button>
@@ -243,17 +241,16 @@ const Testimonials = () => {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`transition-all duration-300 rounded-full ${
-                index === currentIndex
+              className={`transition-all duration-300 rounded-full ${index === currentIndex
                   ? "w-10 h-2.5 bg-blue-600"
                   : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
-              }`}
+                }`}
               aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
         </div>
 
-       
+
       </div>
     </div>
   );

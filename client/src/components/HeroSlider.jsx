@@ -115,16 +115,24 @@ const HeroSlider = () => {
                 <div className="flex flex-col md:flex-row gap-4 animate-fadeInUp animation-delay-400">
                   <Link
                     href={slide.path}
-                    className="w-full md:w-auto px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
+                    className="w-full md:w-auto relative group overflow-hidden rounded-xl p-[2px] bg-orange-100/80 transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg hover:shadow-orange-500/20"
                   >
-                    Learn More
-                    <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    {/* Sweeping RGB Border Light */}
+                    <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#ff453a_70%,#ff9f0a_85%,#30d158_95%,#0a84ff_100%)]" />
+                    <span className="relative flex items-center justify-center px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-200 w-full md:w-auto gap-2">
+                      Learn More
+                      <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
                   </Link>
                   <Link
                     href="/contact"
-                    className="w-full md:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold transition-all duration-200 border-2 border-white/30 hover:border-white/50 text-center"
+                    className="w-full md:w-auto relative group overflow-hidden rounded-xl p-[2px] bg-blue-100/80 transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-md hover:shadow-blue-500/20"
                   >
-                    Get Started
+                    {/* Sweeping RGB Border Light */}
+                    <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#0a84ff_70%,#30d158_85%,#bf5af2_95%,#ff453a_100%)]" />
+                    <span className="relative flex items-center justify-center px-8 py-4 bg-slate-950/70 backdrop-blur-sm text-white rounded-[10px] font-semibold transition-all duration-200 group-hover:bg-slate-950/95 w-full md:w-auto">
+                      Get Started
+                    </span>
                   </Link>
                 </div>
               </div>

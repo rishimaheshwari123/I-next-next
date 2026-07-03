@@ -1,9 +1,10 @@
 import React from "react";
-import { 
-  FaSearch, 
-  FaShareAlt, 
-  FaBullhorn, 
-  FaEnvelope, 
+import Link from "next/link";
+import {
+  FaSearch,
+  FaShareAlt,
+  FaBullhorn,
+  FaEnvelope,
   FaShieldAlt,
   FaLaptopCode,
   FaMobileAlt,
@@ -69,53 +70,53 @@ const INEXTETS = () => {
   ];
 
   const whyChooseUs = [
-    { icon: FaUsers, title: "Experienced Team", desc: "Skilled professionals with years of expertise" },
-    { icon: FaLightbulb, title: "Innovative Solutions", desc: "Creative approaches to solve problems" },
-    { icon: FaHeart, title: "Customer-Centric", desc: "Your success is our priority" },
-    { icon: FaDollarSign, title: "Affordable Pricing", desc: "Quality services at competitive rates" },
-    { icon: FaClock, title: "Timely Delivery", desc: "We respect deadlines" }
+    { icon: FaUsers, title: "Experienced Team", desc: "Skilled professionals with years of expertise", gradient: "from-blue-500 to-indigo-600" },
+    { icon: FaLightbulb, title: "Innovative Solutions", desc: "Creative approaches to solve problems", gradient: "from-orange-500 to-amber-500" },
+    { icon: FaHeart, title: "Customer-Centric", desc: "Your success is our priority", gradient: "from-rose-500 to-pink-500" },
+    { icon: FaDollarSign, title: "Affordable Pricing", desc: "Quality services at competitive rates", gradient: "from-emerald-400 to-teal-500" },
+    { icon: FaClock, title: "Timely Delivery", desc: "We respect deadlines", gradient: "from-cyan-500 to-blue-600" }
   ];
 
   return (
-    <div className="py-16 bg-white">
-      <div className="w-11/12 mx-auto">
+    <div className=" bg-transparent">
+      <div className="w-full">
         {/* Header Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <div className="inline-block mb-4">
-            <span className="px-5 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-bold">
+            <span className="px-5 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-bold uppercase tracking-wide">
               About Our Company
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            I Next Ets: Best Digital Marketing Agency in Bhopal
+          <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">
+            I Next Ets: Best <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-orange-500">Digital Marketing Agency</span> in Bhopal
           </h1>
-          <p className="text-base md:text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed border-l-4 border-blue-600/30 pl-4 md:pl-6 text-left md:text-center italic">
             With the digital world changing quickly, businesses of all sizes need a strong online presence. Whether you're a startup, a small or medium enterprise, or a large company, going digital is crucial to succeed in the market. If you're looking for the best digital marketing, web development, or app development services in Bhopal, you've come to the right place with I Next Ets.
           </p>
         </div>
 
         {/* Why Choose Us Section */}
-        <div className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 text-center">
+        <div className="mb-20">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
             Why Choose I Next Ets?
           </h2>
-          <p className="text-base text-gray-600 text-center mb-8 max-w-3xl mx-auto">
+          <p className="text-gray-500 text-center mb-12 max-w-2xl mx-auto">
             I Next Ets is a well-known digital marketing agency in Bhopal. We provide great digital solutions to businesses of all kinds.
           </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {whyChooseUs.map((item, index) => {
               const IconComponent = item.icon;
               return (
-                <div 
+                <div
                   key={index}
-                  className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100 hover:shadow-lg transition-all duration-300 text-center group hover:scale-105"
+                  className="bg-white p-6 rounded-2xl border border-gray-100 hover:border-gray-200/60 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_25px_50px_rgba(59,130,246,0.06)] hover:-translate-y-1.5 transition-all duration-300 text-center group"
                 >
-                  <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-500 transition-colors duration-300">
-                    <IconComponent className="w-7 h-7 text-white" />
+                  <div className={`w-14 h-14 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 group-hover:scale-110 shadow-md`}>
+                    <IconComponent className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2 text-sm">{item.title}</h3>
-                  <p className="text-xs text-gray-600">{item.desc}</p>
+                  <h3 className="font-bold text-gray-900 mb-2 text-sm group-hover:text-blue-600 transition-colors duration-300">{item.title}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               );
             })}
@@ -123,50 +124,54 @@ const INEXTETS = () => {
         </div>
 
         {/* Services Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
+        <div className="mb-20">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">
             Our Main Services
           </h2>
-          
-          <div className="space-y-8">
+          <p className="text-gray-500 text-center mb-12 max-w-2xl mx-auto">
+            Leverage our cross-functional capabilities to scale your digital presence and operational efficiency.
+          </p>
+
+          <div className="space-y-10">
             {services.map((service, index) => {
               const ServiceIcon = service.icon;
-              const bgColor = service.color === "blue" ? "bg-blue-600" : "bg-orange-500";
-              const borderColor = service.color === "blue" ? "border-blue-200" : "border-orange-200";
+              const accentColor = service.color === "blue" ? "from-blue-500 to-indigo-600 shadow-blue-500/20" : "from-orange-500 to-amber-500 shadow-orange-500/20";
+              const borderColor = service.color === "blue" ? "hover:border-blue-500/20" : "hover:border-orange-500/20";
               const textColor = service.color === "blue" ? "text-blue-600" : "text-orange-500";
-              
+
               return (
-                <div 
+                <div
                   key={service.id}
-                  className={`bg-white rounded-2xl border-2 ${borderColor} p-6 md:p-8 hover:shadow-xl transition-all duration-300`}
+                  className={`bg-white rounded-3xl border border-gray-100 ${borderColor} p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300`}
                 >
                   <div className="flex items-center gap-4 mb-6">
-                    <div className={`w-12 h-12 ${bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                    <div className={`w-14 h-14 bg-gradient-to-br ${accentColor} rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg`}>
                       <ServiceIcon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className={`text-xl md:text-2xl font-bold ${textColor}`}>
-                      {index + 1}. {service.title}
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      <span className={`${textColor} mr-2`}>{index + 1}.</span>
+                      {service.title}
                     </h3>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {service.items.map((item, idx) => {
                       const ItemIcon = item.icon;
                       return (
-                        <div 
+                        <div
                           key={idx}
-                          className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-200"
+                          className="flex items-start gap-4 p-5 bg-slate-50/50 rounded-2xl hover:bg-slate-50 hover:shadow-sm border border-transparent hover:border-gray-100/50 transition-all duration-300"
                         >
                           {ItemIcon ? (
-                            <div className={`w-8 h-8 ${bgColor} rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                              <ItemIcon className="w-4 h-4 text-white" />
+                            <div className={`w-9 h-9 bg-gradient-to-br ${accentColor} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                              <ItemIcon className="w-4.5 h-4.5 text-white" />
                             </div>
                           ) : (
-                            <FaCheckCircle className={`w-5 h-5 ${textColor} flex-shrink-0 mt-1`} />
+                            <FaCheckCircle className={`w-6 h-6 ${textColor} flex-shrink-0 mt-0.5`} />
                           )}
                           <div className="flex-1 min-w-0">
                             <h4 className="font-bold text-gray-900 text-sm mb-1">{item.name}</h4>
-                            <p className="text-xs text-gray-600">{item.desc}</p>
+                            <p className="text-xs text-gray-500 leading-relaxed">{item.desc || `High-performance client solutions customized to match project milestones.`}</p>
                           </div>
                         </div>
                       );
@@ -178,18 +183,7 @@ const INEXTETS = () => {
           </div>
         </div>
 
-        {/* Final CTA Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 md:p-12 text-center text-white">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-base md:text-lg mb-6 max-w-3xl mx-auto opacity-90">
-            When you are looking for a digital marketing agency, web development company, app development company, or e-commerce development company in Bhopal, I Next Ets is your one-stop solution.
-          </p>
-          <button className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-            Contact Us Today
-          </button>
-        </div>
+
       </div>
     </div>
   );

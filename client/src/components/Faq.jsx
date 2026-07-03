@@ -23,11 +23,11 @@ const Faq = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
             <FaQuestionCircle className="w-8 h-8 text-blue-600" />
           </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             Frequently Asked <span className="text-blue-600">Questions</span>
           </h2>
-          
+
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             We hope these questions and answers help you find the best digital
             transformation partner for your business.
@@ -49,11 +49,10 @@ const Faq = () => {
                 <div className="flex items-start gap-4 flex-1">
                   {/* Icon Button */}
                   <div
-                    className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      faqState[index]
+                    className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${faqState[index]
                         ? "bg-blue-600 text-white shadow-lg shadow-blue-500/50"
                         : "bg-blue-100 text-blue-600 group-hover:bg-blue-200"
-                    }`}
+                      }`}
                   >
                     {faqState[index] ? (
                       <HiMinus className="w-6 h-6" />
@@ -70,19 +69,17 @@ const Faq = () => {
 
                 {/* Indicator Badge */}
                 <div
-                  className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-300 ${
-                    faqState[index] ? "bg-blue-600 scale-150" : "bg-gray-300"
-                  }`}
+                  className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-300 ${faqState[index] ? "bg-blue-600 scale-150" : "bg-gray-300"
+                    }`}
                 ></div>
               </button>
 
               {/* Answer Content */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  faqState[index]
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${faqState[index]
                     ? "max-h-[500px] opacity-100"
                     : "max-h-0 opacity-0"
-                }`}
+                  }`}
               >
                 <div className="px-6 md:px-8 pb-6 md:pb-8">
                   <div className="pl-16 pr-4">

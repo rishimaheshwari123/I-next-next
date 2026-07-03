@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { IoIosArrowDown, IoMdClose } from "react-icons/io";
 import { HiMenuAlt3 } from "react-icons/hi";
 import {
@@ -37,6 +38,18 @@ const serviceIcons = {
   8: FaShieldAlt,
 };
 
+// Service icon background colors mapping
+const serviceIconColors = {
+  1: "bg-gradient-to-br from-pink-500 to-rose-500 shadow-rose-500/20",
+  2: "bg-gradient-to-br from-purple-500 to-indigo-500 shadow-purple-500/20",
+  3: "bg-gradient-to-br from-teal-400 to-emerald-500 shadow-teal-500/20",
+  4: "bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-500/20",
+  5: "bg-gradient-to-br from-blue-500 to-indigo-600 shadow-blue-500/20",
+  6: "bg-gradient-to-br from-cyan-400 to-blue-500 shadow-cyan-500/20",
+  7: "bg-gradient-to-br from-fuchsia-500 to-purple-600 shadow-fuchsia-500/20",
+  8: "bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/20",
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -46,6 +59,7 @@ const Navbar = () => {
 
   const megaMenuRef = useRef(null);
   const sidebarRef = useRef(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,28 +93,34 @@ const Navbar = () => {
   return (
     <>
       {/* Topbar */}
-      <div className="fixed top-0 left-0 right-0 z-[60] bg-orange-500">
+      <div
+        className={`fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 transition-all duration-300 ${
+          isScrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+        }`}
+      >
         <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
           <div className="flex justify-between items-center h-12">
             {/* Left - Contact Info */}
             <div className="flex items-center gap-6">
               <a
                 href="tel:+919981122493"
-                className="flex items-center gap-2 text-white hover:text-orange-400 transition-all duration-200 text-sm"
+                className="group flex items-center gap-2 text-white hover:text-orange-100 transition-all duration-200 text-sm relative"
               >
                 <FaPhone className="w-3.5 h-3.5" />
-                <span className="hidden md:inline font-medium">
+                <span className="hidden md:inline font-medium relative">
                   +91 9981122493
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </span>
               </a>
 
               <a
                 href="mailto:info.inextets@gmail.com"
-                className="flex items-center gap-2 text-white hover:text-orange-400 transition-all duration-200 text-sm"
+                className="group flex items-center gap-2 text-white hover:text-orange-100 transition-all duration-200 text-sm relative"
               >
                 <FaEnvelope className="w-3.5 h-3.5" />
-                <span className="hidden lg:inline font-medium">
+                <span className="hidden lg:inline font-medium relative">
                   info.inextets@gmail.com
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </span>
               </a>
             </div>
@@ -111,7 +131,7 @@ const Navbar = () => {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 hover:border-white/30 rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
                 title="Facebook"
               >
                 <FaFacebook className="w-4 h-4" />
@@ -121,7 +141,7 @@ const Navbar = () => {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 hover:border-white/30 rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
                 title="LinkedIn"
               >
                 <FaLinkedin className="w-4 h-4" />
@@ -131,7 +151,7 @@ const Navbar = () => {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 hover:border-white/30 rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
                 title="Instagram"
               >
                 <FaInstagram className="w-4 h-4" />
@@ -141,7 +161,7 @@ const Navbar = () => {
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-white/20 hover:bg-orange-500 rounded-lg flex items-center justify-center text-white transition-all duration-200"
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/10 hover:border-white/30 rounded-lg flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
                 title="YouTube"
               >
                 <FaYoutube className="w-4 h-4" />
@@ -153,30 +173,41 @@ const Navbar = () => {
 
       {/* Main Navbar */}
       <nav
-        className={`fixed top-12 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-white shadow-lg" : "bg-white shadow-md"
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "top-3 mx-auto w-[94vw] max-w-7xl bg-white/90 backdrop-blur-md border border-slate-200/50 shadow-[0_10px_30px_rgba(0,0,0,0.04)] rounded-2xl py-1 px-4"
+            : "top-12 w-full bg-white border-b border-slate-100"
         }`}
       >
-        <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
-          <div className="flex justify-between items-center h-20">
+        <div className="max-w-[90vw] mx-auto px-2 lg:px-4">
+          <div
+            className={`flex justify-between items-center transition-all duration-300 ${
+              isScrolled ? "h-16" : "h-20"
+            }`}
+          >
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 z-50">
-              <Image
-                src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
-                width={55}
-                height={55}
-                alt="Logo"
-                className="rounded-xl"
-                priority
-              />
-              <span className="hidden sm:block text-xl font-bold text-blue-600">
+            <Link
+              href="/"
+              className="flex items-center space-x-2.5 z-50 group/logo"
+            >
+              <div className="relative overflow-hidden rounded-xl transition-all duration-300 group-hover/logo:scale-105 group-hover/logo:rotate-3 shadow-md shadow-blue-500/10">
+                <Image
+                  src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
+                  width={isScrolled ? 42 : 52}
+                  height={isScrolled ? 42 : 52}
+                  alt="Logo"
+                  className="rounded-xl transition-all duration-300"
+                  priority
+                />
+              </div>
+              <span className="hidden sm:block text-xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-orange-500 bg-clip-text text-transparent tracking-tight">
                 I Next ETS
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
-              <ul className="flex items-center space-x-8">
+            {/* Desktop Navigation Links (Center) */}
+            <div className="hidden lg:flex items-center justify-center flex-1 mx-6">
+              <ul className="flex items-center space-x-1">
                 {navbar.map((link) => (
                   <li key={link.id}>
                     {link.title === "Services" ? (
@@ -185,11 +216,11 @@ const Navbar = () => {
                         onMouseEnter={() => setIsServicesOpen(true)}
                         onMouseLeave={() => setIsServicesOpen(false)}
                       >
-                        <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 font-semibold transition-colors duration-200 py-2">
+                        <button className="flex items-center space-x-1 text-slate-700 hover:text-blue-600 font-semibold transition-all duration-200 py-2 px-2 hover:bg-slate-50/80 rounded-xl">
                           <span>{link.title}</span>
                           <IoIosArrowDown
                             className={`transition-transform duration-300 ${
-                              isServicesOpen ? "rotate-180" : ""
+                              isServicesOpen ? "rotate-180 text-blue-600" : ""
                             }`}
                           />
                         </button>
@@ -197,25 +228,28 @@ const Navbar = () => {
                         {/* Mega Menu */}
                         <div
                           ref={megaMenuRef}
-                          className={`absolute left-0 right-0 top-full pt-1 transition-all duration-300 ${
+                          className={`absolute left-0 right-0 top-full pt-3 transition-all duration-300 z-[100] ${
                             isServicesOpen
                               ? "opacity-100 visible translate-y-0"
                               : "opacity-0 invisible -translate-y-4"
                           }`}
                         >
-                          <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
-                            <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+                          <div className="w-full px-0">
+                            <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-slate-100/80 overflow-hidden">
                               <div className="grid grid-cols-12 gap-0">
                                 {/* Left Section - Services (75%) */}
-                                <div className="col-span-9 p-10">
-                                  <div className="mb-6">
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                      Our Services
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                      Comprehensive solutions to grow your
-                                      business
-                                    </p>
+                                <div className="col-span-9 p-8">
+                                  <div className="mb-6 flex items-center gap-2">
+                                    <span className="w-2.5 h-2.5 bg-blue-600 rounded-full animate-pulse"></span>
+                                    <div>
+                                      <h3 className="text-xl font-bold text-slate-800">
+                                        Our Core Services
+                                      </h3>
+                                      <p className="text-xs text-slate-400 mt-0.5">
+                                        Innovative solutions tailored to power
+                                        your brand
+                                      </p>
+                                    </div>
                                   </div>
 
                                   <div className="grid grid-cols-3 gap-4">
@@ -229,17 +263,22 @@ const Navbar = () => {
                                           onClick={() =>
                                             setIsServicesOpen(false)
                                           }
-                                          className="group/item p-5 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:shadow-lg"
+                                          className="group/item p-4 rounded-2xl hover:bg-slate-50 transition-all duration-300 border border-slate-100 hover:border-blue-100 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5"
                                         >
                                           <div className="flex items-start space-x-4">
-                                            <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white group-hover/item:bg-orange-500 group-hover/item:scale-110 transition-all duration-300 shadow-md">
-                                              <IconComponent className="w-6 h-6" />
+                                            <div
+                                              className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white ${
+                                                serviceIconColors[service.id] ||
+                                                "bg-blue-600"
+                                              } group-hover/item:scale-110 transition-all duration-300 shadow-md`}
+                                            >
+                                              <IconComponent className="w-5 h-5" />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                              <h4 className="font-bold text-gray-900 mb-1.5 text-base group-hover/item:text-blue-600 transition-colors duration-200">
+                                              <h4 className="font-bold text-slate-800 mb-1 text-sm group-hover/item:text-blue-600 transition-colors duration-200">
                                                 {service.title}
                                               </h4>
-                                              <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                                              <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
                                                 {service.description}
                                               </p>
                                             </div>
@@ -251,27 +290,27 @@ const Navbar = () => {
                                 </div>
 
                                 {/* Right Section - Contact & Social (25%) */}
-                                <div className="col-span-3 bg-gradient-to-br from-gray-50 to-blue-50 p-8 border-l border-gray-100">
-                                  <div className="space-y-8">
+                                <div className="col-span-3 bg-gradient-to-br from-slate-50 to-blue-50/30 p-8 border-l border-slate-100">
+                                  <div className="space-y-6">
                                     {/* Contact Info */}
                                     <div>
-                                      <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
-                                        <span className="w-1 h-6 bg-blue-600 rounded-full mr-3"></span>
+                                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                                        <span className="w-1.5 h-4 bg-blue-600 rounded-full mr-2"></span>
                                         Get In Touch
                                       </h4>
-                                      <div className="space-y-4">
+                                      <div className="space-y-3">
                                         <a
                                           href="tel:+919981122493"
-                                          className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
+                                          className="flex items-center space-x-3 text-sm text-slate-600 hover:text-blue-600 transition-colors duration-200 group p-2 rounded-xl hover:bg-white hover:shadow-sm"
                                         >
-                                          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
-                                            <FaPhone className="w-4 h-4" />
+                                          <div className="w-9 h-9 bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white rounded-lg flex items-center justify-center text-orange-600 transition-all duration-300 flex-shrink-0">
+                                            <FaPhone className="w-3.5 h-3.5" />
                                           </div>
                                           <div className="flex-1 min-w-0">
-                                            <div className="text-xs text-gray-500 mb-0.5">
+                                            <div className="text-[10px] text-slate-400 font-medium">
                                               Call Us
                                             </div>
-                                            <div className="font-semibold text-gray-900">
+                                            <div className="font-bold text-slate-800 text-xs">
                                               +91 9981122493
                                             </div>
                                           </div>
@@ -279,33 +318,31 @@ const Navbar = () => {
 
                                         <a
                                           href="mailto:info.inextets@gmail.com"
-                                          className="flex items-start space-x-3 text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 group p-3 rounded-lg hover:bg-white"
+                                          className="flex items-center space-x-3 text-sm text-slate-600 hover:text-blue-600 transition-colors duration-200 group p-2 rounded-xl hover:bg-white hover:shadow-sm"
                                         >
-                                          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-600 transition-all duration-300 shadow-sm flex-shrink-0">
-                                            <FaEnvelope className="w-4 h-4" />
+                                          <div className="w-9 h-9 bg-orange-500/10 group-hover:bg-orange-500 group-hover:text-white rounded-lg flex items-center justify-center text-orange-600 transition-all duration-300 flex-shrink-0">
+                                            <FaEnvelope className="w-3.5 h-3.5" />
                                           </div>
                                           <div className="flex-1 min-w-0">
-                                            <div className="text-xs text-gray-500 mb-0.5">
+                                            <div className="text-[10px] text-slate-400 font-medium">
                                               Email Us
                                             </div>
-                                            <div className="font-semibold text-gray-900 text-xs break-all">
+                                            <div className="font-bold text-slate-800 text-xs truncate">
                                               info.inextets@gmail.com
                                             </div>
                                           </div>
                                         </a>
 
-                                        <div className="flex items-start space-x-3 text-sm text-gray-700 p-3 rounded-lg bg-white/50">
-                                          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-sm flex-shrink-0">
-                                            <FaMapMarkerAlt className="w-4 h-4" />
+                                        <div className="flex items-start space-x-3 text-sm text-slate-600 p-2.5 rounded-xl bg-white/60 border border-slate-100">
+                                          <div className="w-9 h-9 bg-blue-600/10 rounded-lg flex items-center justify-center text-blue-600 shadow-sm flex-shrink-0">
+                                            <FaMapMarkerAlt className="w-3.5 h-3.5" />
                                           </div>
                                           <div className="flex-1 min-w-0">
-                                            <div className="text-xs text-gray-500 mb-0.5">
+                                            <div className="text-[10px] text-slate-400 font-medium">
                                               Visit Us
                                             </div>
-                                            <div className="font-semibold text-gray-900 leading-tight text-xs">
-                                              Plot No - 11, 2nd floor, near
-                                              MANOHAR DAIRY, Zone-I, Maharana
-                                              Pratap Nagar, Bhopal, MP 462011
+                                            <div className="font-semibold text-slate-700 leading-tight text-[11px]">
+                                              Zone-I, MP Nagar, Bhopal, MP
                                             </div>
                                           </div>
                                         </div>
@@ -314,49 +351,49 @@ const Navbar = () => {
 
                                     {/* Social Media */}
                                     <div>
-                                      <h4 className="text-lg font-bold text-gray-900 mb-5 flex items-center">
-                                        <span className="w-1 h-6 bg-orange-500 rounded-full mr-3"></span>
+                                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center">
+                                        <span className="w-1.5 h-4 bg-orange-500 rounded-full mr-2"></span>
                                         Follow Us
                                       </h4>
-                                      <div className="flex items-center justify-center gap-3">
+                                      <div className="flex items-center gap-2">
                                         <a
                                           href="https://facebook.com"
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          className="w-9 h-9 bg-white hover:bg-[#1877F2] border border-slate-100 rounded-lg flex items-center justify-center hover:text-white text-slate-600 transition-all duration-300 shadow-sm hover:scale-105"
                                           title="Facebook"
                                         >
-                                          <FaFacebook className="w-6 h-6 text-white" />
+                                          <FaFacebook className="w-4 h-4" />
                                         </a>
 
                                         <a
                                           href="https://linkedin.com"
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center hover:bg-blue-800 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          className="w-9 h-9 bg-white hover:bg-[#0A66C2] border border-slate-100 rounded-lg flex items-center justify-center hover:text-white text-slate-600 transition-all duration-300 shadow-sm hover:scale-105"
                                           title="LinkedIn"
                                         >
-                                          <FaLinkedin className="w-6 h-6 text-white" />
+                                          <FaLinkedin className="w-4 h-4" />
                                         </a>
 
                                         <a
                                           href="https://instagram.com"
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="w-12 h-12 bg-pink-600 rounded-lg flex items-center justify-center hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          className="w-9 h-9 bg-white hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] border border-slate-100 rounded-lg flex items-center justify-center hover:text-white text-slate-600 transition-all duration-300 shadow-sm hover:scale-105"
                                           title="Instagram"
                                         >
-                                          <FaInstagram className="w-6 h-6 text-white" />
+                                          <FaInstagram className="w-4 h-4" />
                                         </a>
 
                                         <a
                                           href="https://youtube.com"
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center hover:bg-red-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                          className="w-9 h-9 bg-white hover:bg-[#FF0000] border border-slate-100 rounded-lg flex items-center justify-center hover:text-white text-slate-600 transition-all duration-300 shadow-sm hover:scale-105"
                                           title="YouTube"
                                         >
-                                          <FaYoutube className="w-6 h-6 text-white" />
+                                          <FaYoutube className="w-4 h-4" />
                                         </a>
                                       </div>
                                     </div>
@@ -367,7 +404,7 @@ const Navbar = () => {
                                         setIsModalOpen(true);
                                         setIsServicesOpen(false);
                                       }}
-                                      className="w-full px-5 py-4 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl text-sm transform hover:scale-105"
+                                      className="w-full px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold hover:from-orange-600 hover:to-amber-600 transition-all duration-200 shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 text-xs tracking-wider uppercase transform hover:-translate-y-0.5"
                                     >
                                       Request a Quote →
                                     </button>
@@ -381,42 +418,58 @@ const Navbar = () => {
                     ) : (
                       <Link
                         href={link.path}
-                        className="text-gray-700 hover:text-blue-600 font-semibold transition-colors duration-200 relative group/link pb-1"
+                        className={`font-semibold transition-all duration-300 py-2 px-2 rounded-xl relative group/link ${
+                          pathname === link.path
+                            ? "text-blue-600 bg-blue-50/50"
+                            : "text-slate-700 hover:text-blue-600 hover:bg-slate-50/80"
+                        }`}
                       >
                         {link.title}
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover/link:w-full transition-all duration-300"></span>
+                        <span
+                          className={`absolute bottom-1 left-2 right-2 h-0.5 bg-blue-600 transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 ${
+                            pathname === link.path ? "scale-x-100" : ""
+                          }`}
+                        ></span>
                       </Link>
                     )}
                   </li>
                 ))}
               </ul>
+            </div>
 
-              {/* CTA Buttons */}
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
-                >
+            {/* Desktop Action Buttons (Right) */}
+            <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="relative group overflow-hidden rounded-xl p-[2px] bg-orange-100/80 transition-transform duration-300 hover:scale-[1.03] active:scale-95 shadow-md shadow-orange-500/20 hover:shadow-lg hover:shadow-orange-500/30"
+              >
+                {/* Sweeping RGB Border Light */}
+                <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#ff453a_70%,#ff9f0a_85%,#30d158_95%,#0a84ff_100%)]" />
+                <span className="relative flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-200">
                   Book Domain
-                </button>
-                <Link
-                  href="/login"
-                  className="px-6 py-3 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
-                >
+                </span>
+              </button>
+              <Link
+                href="/login"
+                className="relative group overflow-hidden rounded-xl p-[2px] bg-blue-100/80 transition-transform duration-300 hover:scale-[1.03] active:scale-95 shadow-sm hover:shadow-md hover:shadow-blue-600/10"
+              >
+                {/* Sweeping RGB Border Light */}
+                <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#0a84ff_70%,#30d158_85%,#bf5af2_95%,#ff453a_100%)]" />
+                <span className="relative flex items-center justify-center px-5 py-2.5 bg-white text-blue-600 rounded-[10px] font-semibold transition-all duration-200 group-hover:bg-slate-50">
                   Login
-                </Link>
-              </div>
+                </span>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden z-50 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              className="lg:hidden z-50 p-2 rounded-xl hover:bg-slate-50 transition-colors duration-200 text-slate-700"
             >
               {isMobileMenuOpen ? (
-                <IoMdClose className="w-7 h-7 text-gray-700" />
+                <IoMdClose className="w-6 h-6" />
               ) : (
-                <HiMenuAlt3 className="w-7 h-7 text-gray-700" />
+                <HiMenuAlt3 className="w-6 h-6" />
               )}
             </button>
           </div>
@@ -425,26 +478,26 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-0 z-40 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${
           isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-500"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
 
-        {/* Sidebar */}
+        {/* Sidebar Panel */}
         <div
           ref={sidebarRef}
-          className={`absolute top-0 right-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl transform transition-transform duration-300 overflow-y-auto ${
+          className={`absolute top-0 right-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl rounded-l-3xl transform transition-transform duration-500 ease-out overflow-y-auto ${
             isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           <div className="flex flex-col min-h-full">
             {/* Sidebar Header */}
-            <div className="bg-white border-b border-gray-200 px-6 py-6 sticky top-0 z-10">
+            <div className="bg-white border-b border-slate-100 px-6 py-5 sticky top-0 z-10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <Image
@@ -452,13 +505,13 @@ const Navbar = () => {
                     width={45}
                     height={45}
                     alt="Logo"
-                    className="rounded-lg"
+                    className="rounded-xl shadow-sm"
                   />
                   <div>
-                    <h2 className="text-xl font-bold text-blue-600">
+                    <h2 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                       I Next ETS
                     </h2>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-[10px] text-slate-400 font-medium">
                       Navigate our services
                     </p>
                   </div>
@@ -477,12 +530,14 @@ const Navbar = () => {
                           onClick={() =>
                             setIsMobileServicesOpen(!isMobileServicesOpen)
                           }
-                          className="w-full flex items-center justify-between px-4 py-3.5 text-gray-700 hover:bg-blue-50 rounded-lg font-semibold transition-colors duration-200"
+                          className="w-full flex items-center justify-between px-4 py-3 text-slate-700 hover:bg-slate-50 rounded-xl font-semibold transition-colors duration-200"
                         >
                           <span>{link.title}</span>
                           <IoIosArrowDown
                             className={`transition-transform duration-300 ${
-                              isMobileServicesOpen ? "rotate-180" : ""
+                              isMobileServicesOpen
+                                ? "rotate-180 text-blue-600"
+                                : ""
                             }`}
                           />
                         </button>
@@ -506,16 +561,21 @@ const Navbar = () => {
                                     setIsMobileMenuOpen(false);
                                     setIsMobileServicesOpen(false);
                                   }}
-                                  className="flex items-start space-x-3 px-4 py-3 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 border border-gray-100"
+                                  className="flex items-start space-x-3 px-4 py-3 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-xl transition-all duration-200 border border-slate-100/50"
                                 >
-                                  <div className="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                                    <IconComponent className="w-5 h-5" />
+                                  <div
+                                    className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-white ${
+                                      serviceIconColors[service.id] ||
+                                      "bg-blue-600"
+                                    } shadow-sm`}
+                                  >
+                                    <IconComponent className="w-4.5 h-4.5" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <div className="font-semibold text-gray-800 mb-0.5">
+                                    <div className="font-semibold text-slate-800 text-xs mb-0.5">
                                       {service.title}
                                     </div>
-                                    <div className="text-xs text-gray-500 line-clamp-2">
+                                    <div className="text-[10px] text-slate-400 line-clamp-1">
                                       {service.description}
                                     </div>
                                   </div>
@@ -529,7 +589,11 @@ const Navbar = () => {
                       <Link
                         href={link.path}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block px-4 py-3.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-semibold transition-colors duration-200"
+                        className={`block px-4 py-3 text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-xl font-semibold transition-all duration-200 ${
+                          pathname === link.path
+                            ? "text-blue-600 bg-blue-50/40"
+                            : ""
+                        }`}
                       >
                         {link.title}
                       </Link>
@@ -540,13 +604,13 @@ const Navbar = () => {
             </div>
 
             {/* Sidebar Footer */}
-            <div className="p-6 border-t border-gray-200 bg-white sticky bottom-0">
+            <div className="p-6 border-t border-slate-100 bg-white sticky bottom-0">
               <button
                 onClick={() => {
                   setIsModalOpen(true);
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full px-6 py-4 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="w-full px-6 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold hover:from-orange-600 hover:to-amber-600 transition-all duration-200 shadow-md shadow-orange-500/20"
               >
                 Get In Touch
               </button>

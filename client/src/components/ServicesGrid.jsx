@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { 
-  FaFacebook, 
-  FaBullhorn, 
-  FaUserPlus, 
-  FaChartLine, 
-  FaLaptopCode, 
-  FaMobileAlt, 
-  FaRobot, 
+import {
+  FaFacebook,
+  FaBullhorn,
+  FaUserPlus,
+  FaChartLine,
+  FaLaptopCode,
+  FaMobileAlt,
+  FaRobot,
   FaShieldAlt,
-  FaArrowRight 
+  FaArrowRight
 } from "react-icons/fa";
 
 const services = [
@@ -101,13 +101,13 @@ const ServicesGrid = () => {
     <div className="py-10 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-5">
           <div className="inline-block mb-4">
             <span className="px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
               What We Offer
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             Our Services
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -127,7 +127,7 @@ const ServicesGrid = () => {
               >
                 {/* Background Gradient on Hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                
+
                 <div className="relative flex flex-col items-start gap-4">
                   {/* Icon with Background */}
                   <div className={`${service.bgColor} w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
@@ -158,7 +158,7 @@ const ServicesGrid = () => {
           })}
         </div>
 
-        
+
       </div>
     </div>
   );
