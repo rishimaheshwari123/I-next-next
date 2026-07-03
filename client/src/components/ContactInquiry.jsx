@@ -94,9 +94,7 @@ export default function ContactInquiry() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-6 shadow-xl">
-            <FaPaperPlane className="text-3xl text-white" />
-          </div>
+
           <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             Get In Touch
           </h2>
