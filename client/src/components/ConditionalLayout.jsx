@@ -7,13 +7,19 @@ import ScrollToTop from "@/components/ScrollToTop";
 import PageLoader from "@/components/common/PageLoader";
 
 function RouteLoaderWrapper({ children }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFading, setIsFading] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Reset loading state whenever path or query changes
+  // Reset loading state whenever path or query changes with a smooth fade-out
   useEffect(() => {
-    setIsLoading(false);
+    setIsFading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      setIsFading(false);
+    }, 300);
+    return () => clearTimeout(timer);
   }, [pathname, searchParams]);
 
   useEffect(() => {
@@ -43,6 +49,7 @@ function RouteLoaderWrapper({ children }) {
             currentUrl.pathname !== targetUrl.pathname ||
             currentUrl.search !== targetUrl.search
           ) {
+            setIsFading(false);
             setIsLoading(true);
           }
         } catch (e) {
@@ -52,6 +59,7 @@ function RouteLoaderWrapper({ children }) {
     };
 
     const handlePopState = () => {
+      setIsFading(false);
       setIsLoading(true);
     };
 
@@ -66,7 +74,11 @@ function RouteLoaderWrapper({ children }) {
 
   return (
     <>
-      {isLoading && <PageLoader />}
+      {isLoading && (
+        <div className={`transition-opacity duration-300 z-[9999] relative ${isFading ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+          <PageLoader />
+        </div>
+      )}
       {children}
     </>
   );
