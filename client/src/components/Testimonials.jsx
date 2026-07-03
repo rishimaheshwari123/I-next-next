@@ -143,6 +143,7 @@ const Testimonials = () => {
         {/* Tab Buttons */}
         <div className="flex justify-center gap-3 mb-8">
           <button
+            suppressHydrationWarning
             onClick={() => setActiveTab("indian")}
             className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${activeTab === "indian"
                 ? "bg-orange-500 text-white shadow-lg"
@@ -152,6 +153,7 @@ const Testimonials = () => {
             🇮🇳 Indian Clients
           </button>
           <button
+            suppressHydrationWarning
             onClick={() => setActiveTab("worldwide")}
             className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${activeTab === "worldwide"
                 ? "bg-blue-600 text-white shadow-lg"
@@ -219,6 +221,7 @@ const Testimonials = () => {
 
           {/* Navigation Arrows */}
           <button
+            suppressHydrationWarning
             onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-14 w-12 h-12 bg-white hover:bg-blue-600 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl border border-gray-200 hover:border-blue-600"
             aria-label="Previous testimonial"
@@ -227,6 +230,7 @@ const Testimonials = () => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={nextSlide}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-14 w-12 h-12 bg-white hover:bg-blue-600 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl border border-gray-200 hover:border-blue-600"
             aria-label="Next testimonial"
@@ -239,6 +243,7 @@ const Testimonials = () => {
         <div className="flex justify-center gap-2 mt-8">
           {currentTestimonials.map((_, index) => (
             <button
+              suppressHydrationWarning
               key={index}
               onClick={() => goToSlide(index)}
               className={`transition-all duration-300 rounded-full ${index === currentIndex

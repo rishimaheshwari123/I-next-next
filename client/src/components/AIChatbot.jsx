@@ -179,6 +179,7 @@ export default function AIChatbot() {
       {/* Floating Button */}
       {!isOpen && (
         <button
+          suppressHydrationWarning
           onClick={() => setIsOpen(true)}
           className="fixed bottom-16 right-4 z-50 w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300 animate-bounce"
         >

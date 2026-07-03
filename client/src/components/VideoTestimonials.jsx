@@ -129,6 +129,7 @@ const VideoTestimonials = () => {
 
                 {/* Watch Button */}
                 <button
+                  suppressHydrationWarning
                   onClick={() => openVideo(testimonial)}
                   className="mt-4 w-full py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg"
                 >
@@ -172,6 +173,7 @@ const VideoTestimonials = () => {
           <div className="relative w-full max-w-5xl">
             {/* Close Button */}
             <button
+              suppressHydrationWarning
               onClick={closeVideo}
               className="absolute -top-12 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors duration-200 shadow-lg"
             >

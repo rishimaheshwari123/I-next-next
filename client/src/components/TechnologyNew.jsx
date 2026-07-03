@@ -206,6 +206,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
         {/* Service Selector */}
         <div className="flex justify-center gap-3 mb-12 flex-wrap">
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(1)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 1
                 ? "bg-blue-600 text-white shadow-lg scale-105"
@@ -217,6 +218,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(2)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 2
                 ? "bg-orange-600 text-white shadow-lg scale-105"
@@ -228,6 +230,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(3)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 3
                 ? "bg-purple-600 text-white shadow-lg scale-105"
@@ -239,6 +242,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(4)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 4
                 ? "bg-green-600 text-white shadow-lg scale-105"
@@ -250,6 +254,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(5)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 5
                 ? "bg-indigo-600 text-white shadow-lg scale-105"
@@ -261,6 +266,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(6)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 6
                 ? "bg-pink-600 text-white shadow-lg scale-105"
@@ -272,6 +278,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(7)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 7
                 ? "bg-cyan-600 text-white shadow-lg scale-105"
@@ -283,6 +290,7 @@ const TechnologyNew = ({ currentServiceId = 5 }) => {
           </button>
 
           <button
+            suppressHydrationWarning
             onClick={() => setActiveService(8)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 text-sm ${activeService === 8
                 ? "bg-red-600 text-white shadow-lg scale-105"

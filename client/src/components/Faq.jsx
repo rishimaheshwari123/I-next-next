@@ -43,6 +43,7 @@ const Faq = () => {
             >
               {/* Question Header */}
               <button
+                suppressHydrationWarning
                 onClick={() => handleClick(index)}
                 className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-gray-50 transition-colors duration-200 group"
               >

@@ -13,6 +13,7 @@ export default function WhatsAppButton() {
 
   return (
     <button
+      suppressHydrationWarning
       onClick={handleWhatsAppClick}
       className="fixed bottom-6 left-6 z-50 w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300 animate-bounce hover:animate-none group"
       aria-label="Contact us on WhatsApp"

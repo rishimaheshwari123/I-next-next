@@ -7,20 +7,37 @@ import ScrollToTop from "@/components/ScrollToTop";
 import PageLoader from "@/components/common/PageLoader";
 
 function RouteLoaderWrapper({ children }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isFading, setIsFading] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Reset loading state whenever path or query changes with a smooth fade-out
+  // Initial load trigger on safe client mount
   useEffect(() => {
+    setHasMounted(true);
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsFading(true);
+      const fadeTimer = setTimeout(() => {
+        setIsLoading(false);
+        setIsFading(false);
+      }, 300);
+      return () => clearTimeout(fadeTimer);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Reset loader state on route/params change
+  useEffect(() => {
+    if (!hasMounted) return;
     setIsFading(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
       setIsFading(false);
     }, 300);
     return () => clearTimeout(timer);
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, hasMounted]);
 
   useEffect(() => {
     const handleLinkClick = (event) => {

@@ -144,6 +144,7 @@ const HeroSlider = () => {
       {/* Navigation Arrows - Bottom Right */}
       <div className="absolute bottom-4 right-4 z-30 flex gap-2">
         <button
+          suppressHydrationWarning
           onClick={prevSlide}
           className="w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200 border border-white/30 hover:border-white/50"
           aria-label="Previous slide"
@@ -152,6 +153,7 @@ const HeroSlider = () => {
         </button>
 
         <button
+          suppressHydrationWarning
           onClick={nextSlide}
           className="w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200 border border-white/30 hover:border-white/50"
           aria-label="Next slide"
@@ -164,6 +166,7 @@ const HeroSlider = () => {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-3">
         {heroSlides.map((_, index) => (
           <button
+            suppressHydrationWarning
             key={index}
             onClick={() => goToSlide(index)}
             className={`transition-all duration-300 rounded-full ${

@@ -117,6 +117,7 @@ export default function ContactInquiry() {
                   <div className="relative">
                     <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
+                      suppressHydrationWarning
                       type="text"
                       name="name"
                       value={formData.name}
@@ -138,6 +139,7 @@ export default function ContactInquiry() {
                     <div className="relative">
                       <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
+                        suppressHydrationWarning
                         type="email"
                         name="email"
                         value={formData.email}
@@ -157,6 +159,7 @@ export default function ContactInquiry() {
                     <div className="relative">
                       <FaPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
+                        suppressHydrationWarning
                         type="tel"
                         name="phone"
                         value={formData.phone}
@@ -178,6 +181,7 @@ export default function ContactInquiry() {
                   <div className="relative">
                     <FaEdit className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
+                      suppressHydrationWarning
                       type="text"
                       name="subject"
                       value={formData.subject}
@@ -198,6 +202,7 @@ export default function ContactInquiry() {
                   <div className="relative">
                     <FaCommentAlt className="absolute left-4 top-4 text-gray-400" />
                     <textarea
+                      suppressHydrationWarning
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
@@ -212,6 +217,7 @@ export default function ContactInquiry() {
 
                 {/* Submit Button */}
                 <button
+                  suppressHydrationWarning
                   type="submit"
                   disabled={submitting}
                   className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"

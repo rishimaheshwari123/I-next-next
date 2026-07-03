@@ -216,7 +216,7 @@ const Navbar = () => {
                         onMouseEnter={() => setIsServicesOpen(true)}
                         onMouseLeave={() => setIsServicesOpen(false)}
                       >
-                        <button className="flex items-center space-x-1 text-slate-700 hover:text-blue-600 font-semibold transition-all duration-200 py-2 px-2 hover:bg-slate-50/80 rounded-xl">
+                        <button suppressHydrationWarning className="flex items-center space-x-1 text-slate-700 hover:text-blue-600 font-semibold transition-all duration-200 py-2 px-2 hover:bg-slate-50/80 rounded-xl">
                           <span>{link.title}</span>
                           <IoIosArrowDown
                             className={`transition-transform duration-300 ${
@@ -440,6 +440,7 @@ const Navbar = () => {
             {/* Desktop Action Buttons (Right) */}
             <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
               <button
+                suppressHydrationWarning
                 onClick={() => setIsModalOpen(true)}
                 className="relative group overflow-hidden rounded-xl p-[2px] bg-orange-100/80 transition-transform duration-300 hover:scale-[1.03] active:scale-95 shadow-md shadow-orange-500/20 hover:shadow-lg hover:shadow-orange-500/30"
               >
@@ -463,6 +464,7 @@ const Navbar = () => {
 
             {/* Mobile Menu Button */}
             <button
+              suppressHydrationWarning
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden z-50 p-2 rounded-xl hover:bg-slate-50 transition-colors duration-200 text-slate-700"
             >
