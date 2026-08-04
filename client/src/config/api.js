@@ -149,4 +149,13 @@ export const EMPLOYEE_API = {
   GET_MY_SUPPORT: (userId) => `${BASE_URL}/support/my-tickets/${userId}`,
 };
 
+// Job Management API Endpoints
+export const JOB_API = {
+  CREATE: `${BASE_URL}/job/create`,
+  GET_ALL: `${BASE_URL}/job/getAll`,
+  GET_SINGLE: (id) => `${BASE_URL}/job/get/${id}`,
+  UPDATE: (id) => `${BASE_URL}/job/update/${id}`,
+  DELETE: (id) => `${BASE_URL}/job/delete/${id}`,
+};
+
 export { BASE_URL };

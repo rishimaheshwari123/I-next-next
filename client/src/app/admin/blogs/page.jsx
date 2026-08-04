@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FaBlog,
   FaPlus,
@@ -11,6 +11,26 @@ import {
   FaTimes,
   FaImage,
   FaSave,
+  FaUndo,
+  FaRedo,
+  FaBold,
+  FaItalic,
+  FaUnderline,
+  FaStrikethrough,
+  FaCode,
+  FaListUl,
+  FaListOl,
+  FaQuoteRight,
+  FaMinus,
+  FaAlignLeft,
+  FaAlignCenter,
+  FaAlignRight,
+  FaAlignJustify,
+  FaLink,
+  FaEraser,
+  FaArrowLeft,
+  FaChevronDown,
+  FaGlobe,
 } from "react-icons/fa";
 import { BASE_URL } from "@/config/api";
 
@@ -18,13 +38,22 @@ const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [currentView, setCurrentView] = useState("list"); // "list", "create", "edit"
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  
+  // Editor and preview tab state
+  const [editorTab, setEditorTab] = useState("editor"); // "editor", "html", "preview"
+  
+  // Tag input state
+  const [tagInput, setTagInput] = useState("");
+
+  // Blog Form State
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
-    desc: "",
-    category: "General",
+    desc: "", // rich text html content
+    category: "Venue Tips",
     metaTitle: "",
     metaDescription: "",
     keywords: "",
@@ -32,15 +61,26 @@ const Blogs = () => {
     ogTitle: "",
     ogDescription: "",
     published: false,
+    
+    // New Fields
+    shortDescription: "",
+    author: "Admin",
+    tags: [],
+    altText: "",
+    focusKeyword: "",
+    noIndex: false,
+    faqs: [], // Array of { question, answer }
+    articleSchema: true,
+    faqSchema: false,
+    breadcrumbSchema: true
   });
+
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [editMode, setEditMode] = useState(false);
+
+  const editorRef = useRef(null);
 
   const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
@@ -53,8 +93,18 @@ const Blogs = () => {
     fetchBlogs();
   }, []);
 
+  // Sync contentEditable content on view switch or blog load
+  useEffect(() => {
+    if (editorRef.current && (currentView === "create" || currentView === "edit")) {
+      if (editorRef.current.innerHTML !== formData.desc) {
+        editorRef.current.innerHTML = formData.desc || "";
+      }
+    }
+  }, [currentView, selectedBlog]);
+
   const fetchBlogs = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${BASE_URL}/blog/getAll`);
       const data = await response.json();
       if (data.success) {
@@ -70,7 +120,6 @@ const Blogs = () => {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
-    // Auto-generate slug from title
     if (name === "title") {
       const slug = value
         .toLowerCase()
@@ -105,17 +154,251 @@ const Blogs = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  // Word & Character Counter
+  const getWordCharCount = () => {
+    const text = formData.desc ? formData.desc.replace(/<[^>]*>/g, " ") : "";
+    const cleanText = text.trim();
+    const words = cleanText ? cleanText.split(/\s+/).length : 0;
+    const chars = cleanText.length;
+    return { words, chars };
+  };
+
+  // Dynamic Read Time Calculator
+  const getReadTime = () => {
+    const { words } = getWordCharCount();
+    const wpm = 200; // Average reading speed
+    const minutes = Math.ceil(words / wpm);
+    return `${minutes} min read`;
+  };
+
+  // Dynamic SEO Score Calculation
+  const calculateSEOScore = () => {
+    let score = 0;
+    const suggestions = [];
+
+    // Focus Keyword presence (+15)
+    if (formData.focusKeyword.trim()) {
+      score += 15;
+      
+      // Keyword in Title (+15)
+      if (formData.title.toLowerCase().includes(formData.focusKeyword.toLowerCase())) {
+        score += 15;
+      } else {
+        suggestions.push("Focus keyword not found in the Title.");
+      }
+
+      // Keyword in Meta Description (+15)
+      if (formData.metaDescription.toLowerCase().includes(formData.focusKeyword.toLowerCase())) {
+        score += 15;
+      } else {
+        suggestions.push("Focus keyword not found in the Meta Description.");
+      }
+
+      // Keyword in Content Body (+15)
+      if (formData.desc.toLowerCase().includes(formData.focusKeyword.toLowerCase())) {
+        score += 15;
+      } else {
+        suggestions.push("Focus keyword not found in the blog content.");
+      }
+    } else {
+      score += 0;
+      suggestions.push("Set a focus keyword to evaluate search optimization.");
+    }
+
+    // Meta Title length check (+10)
+    if (formData.metaTitle.trim()) {
+      const len = formData.metaTitle.length;
+      if (len >= 40 && len <= 60) {
+        score += 10;
+      } else {
+        score += 5;
+        suggestions.push(`Meta Title should be 40-60 characters (currently ${len}).`);
+      }
+    } else {
+      suggestions.push("Define a Meta Title for search results preview.");
+    }
+
+    // Meta Description length check (+10)
+    if (formData.metaDescription.trim()) {
+      const len = formData.metaDescription.length;
+      if (len >= 120 && len <= 160) {
+        score += 10;
+      } else {
+        score += 5;
+        suggestions.push(`Meta Description should be 120-160 characters (currently ${len}).`);
+      }
+    } else {
+      suggestions.push("Define a Meta Description to optimize SERP snippet.");
+    }
+
+    // Short Description (+10)
+    if (formData.shortDescription.trim()) {
+      score += 10;
+    } else {
+      suggestions.push("Add a short description for cards listing.");
+    }
+
+    // Image Alt text check (+10)
+    if (formData.altText.trim()) {
+      score += 10;
+    } else {
+      suggestions.push("Add Image Alt text for accessibility and search ranking.");
+    }
+
+    // Tags (+10)
+    if (formData.tags && formData.tags.length >= 2) {
+      score += 10;
+    } else if (formData.tags && formData.tags.length > 0) {
+      score += 5;
+      suggestions.push("Add at least 2 tags to group relevant content.");
+    } else {
+      suggestions.push("Add tags to classify this blog post.");
+    }
+
+    return { score, suggestions };
+  };
+
+  // Rich Editor Formatting Actions
+  const execEditorCommand = (command, value = null) => {
+    if (typeof document !== "undefined" && editorRef.current) {
+      document.execCommand(command, false, value);
+      updateDescFromEditor();
+    }
+  };
+
+  const updateDescFromEditor = () => {
+    if (editorRef.current) {
+      setFormData(prev => ({
+        ...prev,
+        desc: editorRef.current.innerHTML
+      }));
+    }
+  };
+
+  // Tag Helpers
+  const handleAddTag = (e) => {
     e.preventDefault();
+    const tag = tagInput.trim();
+    if (tag && !formData.tags.includes(tag)) {
+      setFormData(prev => ({
+        ...prev,
+        tags: [...prev.tags, tag]
+      }));
+      setTagInput("");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      tags: prev.tags.filter(t => t !== tagToRemove)
+    }));
+  };
+
+  // FAQ Helpers
+  const handleAddFaq = () => {
+    setFormData(prev => ({
+      ...prev,
+      faqs: [...prev.faqs, { question: "", answer: "" }]
+    }));
+  };
+
+  const handleRemoveFaq = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, idx) => idx !== index)
+    }));
+  };
+
+  const handleFaqChange = (index, field, value) => {
+    setFormData(prev => {
+      const updatedFaqs = [...prev.faqs];
+      updatedFaqs[index] = {
+        ...updatedFaqs[index],
+        [field]: value
+      };
+      return {
+        ...prev,
+        faqs: updatedFaqs
+      };
+    });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      slug: "",
+      desc: "",
+      category: "Venue Tips",
+      metaTitle: "",
+      metaDescription: "",
+      keywords: "",
+      canonicalUrl: "",
+      ogTitle: "",
+      ogDescription: "",
+      published: false,
+      shortDescription: "",
+      author: "Admin",
+      tags: [],
+      altText: "",
+      focusKeyword: "",
+      noIndex: false,
+      faqs: [],
+      articleSchema: true,
+      faqSchema: false,
+      breadcrumbSchema: true
+    });
+    setImageFile(null);
+    setImagePreview(null);
+    setSelectedBlog(null);
+    setEditorTab("editor");
+  };
+
+  const handleCreateNewClick = () => {
+    resetForm();
+    setCurrentView("create");
+  };
+
+  const handleEditClick = (blog) => {
+    setSelectedBlog(blog);
+    setFormData({
+      title: blog.title || "",
+      slug: blog.slug || "",
+      desc: blog.desc || "",
+      category: blog.category || "Venue Tips",
+      metaTitle: blog.metaTitle || "",
+      metaDescription: blog.metaDescription || "",
+      keywords: blog.keywords || "",
+      canonicalUrl: blog.canonicalUrl || "",
+      ogTitle: blog.ogTitle || "",
+      ogDescription: blog.ogDescription || "",
+      published: blog.published || false,
+      shortDescription: blog.shortDescription || "",
+      author: blog.author || "Admin",
+      tags: blog.tags || [],
+      altText: blog.altText || "",
+      focusKeyword: blog.focusKeyword || "",
+      noIndex: blog.noIndex || false,
+      faqs: blog.faqs || [],
+      articleSchema: blog.articleSchema !== undefined ? blog.articleSchema : true,
+      faqSchema: blog.faqSchema || false,
+      breadcrumbSchema: blog.breadcrumbSchema !== undefined ? blog.breadcrumbSchema : true
+    });
+    setImagePreview(blog.image || null);
+    setCurrentView("edit");
+  };
+
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
     
     // Validation
     if (!formData.title || !formData.slug || !formData.desc) {
-      showToast("Please fill all required fields", "error");
+      showToast("Please fill all required fields (Title, Slug, Body Content)", "error");
       return;
     }
     
-    if (!imageFile) {
-      showToast("Please select an image", "error");
+    if (currentView === "create" && !imageFile) {
+      showToast("Please select a featured image", "error");
       return;
     }
 
@@ -124,65 +407,66 @@ const Blogs = () => {
     try {
       const formDataToSend = new FormData();
       
-      // Append all form fields explicitly
+      // Append core fields
       formDataToSend.append("title", formData.title);
       formDataToSend.append("slug", formData.slug);
       formDataToSend.append("desc", formData.desc);
       formDataToSend.append("category", formData.category);
-      formDataToSend.append("metaTitle", formData.metaTitle);
-      formDataToSend.append("metaDescription", formData.metaDescription);
+      formDataToSend.append("metaTitle", formData.metaTitle || formData.title);
+      formDataToSend.append("metaDescription", formData.metaDescription || formData.shortDescription);
       formDataToSend.append("keywords", formData.keywords);
       formDataToSend.append("canonicalUrl", formData.canonicalUrl);
-      formDataToSend.append("ogTitle", formData.ogTitle);
-      formDataToSend.append("ogDescription", formData.ogDescription);
+      formDataToSend.append("ogTitle", formData.ogTitle || formData.title);
+      formDataToSend.append("ogDescription", formData.ogDescription || formData.shortDescription);
       formDataToSend.append("published", formData.published);
+      
+      // Append new fields
+      formDataToSend.append("shortDescription", formData.shortDescription);
+      formDataToSend.append("author", formData.author);
+      formDataToSend.append("altText", formData.altText);
+      formDataToSend.append("focusKeyword", formData.focusKeyword);
+      formDataToSend.append("noIndex", formData.noIndex);
+      formDataToSend.append("articleSchema", formData.articleSchema);
+      formDataToSend.append("faqSchema", formData.faqSchema);
+      formDataToSend.append("breadcrumbSchema", formData.breadcrumbSchema);
+      formDataToSend.append("tags", JSON.stringify(formData.tags));
+      formDataToSend.append("faqs", JSON.stringify(formData.faqs));
 
       // Append image
       if (imageFile) {
         formDataToSend.append("image", imageFile);
       }
 
-      const response = await fetch(`${BASE_URL}/blog/create`, {
-        method: "POST",
+      const url = currentView === "create" 
+        ? `${BASE_URL}/blog/create`
+        : `${BASE_URL}/blog/update/${selectedBlog._id}`;
+      
+      const method = currentView === "create" ? "POST" : "PUT";
+
+      const response = await fetch(url, {
+        method,
         body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (data.success) {
-        showToast("Blog created successfully!", "success");
-        setShowCreateModal(false);
+        showToast(
+          currentView === "create" ? "Blog created successfully!" : "Blog updated successfully!",
+          "success"
+        );
+        setCurrentView("list");
         resetForm();
         fetchBlogs();
       } else {
-        showToast(data.message || "Failed to create blog", "error");
+        showToast(data.message || "Operation failed", "error");
       }
     } catch (error) {
-      console.error("Error creating blog:", error);
-      showToast("Error creating blog. Please try again.", "error");
+      console.error("Error submitting blog:", error);
+      showToast("Something went wrong. Please try again.", "error");
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      slug: "",
-      desc: "",
-      category: "General",
-      metaTitle: "",
-      metaDescription: "",
-      keywords: "",
-      canonicalUrl: "",
-      ogTitle: "",
-      ogDescription: "",
-      published: false,
-    });
-    setImageFile(null);
-    setImagePreview(null);
-    setEditMode(false);
-    setSelectedBlog(null);
   };
 
   const handleDelete = async (id) => {
@@ -209,83 +493,6 @@ const Blogs = () => {
     }
   };
 
-  const handleView = (blog) => {
-    setSelectedBlog(blog);
-    setShowViewModal(true);
-  };
-
-  const handleEditClick = (blog) => {
-    setSelectedBlog(blog);
-    setEditMode(true);
-    setFormData({
-      title: blog.title || "",
-      slug: blog.slug || "",
-      desc: blog.desc || "",
-      category: blog.category || "General",
-      metaTitle: blog.metaTitle || "",
-      metaDescription: blog.metaDescription || "",
-      keywords: blog.keywords || "",
-      canonicalUrl: blog.canonicalUrl || "",
-      ogTitle: blog.ogTitle || "",
-      ogDescription: blog.ogDescription || "",
-      published: blog.published || false,
-    });
-    setImagePreview(blog.image || null);
-    setShowEditModal(true);
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.title || !formData.slug || !formData.desc) {
-      showToast("Please fill all required fields", "error");
-      return;
-    }
-
-    setSubmitting(true);
-
-    try {
-      const formDataToSend = new FormData();
-      
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("slug", formData.slug);
-      formDataToSend.append("desc", formData.desc);
-      formDataToSend.append("category", formData.category);
-      formDataToSend.append("metaTitle", formData.metaTitle);
-      formDataToSend.append("metaDescription", formData.metaDescription);
-      formDataToSend.append("keywords", formData.keywords);
-      formDataToSend.append("canonicalUrl", formData.canonicalUrl);
-      formDataToSend.append("ogTitle", formData.ogTitle);
-      formDataToSend.append("ogDescription", formData.ogDescription);
-      formDataToSend.append("published", formData.published);
-
-      if (imageFile) {
-        formDataToSend.append("image", imageFile);
-      }
-
-      const response = await fetch(`${BASE_URL}/blog/update/${selectedBlog._id}`, {
-        method: "PUT",
-        body: formDataToSend,
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        showToast("Blog updated successfully!", "success");
-        setShowEditModal(false);
-        resetForm();
-        fetchBlogs();
-      } else {
-        showToast(data.message || "Failed to update blog", "error");
-      }
-    } catch (error) {
-      console.error("Error updating blog:", error);
-      showToast("Error updating blog. Please try again.", "error");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   const handleDeleteClick = (blog) => {
     setSelectedBlog(blog);
     setShowDeleteModal(true);
@@ -294,8 +501,11 @@ const Blogs = () => {
   const filteredBlogs = blogs.filter(
     (blog) =>
       blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      blog.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.desc?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const { score: seoScore, suggestions: seoSuggestions } = calculateSEOScore();
 
   return (
     <div className="space-y-6">
@@ -317,720 +527,606 @@ const Blogs = () => {
         </div>
       )}
 
-      {/* Header */}
-      <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Blog Management
-            </h1>
-            <p className="text-gray-600">Create and manage blog posts</p>
-          </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
-          >
-            <FaPlus />
-            Create New Blog
-          </button>
-        </div>
-      </div>
-
-      {/* Search Bar */}
-      <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-        <div className="relative">
-          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search blogs by title or description..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-          />
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">
-                Total Blogs
-              </p>
-              <p className="text-3xl font-bold text-gray-900">{blogs.length}</p>
-            </div>
-            <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-              <FaBlog className="text-2xl text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">
-                Published
-              </p>
-              <p className="text-3xl font-bold text-gray-900">
-                {blogs.filter((b) => b.published === true).length}
-              </p>
-            </div>
-            <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
-              <FaEye className="text-2xl text-green-600" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-medium mb-1">Drafts</p>
-              <p className="text-3xl font-bold text-gray-900">
-                {blogs.filter((b) => b.published === false).length}
-              </p>
-            </div>
-            <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
-              <FaEdit className="text-2xl text-orange-600" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Blogs Grid */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        {loading ? (
-          <div className="p-12 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading blogs...</p>
-          </div>
-        ) : filteredBlogs.length === 0 ? (
-          <div className="p-12 text-center">
-            <FaBlog className="text-6xl text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">No blogs found</p>
-            <p className="text-gray-400 text-sm mt-2">
-              {searchTerm
-                ? "Try adjusting your search"
-                : "Create your first blog post to get started"}
-            </p>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-200"
-            >
-              Create New Blog
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {filteredBlogs.map((blog, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-              >
-                {/* Blog Image */}
-                <div className="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center overflow-hidden">
-                  {blog.image ? (
-                    <img 
-                      src={blog.image} 
-                      alt={blog.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <FaBlog className="text-6xl text-white opacity-50" />
-                  )}
-                </div>
-
-                {/* Blog Content */}
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        blog.published
-                          ? "bg-green-100 text-green-600"
-                          : "bg-orange-100 text-orange-600"
-                      }`}
-                    >
-                      {blog.published ? "Published" : "Draft"}
-                    </span>
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <FaCalendar className="mr-2" />
-                      {new Date(blog.createdAt).toLocaleDateString()}
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-                    {blog.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                    {blog.desc || blog.description}
-                  </p>
-                  {blog.category && (
-                    <span className="inline-block px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded mb-2">
-                      {blog.category}
-                    </span>
-                  )}
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => handleView(blog)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors duration-200 font-medium"
-                    >
-                      <FaEye />
-                      View
-                    </button>
-                    <button 
-                      onClick={() => handleEditClick(blog)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors duration-200 font-medium"
-                    >
-                      <FaEdit />
-                      Edit
-                    </button>
-                    <button 
-                      onClick={() => handleDeleteClick(blog)}
-                      className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors duration-200"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
+      {currentView === "list" ? (
+        <>
+          {/* Header */}
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Blog Management
+                </h1>
+                <p className="text-gray-600">Create, edit and manage seo optimized blog posts</p>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Create Blog Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-4xl w-full my-8">
-            {/* Header */}
-            <div className="p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Create New Blog
-                </h2>
-                <button
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    resetForm();
-                  }}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
-              {/* Basic Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  Basic Information
-                </h3>
-
-                {/* Title */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Title <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter blog title"
-                  />
-                </div>
-
-                {/* Slug */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Slug <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleInputChange}
-                    required
-                    autoComplete="off"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="blog-url-slug"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    URL-friendly version of the title (auto-generated)
-                  </p>
-                </div>
-
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="General">General</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Business">Business</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Design">Design</option>
-                    <option value="Development">Development</option>
-                    <option value="SEO">SEO</option>
-                    <option value="Tutorial">Tutorial</option>
-                  </select>
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    name="desc"
-                    value={formData.desc}
-                    onChange={handleInputChange}
-                    required
-                    rows="6"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Write your blog content here..."
-                  />
-                </div>
-
-                {/* Image Upload */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Featured Image <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-4">
-                    <label className="flex-1 flex flex-col items-center px-4 py-6 bg-white border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
-                      <FaImage className="text-3xl text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-600">
-                        {imageFile ? imageFile.name : "Click to upload image"}
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                        required
-                      />
-                    </label>
-                    {imagePreview && (
-                      <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-300">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Published Status */}
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="published"
-                    id="published"
-                    checked={formData.published}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="published" className="text-sm font-medium text-gray-700">
-                    Publish immediately
-                  </label>
-                </div>
-              </div>
-
-              {/* SEO Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  SEO Settings
-                </h3>
-
-                {/* Meta Title */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Meta Title
-                  </label>
-                  <input
-                    type="text"
-                    name="metaTitle"
-                    value={formData.metaTitle}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Leave empty to use blog title"
-                  />
-                </div>
-
-                {/* Meta Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Meta Description
-                  </label>
-                  <textarea
-                    name="metaDescription"
-                    value={formData.metaDescription}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="SEO description (recommended: 150-160 characters)"
-                  />
-                </div>
-
-                {/* Keywords */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Keywords
-                  </label>
-                  <input
-                    type="text"
-                    name="keywords"
-                    value={formData.keywords}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="keyword1, keyword2, keyword3"
-                  />
-                </div>
-
-                {/* Canonical URL */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Canonical URL
-                  </label>
-                  <input
-                    type="url"
-                    name="canonicalUrl"
-                    value={formData.canonicalUrl}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://example.com/blog/post"
-                  />
-                </div>
-              </div>
-
-              {/* Open Graph Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  Open Graph (Social Media)
-                </h3>
-
-                {/* OG Title */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    OG Title
-                  </label>
-                  <input
-                    type="text"
-                    name="ogTitle"
-                    value={formData.ogTitle}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Leave empty to use blog title"
-                  />
-                </div>
-
-                {/* OG Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    OG Description
-                  </label>
-                  <textarea
-                    name="ogDescription"
-                    value={formData.ogDescription}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Description for social media sharing"
-                  />
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <div className="flex gap-4 pt-4 border-t">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    resetForm();
-                  }}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      <FaSave />
-                      Create Blog
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* View Blog Modal */}
-      {showViewModal && selectedBlog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-4xl w-full my-8">
-            {/* Header */}
-            <div className="p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">View Blog</h2>
-                <button
-                  onClick={() => {
-                    setShowViewModal(false);
-                    setSelectedBlog(null);
-                  }}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
-              {/* Image */}
-              {selectedBlog.image && (
-                <div className="w-full h-64 rounded-lg overflow-hidden">
-                  <img
-                    src={selectedBlog.image}
-                    alt={selectedBlog.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {/* Basic Info */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Title</h3>
-                  <p className="text-lg font-semibold text-gray-900">{selectedBlog.title}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Slug</h3>
-                  <p className="text-gray-700">{selectedBlog.slug}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Category</h3>
-                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
-                    {selectedBlog.category}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Status</h3>
-                  <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-                    selectedBlog.published ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600"
-                  }`}>
-                    {selectedBlog.published ? "Published" : "Draft"}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Description</h3>
-                  <p className="text-gray-700 whitespace-pre-wrap">{selectedBlog.desc}</p>
-                </div>
-
-                {/* SEO Info */}
-                {(selectedBlog.metaTitle || selectedBlog.metaDescription || selectedBlog.keywords) && (
-                  <div className="border-t pt-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">SEO Information</h3>
-                    
-                    {selectedBlog.metaTitle && (
-                      <div className="mb-3">
-                        <h4 className="text-sm font-medium text-gray-500 mb-1">Meta Title</h4>
-                        <p className="text-gray-700">{selectedBlog.metaTitle}</p>
-                      </div>
-                    )}
-
-                    {selectedBlog.metaDescription && (
-                      <div className="mb-3">
-                        <h4 className="text-sm font-medium text-gray-500 mb-1">Meta Description</h4>
-                        <p className="text-gray-700">{selectedBlog.metaDescription}</p>
-                      </div>
-                    )}
-
-                    {selectedBlog.keywords && (
-                      <div className="mb-3">
-                        <h4 className="text-sm font-medium text-gray-500 mb-1">Keywords</h4>
-                        <p className="text-gray-700">{selectedBlog.keywords}</p>
-                      </div>
-                    )}
-
-                    {selectedBlog.canonicalUrl && (
-                      <div className="mb-3">
-                        <h4 className="text-sm font-medium text-gray-500 mb-1">Canonical URL</h4>
-                        <a href={selectedBlog.canonicalUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                          {selectedBlog.canonicalUrl}
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Timestamps */}
-                <div className="border-t pt-4 flex gap-6 text-sm text-gray-500">
-                  <div>
-                    <span className="font-medium">Created:</span> {new Date(selectedBlog.createdAt).toLocaleString()}
-                  </div>
-                  <div>
-                    <span className="font-medium">Updated:</span> {new Date(selectedBlog.updatedAt).toLocaleString()}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 border-t">
               <button
-                onClick={() => {
-                  setShowViewModal(false);
-                  setSelectedBlog(null);
-                }}
-                className="w-full px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200"
+                onClick={handleCreateNewClick}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-750 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
               >
-                Close
+                <FaPlus />
+                Create New Blog
               </button>
             </div>
           </div>
-        </div>
-      )}
 
-      {/* Edit Blog Modal */}
-      {showEditModal && selectedBlog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-4xl w-full my-8">
-            {/* Header */}
-            <div className="p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-2xl">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Edit Blog</h2>
-                <button
-                  onClick={() => {
-                    setShowEditModal(false);
-                    resetForm();
-                  }}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  <FaTimes />
-                </button>
+          {/* Search Bar */}
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+            <div className="relative">
+              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search blogs by title or content..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 text-sm font-medium mb-1">
+                    Total Blogs
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900">{blogs.length}</p>
+                </div>
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <FaBlog className="text-2xl text-blue-600" />
+                </div>
               </div>
             </div>
 
-            {/* Form - Same as Create but with handleUpdate */}
-            <form onSubmit={handleUpdate} className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
-              {/* Basic Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  Basic Information
-                </h3>
-
-                {/* Title */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Title <span className="text-red-500">*</span>
-                  </label>
+                  <p className="text-gray-600 text-sm font-medium mb-1">
+                    Published
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    {blogs.filter((b) => b.published === true).length}
+                  </p>
+                </div>
+                <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                  <FaEye className="text-2xl text-green-600" />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 text-sm font-medium mb-1">Drafts</p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    {blogs.filter((b) => b.published === false).length}
+                  </p>
+                </div>
+                <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <FaEdit className="text-2xl text-orange-600" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Blogs Grid */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            {loading ? (
+              <div className="p-12 text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading blogs...</p>
+              </div>
+            ) : filteredBlogs.length === 0 ? (
+              <div className="p-12 text-center">
+                <FaBlog className="text-6xl text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-600 text-lg">No blogs found</p>
+                <p className="text-gray-400 text-sm mt-2">
+                  {searchTerm
+                    ? "Try adjusting your search"
+                    : "Create your first blog post to get started"}
+                </p>
+                <button
+                  onClick={handleCreateNewClick}
+                  className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-200"
+                >
+                  Create New Blog
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                {filteredBlogs.map((blog, index) => (
+                  <div
+                    key={index}
+                    className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] flex flex-col justify-between"
+                  >
+                    {/* Blog Image */}
+                    <div>
+                      <div className="h-48 bg-gradient-to-br from-blue-500 to-purple-650 flex items-center justify-center overflow-hidden relative">
+                        {blog.image ? (
+                          <img 
+                            src={blog.image} 
+                            alt={blog.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <FaBlog className="text-6xl text-white opacity-50" />
+                        )}
+                        {blog.focusKeyword && (
+                          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-blue-600 text-white text-[10px] font-bold shadow">
+                            🔑 {blog.focusKeyword}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Blog Content */}
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              blog.published
+                                ? "bg-green-100 text-green-600"
+                                : "bg-orange-100 text-orange-600"
+                            }`}
+                          >
+                            {blog.published ? "Published" : "Draft"}
+                          </span>
+                          <div className="flex items-center text-gray-500 text-xs font-semibold">
+                            <FaCalendar className="mr-2" />
+                            {new Date(blog.createdAt).toLocaleDateString()}
+                          </div>
+                        </div>
+
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                          {blog.title}
+                        </h3>
+                        <p className="text-gray-500 text-sm line-clamp-3 mb-4 font-normal">
+                          {blog.shortDescription || blog.desc?.replace(/<[^>]*>/g, " ")}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {blog.category && (
+                            <span className="inline-block px-2.5 py-0.5 bg-blue-55 text-blue-700 text-xs font-semibold rounded">
+                              {blog.category}
+                            </span>
+                          )}
+                          {blog.author && (
+                            <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-gray-700 text-xs font-semibold rounded">
+                              👤 {blog.author}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 pt-0 border-t border-gray-100 flex items-center gap-2">
+                      <button 
+                        onClick={() => handleEditClick(blog)}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200 font-semibold text-sm"
+                      >
+                        <FaEdit />
+                        Edit / Customize
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteClick(blog)}
+                        className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-200"
+                        title="Delete Post"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        /* Workspace Editor View - Matches Screenshots Exactly */
+        <div className="min-h-screen bg-slate-50 rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+          
+          {/* Top Bar Workspace Navigation */}
+          <div className="bg-white border-b border-gray-200 p-4 px-6 sticky top-0 z-30 flex flex-wrap justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrentView("list");
+                  resetForm();
+                }}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-semibold transition-all"
+              >
+                <FaArrowLeft /> Back to Blogs
+              </button>
+              <div className="h-6 w-[1px] bg-gray-300"></div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">
+                  {currentView === "create" ? "New Blog Post" : "Edit Blog Post"}
+                </h2>
+                <p className="text-xs text-gray-500">{formData.title || "Untitled"}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Draft/Published Selector */}
+              <select
+                name="published"
+                value={formData.published}
+                onChange={(e) => setFormData(prev => ({ ...prev, published: e.target.value === "true" }))}
+                className="px-3.5 py-2 border border-gray-300 rounded-lg font-semibold text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="false">Draft</option>
+                <option value="true">Published</option>
+              </select>
+
+              <button
+                onClick={() => handleSubmit()}
+                disabled={submitting}
+                className="px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold text-sm shadow hover:shadow-md hover:from-orange-600 hover:to-orange-700 transition-all flex items-center gap-2 disabled:opacity-50"
+              >
+                {submitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <FaSave />
+                    {currentView === "create" ? "Create Blog" : "Save Blog"}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+              
+              {/* LEFT COLUMN: EDITOR & FAQ */}
+              <div className="lg:col-span-2 space-y-6">
+                
+                {/* Heading Block */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                   <input
                     type="text"
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
+                    className="w-full text-3xl font-bold border-none outline-none focus:ring-0 placeholder-gray-300 p-0"
+                    placeholder="Blog Title..."
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Enter blog title"
                   />
+                  <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                    <span className="font-mono">
+                      Slug: <span className="text-gray-400">{formData.slug || "auto-generated-slug"}</span>
+                    </span>
+                    <span className="font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
+                      {getReadTime()}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Slug */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Slug <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleInputChange}
-                    required
-                    autoComplete="off"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="blog-url-slug"
-                  />
+                {/* Editor Tabs and Workspace */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col min-h-[550px]">
+                  
+                  {/* Tab Selector */}
+                  <div className="flex border-b border-gray-200 bg-gray-50/50">
+                    {["editor", "html", "preview"].map((tab) => (
+                      <button
+                        key={tab}
+                        type="button"
+                        onClick={() => setEditorTab(tab)}
+                        className={`px-6 py-3.5 text-sm font-bold border-b-2 capitalize transition-all focus:outline-none ${
+                          editorTab === tab
+                            ? "border-orange-500 text-orange-600 bg-white"
+                            : "border-transparent text-gray-500 hover:text-gray-800"
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Editor Toolbars */}
+                  {editorTab === "editor" && (
+                    <div className="flex flex-wrap gap-1 p-2 border-b border-gray-200 bg-gray-50/20 text-gray-600">
+                      <button type="button" onClick={() => execEditorCommand("undo")} className="p-2 hover:bg-gray-100 rounded" title="Undo"><FaUndo size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("redo")} className="p-2 hover:bg-gray-100 rounded" title="Redo"><FaRedo size={13} /></button>
+                      <div className="w-[1px] h-6 bg-gray-200 mx-1 align-self-center"></div>
+                      
+                      <button type="button" onClick={() => execEditorCommand("formatBlock", "<h1>")} className="px-2 py-1 text-xs font-extrabold hover:bg-gray-100 rounded" title="H1">H1</button>
+                      <button type="button" onClick={() => execEditorCommand("formatBlock", "<h2>")} className="px-2 py-1 text-xs font-extrabold hover:bg-gray-100 rounded" title="H2">H2</button>
+                      <button type="button" onClick={() => execEditorCommand("formatBlock", "<h3>")} className="px-2 py-1 text-xs font-extrabold hover:bg-gray-100 rounded" title="H3">H3</button>
+                      <div className="w-[1px] h-6 bg-gray-200 mx-1 align-self-center"></div>
+
+                      <button type="button" onClick={() => execEditorCommand("bold")} className="p-2 hover:bg-gray-100 rounded font-bold" title="Bold"><FaBold size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("italic")} className="p-2 hover:bg-gray-100 rounded italic" title="Italic"><FaItalic size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("underline")} className="p-2 hover:bg-gray-100 rounded underline" title="Underline"><FaUnderline size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("strikeThrough")} className="p-2 hover:bg-gray-100 rounded line-through" title="Strikethrough"><FaStrikethrough size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("formatBlock", "<pre>")} className="p-2 hover:bg-gray-100 rounded" title="Code Block"><FaCode size={13} /></button>
+                      <div className="w-[1px] h-6 bg-gray-200 mx-1 align-self-center"></div>
+
+                      <button type="button" onClick={() => execEditorCommand("insertUnorderedList")} className="p-2 hover:bg-gray-100 rounded" title="Unordered List"><FaListUl size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("insertOrderedList")} className="p-2 hover:bg-gray-100 rounded" title="Ordered List"><FaListOl size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("formatBlock", "<blockquote>")} className="p-2 hover:bg-gray-100 rounded" title="Quote"><FaQuoteRight size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("insertHorizontalRule")} className="p-2 hover:bg-gray-100 rounded" title="Horizontal Rule"><FaMinus size={13} /></button>
+                      <div className="w-[1px] h-6 bg-gray-200 mx-1 align-self-center"></div>
+
+                      <button type="button" onClick={() => execEditorCommand("justifyLeft")} className="p-2 hover:bg-gray-100 rounded" title="Align Left"><FaAlignLeft size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("justifyCenter")} className="p-2 hover:bg-gray-100 rounded" title="Align Center"><FaAlignCenter size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("justifyRight")} className="p-2 hover:bg-gray-100 rounded" title="Align Right"><FaAlignRight size={13} /></button>
+                      <button type="button" onClick={() => execEditorCommand("justifyFull")} className="p-2 hover:bg-gray-100 rounded" title="Justify"><FaAlignJustify size={13} /></button>
+                      <div className="w-[1px] h-6 bg-gray-200 mx-1 align-self-center"></div>
+
+                      <button type="button" onClick={() => {
+                        const url = prompt("Enter hyperlink URL:");
+                        if (url) execEditorCommand("createLink", url);
+                      }} className="p-2 hover:bg-gray-100 rounded" title="Insert Link"><FaLink size={13} /></button>
+                      
+                      <button type="button" onClick={() => {
+                        const url = prompt("Enter image source URL:");
+                        if (url) execEditorCommand("insertImage", url);
+                      }} className="p-2 hover:bg-gray-100 rounded" title="Insert Image Link"><FaImage size={13} /></button>
+
+                      <button type="button" onClick={() => execEditorCommand("removeFormat")} className="p-2 hover:bg-gray-100 rounded" title="Clear Formatting"><FaEraser size={13} /></button>
+
+                      {/* Character/Word Stats */}
+                      <span className="ml-auto mr-2 py-2 text-[11px] font-semibold text-gray-400">
+                        {getWordCharCount().words} words · {getWordCharCount().chars} chars
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Tab Contents */}
+                  <div className="flex-1 p-6 min-h-[400px]">
+                    {editorTab === "editor" && (
+                      <div
+                        ref={editorRef}
+                        contentEditable
+                        onInput={updateDescFromEditor}
+                        className="w-full h-full min-h-[380px] focus:outline-none overflow-y-auto text-gray-800 leading-relaxed font-sans text-base prose prose-slate max-w-none"
+                        style={{ border: "none" }}
+                      ></div>
+                    )}
+
+                    {editorTab === "html" && (
+                      <textarea
+                        name="desc"
+                        value={formData.desc}
+                        onChange={handleInputChange}
+                        className="w-full h-full min-h-[380px] p-4 font-mono text-sm text-gray-700 bg-gray-50 border border-gray-250 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none resize-y"
+                        placeholder="<html>Write or paste HTML code here</html>"
+                      ></textarea>
+                    )}
+
+                    {editorTab === "preview" && (
+                      <div
+                        className="w-full h-full min-h-[380px] prose prose-orange max-w-none overflow-y-auto"
+                        dangerouslySetInnerHTML={{ __html: formData.desc || "<p className='text-gray-400 italic'>No content written yet</p>" }}
+                      />
+                    )}
+                  </div>
                 </div>
 
-                {/* Category */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="General">General</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Business">Business</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Design">Design</option>
-                    <option value="Development">Development</option>
-                    <option value="SEO">SEO</option>
-                    <option value="Tutorial">Tutorial</option>
-                  </select>
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description <span className="text-red-500">*</span>
+                {/* Short Description */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Short Description <span className="text-gray-400 font-normal">(shown in blog cards)</span>
                   </label>
                   <textarea
-                    name="desc"
-                    value={formData.desc}
+                    name="shortDescription"
+                    value={formData.shortDescription}
                     onChange={handleInputChange}
-                    required
-                    rows="6"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Write your blog content here..."
+                    rows="3"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-700"
+                    placeholder="Brief summary of the blog post..."
                   />
                 </div>
 
-                {/* Image Upload */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Featured Image {!imagePreview && <span className="text-red-500">*</span>}
-                  </label>
-                  <div className="flex items-center gap-4">
-                    <label className="flex-1 flex flex-col items-center px-4 py-6 bg-white border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
-                      <FaImage className="text-3xl text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-600">
-                        {imageFile ? imageFile.name : "Click to upload new image"}
-                      </span>
+                {/* FAQ Section */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-lg font-bold text-gray-900">FAQ Section</h3>
+                    <button
+                      type="button"
+                      onClick={handleAddFaq}
+                      className="px-3.5 py-1.5 bg-orange-50 text-orange-600 rounded-lg border border-orange-100 hover:bg-orange-100 transition-all font-bold text-xs flex items-center gap-1"
+                    >
+                      <FaPlus /> Add FAQ
+                    </button>
+                  </div>
+
+                  {formData.faqs.length === 0 ? (
+                    <p className="text-sm text-gray-400 italic text-center py-4">No FAQs added yet.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {formData.faqs.map((faq, index) => (
+                        <div key={index} className="border border-gray-200 p-4 rounded-xl relative bg-gray-50/30">
+                          <div className="flex justify-between items-center mb-3">
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                              FAQ {index + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFaq(index)}
+                              className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
+                              title="Delete FAQ"
+                            >
+                              <FaTrash size={12} />
+                            </button>
+                          </div>
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              value={faq.question}
+                              onChange={(e) => handleFaqChange(index, "question", e.target.value)}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm font-semibold text-gray-800"
+                              placeholder="Question..."
+                            />
+                            <textarea
+                              value={faq.answer}
+                              onChange={(e) => handleFaqChange(index, "answer", e.target.value)}
+                              rows="2"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-sm text-gray-700"
+                              placeholder="Answer..."
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+              </div>
+
+              {/* RIGHT COLUMN: SETTINGS, SEO, AND SCHEMA */}
+              <div className="space-y-6">
+
+                {/* SEO Score Block */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-base font-bold text-gray-800">SEO Score</span>
+                    <span className={`text-2xl font-black ${
+                      seoScore >= 80 ? "text-green-600" : seoScore >= 50 ? "text-orange-500" : "text-red-500"
+                    }`}>
+                      {seoScore}/100
+                    </span>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="w-full bg-gray-100 rounded-full h-2.5 mb-4">
+                    <div 
+                      className={`h-2.5 rounded-full transition-all duration-500 ${
+                        seoScore >= 80 ? "bg-green-500" : seoScore >= 50 ? "bg-orange-500" : "bg-red-500"
+                      }`} 
+                      style={{ width: `${Math.min(100, seoScore)}%` }}
+                    ></div>
+                  </div>
+
+                  {/* Suggestion list */}
+                  {seoSuggestions.length > 0 && (
+                    <div className="space-y-2 mt-4 max-h-[150px] overflow-y-auto">
+                      {seoSuggestions.map((sug, idx) => (
+                        <div key={idx} className="flex gap-2 items-start text-xs text-red-500">
+                          <span className="mt-0.5">⚠️</span>
+                          <span className="leading-tight font-medium">{sug}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {seoSuggestions.length === 0 && (
+                    <div className="flex gap-2 items-center text-xs text-green-600 font-bold bg-green-50 p-2 rounded-lg mt-2">
+                      <span>🎉 Awesome! Your post satisfies all basic SEO metrics.</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Post Settings */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b pb-2">
+                    Post Settings
+                  </h3>
+
+                  {/* Category */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    >
+                      <option value="Venue Tips">Venue Tips</option>
+                      <option value="Technology">Technology</option>
+                      <option value="Business">Business</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Design">Design</option>
+                      <option value="Development">Development</option>
+                      <option value="SEO">SEO</option>
+                      <option value="Tutorial">Tutorial</option>
+                    </select>
+                  </div>
+
+                  {/* Author */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">
+                      Author
+                    </label>
+                    <input
+                      type="text"
+                      name="author"
+                      value={formData.author}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="e.g. Admin"
+                    />
+                  </div>
+
+                  {/* Tags input */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">
+                      Tags
+                    </label>
+                    <form onSubmit={handleAddTag} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        className="flex-1 px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                        placeholder="Add tag..."
+                      />
+                      <button
+                        type="submit"
+                        className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 border border-gray-300 rounded-lg font-bold text-xs text-gray-800 transition-all"
+                      >
+                        Add
+                      </button>
+                    </form>
+                    
+                    {/* Tags display */}
+                    {formData.tags && formData.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {formData.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            onClick={() => handleRemoveTag(tag)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-orange-50 border border-orange-100 text-orange-700 text-xs font-bold cursor-pointer hover:bg-orange-100 transition-all"
+                            title="Click to remove tag"
+                          >
+                            {tag} <span className="opacity-60 text-[9px]">✕</span>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Featured Image */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b pb-2">
+                    Featured Image
+                  </h3>
+
+                  <div className="space-y-3">
+                    <label className="flex flex-col items-center justify-center border-2 border-gray-300 border-dashed rounded-xl px-4 py-8 cursor-pointer hover:bg-gray-50 transition-all bg-white relative overflow-hidden min-h-[140px]">
+                      {imagePreview ? (
+                        <div className="absolute inset-0 w-full h-full bg-slate-100">
+                          <img
+                            src={imagePreview}
+                            alt="Featured preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-all text-white font-bold text-xs">
+                            Change Image
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <FaImage className="text-3xl text-gray-300 mb-2" />
+                          <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Click to upload</span>
+                        </>
+                      )}
                       <input
                         type="file"
                         accept="image/*"
@@ -1038,162 +1134,256 @@ const Blogs = () => {
                         className="hidden"
                       />
                     </label>
-                    {imagePreview && (
-                      <div className="w-32 h-32 rounded-lg overflow-hidden border-2 border-gray-300">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
+
+                    {/* Image Alt Text */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                        Alt Text
+                      </label>
+                      <input
+                        type="text"
+                        name="altText"
+                        value={formData.altText}
+                        onChange={handleInputChange}
+                        className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                        placeholder="Describe the image..."
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Published Status */}
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="published"
-                    id="published-edit"
-                    checked={formData.published}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="published-edit" className="text-sm font-medium text-gray-700">
-                    Published
-                  </label>
+                {/* SEO Settings & Google Preview */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b pb-2 flex items-center gap-1.5">
+                    <FaGlobe className="text-orange-500" /> SEO Settings
+                  </h3>
+
+                  {/* Focus Keyword */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                      Focus Keyword
+                    </label>
+                    <input
+                      type="text"
+                      name="focusKeyword"
+                      value={formData.focusKeyword}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="e.g. venue booking tips"
+                    />
+                  </div>
+
+                  {/* Meta Title */}
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="block text-xs font-semibold text-gray-500 uppercase">
+                        Meta Title
+                      </label>
+                      <span className={`text-[10px] font-mono ${
+                        formData.metaTitle.length >= 40 && formData.metaTitle.length <= 60 ? "text-green-600 font-bold" : "text-gray-400"
+                      }`}>
+                        ({formData.metaTitle.length}/60)
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      name="metaTitle"
+                      value={formData.metaTitle}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="Leave empty to use title"
+                    />
+                  </div>
+
+                  {/* Meta Description */}
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="block text-xs font-semibold text-gray-500 uppercase">
+                        Meta Description
+                      </label>
+                      <span className={`text-[10px] font-mono ${
+                        formData.metaDescription.length >= 120 && formData.metaDescription.length <= 160 ? "text-green-600 font-bold" : "text-gray-400"
+                      }`}>
+                        ({formData.metaDescription.length}/160)
+                      </span>
+                    </div>
+                    <textarea
+                      name="metaDescription"
+                      value={formData.metaDescription}
+                      onChange={handleInputChange}
+                      rows="3"
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="Meta description..."
+                    />
+                  </div>
+
+                  {/* Canonical URL */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                      Canonical URL
+                    </label>
+                    <input
+                      type="url"
+                      name="canonicalUrl"
+                      value={formData.canonicalUrl}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="https://..."
+                    />
+                  </div>
+
+                  {/* Google Preview */}
+                  <div className="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Google Preview</p>
+                    <div className="space-y-1 font-sans">
+                      <h4 className="text-blue-800 text-base font-bold hover:underline leading-snug break-words">
+                        {formData.metaTitle || formData.title || "Blog Title"}
+                      </h4>
+                      <p className="text-green-700 text-xs truncate">
+                        rentalmeet.com/blog/{formData.slug || "slug"}
+                      </p>
+                      <p className="text-gray-600 text-xs line-clamp-2 leading-relaxed">
+                        {formData.metaDescription || formData.shortDescription || "Meta description..."}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* OG Title */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                      OG Title
+                    </label>
+                    <input
+                      type="text"
+                      name="ogTitle"
+                      value={formData.ogTitle}
+                      onChange={handleInputChange}
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="Facebook open graph title"
+                    />
+                  </div>
+
+                  {/* OG Description */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
+                      OG Description
+                    </label>
+                    <textarea
+                      name="ogDescription"
+                      value={formData.ogDescription}
+                      onChange={handleInputChange}
+                      rows="2"
+                      className="w-full px-3.5 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-gray-700"
+                      placeholder="Description for social sharing"
+                    />
+                  </div>
+
+                  {/* No Index Toggle */}
+                  <div className="flex items-center gap-2 pt-2">
+                    <input
+                      type="checkbox"
+                      id="noIndex"
+                      name="noIndex"
+                      checked={formData.noIndex}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                    />
+                    <label htmlFor="noIndex" className="text-xs font-semibold text-gray-600 cursor-pointer">
+                      No Index (hide from search engines)
+                    </label>
+                  </div>
                 </div>
+
+                {/* Schema Markup Block - Custom Switches */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                  <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b pb-2">
+                    Schema Markup
+                  </h3>
+
+                  {/* Article Schema */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">Article Schema</p>
+                      <p className="text-[10px] text-gray-500">Inject structured Article metadata</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, articleSchema: !prev.articleSchema }))}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        formData.articleSchema ? "bg-orange-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          formData.articleSchema ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* FAQ Page Schema */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">FAQ Page Schema</p>
+                      <p className="text-[10px] text-gray-500">Inject dynamic FAQ structured code</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, faqSchema: !prev.faqSchema }))}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        formData.faqSchema ? "bg-orange-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          formData.faqSchema ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Breadcrumb Schema */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">Breadcrumb Schema</p>
+                      <p className="text-[10px] text-gray-500">Inject post navigation schema</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, breadcrumbSchema: !prev.breadcrumbSchema }))}
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        formData.breadcrumbSchema ? "bg-orange-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          formData.breadcrumbSchema ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+
               </div>
 
-              {/* SEO Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  SEO Settings
-                </h3>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
-                  <input
-                    type="text"
-                    name="metaTitle"
-                    value={formData.metaTitle}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
-                  <textarea
-                    name="metaDescription"
-                    value={formData.metaDescription}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Keywords</label>
-                  <input
-                    type="text"
-                    name="keywords"
-                    value={formData.keywords}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Canonical URL</label>
-                  <input
-                    type="url"
-                    name="canonicalUrl"
-                    value={formData.canonicalUrl}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Open Graph Settings */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  Open Graph (Social Media)
-                </h3>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">OG Title</label>
-                  <input
-                    type="text"
-                    name="ogTitle"
-                    value={formData.ogTitle}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">OG Description</label>
-                  <textarea
-                    name="ogDescription"
-                    value={formData.ogDescription}
-                    onChange={handleInputChange}
-                    rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <div className="flex gap-4 pt-4 border-t">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowEditModal(false);
-                    resetForm();
-                  }}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {submitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      Updating...
-                    </>
-                  ) : (
-                    <>
-                      <FaSave />
-                      Update Blog
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && selectedBlog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[70] p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
             <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full">
-              <FaTrash className="text-3xl text-red-600" />
+              <FaTrash className="text-3xl text-red-650" />
             </div>
             
             <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
               Delete Blog?
             </h2>
             
-            <p className="text-gray-600 text-center mb-6">
+            <p className="text-gray-600 text-center mb-6 text-sm">
               Are you sure you want to delete "<strong>{selectedBlog.title}</strong>"? This action cannot be undone.
             </p>
 
@@ -1204,14 +1394,14 @@ const Blogs = () => {
                   setSelectedBlog(null);
                 }}
                 disabled={submitting}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50"
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDelete(selectedBlog._id)}
                 disabled={submitting}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {submitting ? (
                   <>

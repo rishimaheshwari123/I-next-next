@@ -15,7 +15,17 @@ const createBlogsCtrl = async (req, res) => {
             ogTitle,
             ogDescription,
             published = false,
-            type // for backward compatibility
+            type, // for backward compatibility
+            shortDescription,
+            author,
+            tags,
+            altText,
+            focusKeyword,
+            noIndex = false,
+            faqs,
+            articleSchema = true,
+            faqSchema = false,
+            breadcrumbSchema = true
         } = req.body;
         const image = req.files?.image;
 
@@ -37,6 +47,31 @@ const createBlogsCtrl = async (req, res) => {
             })
         }
 
+        // Safe parsing for array and objects
+        let parsedTags = [];
+        if (tags) {
+            try {
+                parsedTags = JSON.parse(tags);
+            } catch (e) {
+                if (typeof tags === 'string') {
+                    parsedTags = tags.split(',').map(t => t.trim()).filter(Boolean);
+                } else if (Array.isArray(tags)) {
+                    parsedTags = tags;
+                }
+            }
+        }
+
+        let parsedFaqs = [];
+        if (faqs) {
+            try {
+                parsedFaqs = JSON.parse(faqs);
+            } catch (e) {
+                if (Array.isArray(faqs)) {
+                    parsedFaqs = faqs;
+                }
+            }
+        }
+
         const blog = await blogModel.create({
             title,
             slug: slug.toLowerCase().trim(),
@@ -51,7 +86,17 @@ const createBlogsCtrl = async (req, res) => {
             ogDescription: ogDescription || desc.substring(0, 160),
             ogImage: imageUrl, // Use uploaded image for OG
             published: published === 'true' || published === true,
-            type: type || category // backward compatibility
+            type: type || category, // backward compatibility
+            shortDescription: shortDescription || '',
+            author: author || 'Admin',
+            tags: parsedTags,
+            altText: altText || '',
+            focusKeyword: focusKeyword || '',
+            noIndex: noIndex === 'true' || noIndex === true,
+            faqs: parsedFaqs,
+            articleSchema: articleSchema === 'true' || articleSchema === true || articleSchema === undefined,
+            faqSchema: faqSchema === 'true' || faqSchema === true,
+            breadcrumbSchema: breadcrumbSchema === 'true' || breadcrumbSchema === true || breadcrumbSchema === undefined
         })
 
         return res.status(201).json({
@@ -79,7 +124,7 @@ const createBlogsCtrl = async (req, res) => {
 const getAllBlogsCtrl = async (req, res) => {
     try {
 
-        const blogs = await blogModel.find({});
+        const blogs = await blogModel.find({}).sort({ createdAt: -1 });
         if (!blogs) {
             return res.status(400).json({
                 success: false,
@@ -174,7 +219,17 @@ const updateBlogCtrl = async (req, res) => {
             ogDescription,
             ogImage,
             published,
-            type // for backward compatibility
+            type, // for backward compatibility
+            shortDescription,
+            author,
+            tags,
+            altText,
+            focusKeyword,
+            noIndex,
+            faqs,
+            articleSchema,
+            faqSchema,
+            breadcrumbSchema
         } = req.body;
         const image = req.files?.image;
 
@@ -196,9 +251,50 @@ const updateBlogCtrl = async (req, res) => {
         }
         if (type) updateData.type = type;
 
+        // Extract and assign new fields if provided
+        if (typeof shortDescription !== 'undefined') updateData.shortDescription = shortDescription;
+        if (typeof author !== 'undefined') updateData.author = author;
+        if (typeof altText !== 'undefined') updateData.altText = altText;
+        if (typeof focusKeyword !== 'undefined') updateData.focusKeyword = focusKeyword;
+        if (typeof noIndex !== 'undefined') {
+            updateData.noIndex = noIndex === 'true' || noIndex === true;
+        }
+        if (typeof articleSchema !== 'undefined') {
+            updateData.articleSchema = articleSchema === 'true' || articleSchema === true;
+        }
+        if (typeof faqSchema !== 'undefined') {
+            updateData.faqSchema = faqSchema === 'true' || faqSchema === true;
+        }
+        if (typeof breadcrumbSchema !== 'undefined') {
+            updateData.breadcrumbSchema = breadcrumbSchema === 'true' || breadcrumbSchema === true;
+        }
+
+        if (tags) {
+            try {
+                updateData.tags = JSON.parse(tags);
+            } catch (e) {
+                if (typeof tags === 'string') {
+                    updateData.tags = tags.split(',').map(t => t.trim()).filter(Boolean);
+                } else if (Array.isArray(tags)) {
+                    updateData.tags = tags;
+                }
+            }
+        }
+
+        if (faqs) {
+            try {
+                updateData.faqs = JSON.parse(faqs);
+            } catch (e) {
+                if (Array.isArray(faqs)) {
+                    updateData.faqs = faqs;
+                }
+            }
+        }
+
         if (image) {
             const thumnailImage = await uploadImageToCloudinary(image, process.env.FOLDER_NAME)
             updateData.image = thumnailImage.secure_url;
+            updateData.ogImage = thumnailImage.secure_url;
         }
 
         const updatedBlog = await blogModel.findByIdAndUpdate(id, updateData, { new: true });

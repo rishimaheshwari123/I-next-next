@@ -91,4 +91,5 @@ export const PERMISSIONS = {
   TASKS: 'tasks',
   LEAD_MANAGEMENT: 'leadManagement',
   STAFF_MANAGEMENT: 'staffManagement',
+  JOBS: 'jobs',
 };

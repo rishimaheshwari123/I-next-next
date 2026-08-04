@@ -32,6 +32,7 @@ export default function PermissionModal({
     attendance: false,
     leaveRequests: false,
     tasks: false,
+    jobs: false,
   });
 
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function PermissionModal({
       { key: "projects", label: "Projects" },
       { key: "categories", label: "Categories" },
       { key: "blogs", label: "Blogs" },
+      { key: "jobs", label: "Jobs Management" },
     ],
     "Sales & Clients": [
       { key: "leadManagement", label: "Lead Management" },
@@ -159,11 +161,10 @@ export default function PermissionModal({
                     {items.map((item) => (
                       <label
                         key={item.key}
-                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                          permissions[item.key]
+                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${permissions[item.key]
                             ? "bg-indigo-100 border-2 border-indigo-500"
                             : "bg-white border-2 border-gray-200 hover:border-gray-300"
-                        } ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                          } ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                       >
                         <input
                           type="checkbox"
@@ -173,11 +174,10 @@ export default function PermissionModal({
                           className="w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
                         />
                         <span
-                          className={`font-semibold ${
-                            permissions[item.key]
+                          className={`font-semibold ${permissions[item.key]
                               ? "text-indigo-700"
                               : "text-gray-700"
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </span>
@@ -202,9 +202,8 @@ export default function PermissionModal({
             <button
               type="submit"
               disabled={submitting}
-              className={`px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:shadow-lg font-semibold transition-all ${
-                submitting ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg hover:shadow-lg font-semibold transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               {submitting ? "Updating..." : "Update Permissions"}
             </button>

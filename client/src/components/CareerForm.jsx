@@ -1,16 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "@/config/api";
 import { FaUser, FaEnvelope, FaPhone, FaBriefcase, FaMoneyBillWave, FaClock, FaGraduationCap, FaCalendar, FaUpload } from "react-icons/fa";
 
-const CareerForm = () => {
+const CareerForm = ({ defaultJob }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     contact: "",
-    applicationFor: "",
+    applicationFor: defaultJob || "",
     experienceType: "experienced", // default to experienced
     totalExperience: "",
     currentCTC: "",
@@ -21,6 +21,15 @@ const CareerForm = () => {
     technologies: [],
     resume: null,
   });
+
+  useEffect(() => {
+    if (defaultJob) {
+      setFormData(prev => ({
+        ...prev,
+        applicationFor: defaultJob
+      }));
+    }
+  }, [defaultJob]);
 
   const [techInput, setTechInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -268,6 +277,15 @@ const CareerForm = () => {
                 <option value="DevOps Engineer">DevOps Engineer</option>
                 <option value="Data Scientist">Data Scientist</option>
                 <option value="Cloud Engineer">Cloud Engineer</option>
+                {formData.applicationFor && ![
+                  "Frontend Developer", "Backend Developer", "Full Stack Developer", "Graphic Designer",
+                  "Mobile App Developer", "SEO Developer", "Digital Marketing", "SEO Marketing",
+                  "AI/ML Developer", "UI/UX Designer", "React JS Developer", "Node.js Developer",
+                  "MERN Stack Developer", "Content Writer", "Social Media Manager", "Business Analyst",
+                  "Project Manager", "DevOps Engineer", "Data Scientist", "Cloud Engineer"
+                ].includes(formData.applicationFor) && (
+                  <option value={formData.applicationFor}>{formData.applicationFor}</option>
+                )}
               </select>
             </div>
           </div>

@@ -63,6 +63,9 @@ app.use("/api/v1/category", require("./routes/categoryRoutes"));
 // Service Management Routes
 app.use("/api/v1/service", require("./routes/serviceRoutes"));
 
+// Job Management Routes
+app.use("/api/v1/job", require("./routes/jobRoutes"));
+
 // Revenue Management Routes
 app.use("/api/v1/revenue", require("./routes/revenueRoute"));
 

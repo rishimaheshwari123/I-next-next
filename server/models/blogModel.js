@@ -64,6 +64,51 @@ const blogSchema = new mongoose.Schema({
         default: false
     },
     
+    // New fields from the images
+    shortDescription: {
+        type: String,
+        trim: true
+    },
+    author: {
+        type: String,
+        default: 'Admin',
+        trim: true
+    },
+    tags: {
+        type: [String],
+        default: []
+    },
+    altText: {
+        type: String,
+        trim: true
+    },
+    focusKeyword: {
+        type: String,
+        trim: true
+    },
+    noIndex: {
+        type: Boolean,
+        default: false
+    },
+    faqs: [
+        {
+            question: { type: String, trim: true },
+            answer: { type: String, trim: true }
+        }
+    ],
+    articleSchema: {
+        type: Boolean,
+        default: true
+    },
+    faqSchema: {
+        type: Boolean,
+        default: false
+    },
+    breadcrumbSchema: {
+        type: Boolean,
+        default: true
+    },
+    
     // Keep for backward compatibility
     type: {
         type: String,
