@@ -516,11 +516,13 @@ const Blogs = () => {
             className={`px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 ${
               toast.type === "success"
                 ? "bg-green-500 text-white"
+                : toast.type === "info"
+                ? "bg-blue-500 text-white"
                 : "bg-red-500 text-white"
             }`}
           >
             <span className="text-lg">
-              {toast.type === "success" ? "✓" : "✕"}
+              {toast.type === "success" ? "✓" : toast.type === "info" ? "ℹ" : "✕"}
             </span>
             <span className="font-medium">{toast.message}</span>
           </div>
@@ -861,10 +863,89 @@ const Blogs = () => {
                         if (url) execEditorCommand("createLink", url);
                       }} className="p-2 hover:bg-gray-100 rounded" title="Insert Link"><FaLink size={13} /></button>
                       
-                      <button type="button" onClick={() => {
-                        const url = prompt("Enter image source URL:");
-                        if (url) execEditorCommand("insertImage", url);
-                      }} className="p-2 hover:bg-gray-100 rounded" title="Insert Image Link"><FaImage size={13} /></button>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          const savedRange = (() => {
+                            if (typeof window !== "undefined") {
+                              const sel = window.getSelection();
+                              if (sel.rangeCount > 0) {
+                                const range = sel.getRangeAt(0);
+                                if (editorRef.current && editorRef.current.contains(range.commonAncestorContainer)) {
+                                  return range;
+                                }
+                              }
+                            }
+                            return null;
+                          })();
+
+                          const input = document.createElement("input");
+                          input.type = "file";
+                          input.accept = "image/*";
+                          input.onchange = async (e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+
+                            showToast("Uploading image...", "info");
+
+                            try {
+                              const formDataToSend = new FormData();
+                              formDataToSend.append("thumbnail", file);
+
+                              const response = await fetch(`${BASE_URL}/image/upload`, {
+                                method: "POST",
+                                body: formDataToSend,
+                              });
+
+                              const data = await response.json();
+                              if (data.success && data.thumbnailImage && data.thumbnailImage.secure_url) {
+                                const imageUrl = data.thumbnailImage.secure_url;
+                                
+                                const img = document.createElement("img");
+                                img.src = imageUrl;
+                                img.alt = "Uploaded image";
+                                img.style.maxWidth = "100%";
+                                img.style.height = "auto";
+                                img.style.margin = "1rem 0";
+                                img.style.borderRadius = "0.5rem";
+                                img.style.display = "block";
+
+                                if (savedRange) {
+                                  savedRange.deleteContents();
+                                  savedRange.insertNode(img);
+
+                                  const newRange = document.createRange();
+                                  newRange.setStartAfter(img);
+                                  newRange.collapse(true);
+
+                                  const sel = window.getSelection();
+                                  sel.removeAllRanges();
+                                  sel.addRange(newRange);
+                                } else if (editorRef.current) {
+                                  editorRef.current.appendChild(img);
+                                }
+                                
+                                if (editorRef.current) {
+                                  editorRef.current.focus();
+                                }
+                                updateDescFromEditor();
+                                showToast("Image uploaded successfully!", "success");
+                              } else {
+                                showToast(data.message || "Failed to upload image", "error");
+                              }
+                            } catch (error) {
+                              console.error("Error uploading image to editor:", error);
+                              showToast("Error uploading image", "error");
+                            }
+                          };
+                          input.click();
+                        }}
+                        className="p-2 hover:bg-gray-100 rounded"
+                        title="Upload Image"
+                      >
+                        <FaImage size={13} />
+                      </button>
 
                       <button type="button" onClick={() => execEditorCommand("removeFormat")} className="p-2 hover:bg-gray-100 rounded" title="Clear Formatting"><FaEraser size={13} /></button>
 
