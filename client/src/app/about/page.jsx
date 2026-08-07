@@ -3,7 +3,7 @@ import INEXTETS from "@/components/InfoDetails";
 
 const About = () => {
   return (
-    <div className="mt-[108px] bg-slate-50/50 min-h-screen">
+    <div className="mt-[78px] bg-slate-50/50 min-h-screen">
       <AboutHero />
 
       {/* Centered container with standardized max-w-7xl width */}

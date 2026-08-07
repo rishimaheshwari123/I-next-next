@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useMemo } from "react";
-import { HiArrowRight, HiChevronDown, HiChevronUp } from "react-icons/hi";
-import { FaMobileAlt } from "react-icons/fa";
+import { HiChevronDown, HiChevronUp, HiArrowRight } from "react-icons/hi";
 import Image from "next/image";
+import ProjectShowcase from "@/components/ProjectShowcase";
 
 // Portfolio data with categories
 const portfolioProjects = [
@@ -10,22 +10,25 @@ const portfolioProjects = [
     id: 1,
     title: "W Cosmetic",
     link: "https://cosmetics-sage.vercel.app/",
-    tag: "Ecommerce / Beauty",
+    tag: "Ecommerce",
     image: "/herosection/wcosmetic.png",
+    description: "A high-conversion cosmetic store experience featuring custom product catalogs, quick add-to-cart, smooth item animations, and a seamless checkout process optimized for mobile users.",
   },
   {
     id: 2,
     title: "Audisense Clinic",
     link: "https://audisenseclinic.com/",
-    tag: "Ecommerce / Healthcare",
+    tag: "Healthcare",
     image: "/herosection/aude.png",
+    description: "A specialized clinical platform offering online appointment scheduling, clinic location services, practitioner directory, and customer reviews to simplify audiology healthcare access.",
   },
   {
     id: 3,
     title: "Femme Cure",
     link: "https://www.femmecurehelpingher.com/",
-    tag: "Ecommerce / Healthcare",
+    tag: "Healthcare",
     image: "/herosection/femme.png",
+    description: "An ecommerce healthcare platform for women, offering personalized wellness products, product selection guides, secure cart processing, and educational resources.",
   },
   {
     id: 4,
@@ -33,13 +36,15 @@ const portfolioProjects = [
     link: "https://www.businessgurujee.com/",
     tag: "Real Estate",
     image: "/herosection/guruji.png",
+    description: "A real estate marketplace connecting buyers, sellers, and agents with interactive maps, listing catalogs, advanced filters, and direct call actions.",
   },
   {
     id: 5,
     title: "Relentless Excavating",
     link: "https://www.relentlessexcavating.online",
-    tag: "Real Estate / Landing Pages",
+    tag: "Landing Pages",
     image: "/herosection/relantless.png",
+    description: "A clean landing page for commercial excavation services with custom contact forms, local service area highlight maps, and high-impact project galleries.",
   },
   {
     id: 6,
@@ -47,6 +52,7 @@ const portfolioProjects = [
     link: "https://www.propcorn.co.in",
     tag: "Real Estate",
     image: "/herosection/propcorn.png",
+    description: "A real estate consulting catalog offering premium property searches, pricing calculators, agent profile integrations, and schedule-a-visit calendar options.",
   },
   {
     id: 7,
@@ -266,42 +272,8 @@ const portfolioProjects = [
   },
 ];
 
-const TABS = [
-  "All",
-  "Ecommerce",
-  "Landing Pages",
-  "News",
-  "Beauty",
-  "Healthcare",
-  "Real Estate",
-  "Stock Markets",
-  "NGO",
-  "Events",
-  "Service Provider",
-  "Mobile App",
-];
-
-// Modern Link Component
-const ModernLink = ({ href, children }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white group-hover:text-blue-100 transition-colors duration-200"
-  >
-    {children}
-    <HiArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-  </a>
-);
-
 const PortFolio = () => {
   const [expandedApp, setExpandedApp] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(6);
-
-  // Filter out web projects (exclude Mobile App tag)
-  const webProjects = useMemo(() => {
-    return portfolioProjects.filter((project) => project.tag !== "Mobile App");
-  }, []);
 
   // Get only mobile apps
   const mobileApps = useMemo(() => {
@@ -313,195 +285,114 @@ const PortFolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section with Background Video */}
-      <section className="relative pt-40 pb-32 overflow-hidden bg-slate-950">
-        {/* Background Video */}
-        <div className="absolute inset-0 z-0 bg-slate-950">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover opacity-80"
-          >
-            <source src="https://d1hdtc0tbqeghx.cloudfront.net/wp-content/uploads/2023/06/29131238/Banner.mp4" type="video/mp4" />
-          </video>
-          {/* Dark Overlay for Text Contrast */}
-          <div className="absolute inset-0 bg-slate-950/40"></div>
-          {/* Subtle color highlight mask to retain branding colors */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/15 via-transparent to-orange-600/10"></div>
-        </div>
+    <div className="min-h-screen bg-[#070b13] text-slate-100 pt-20 pb-12">
 
-        {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full mb-6 border border-white/20">
-            <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
-            <span className="text-white font-semibold text-sm uppercase tracking-wide">
-              Our Portfolio
-            </span>
+      {/* White Theme Hero Banner Section */}
+      <section className="relative pt-24 pb-20 overflow-hidden bg-white border-b border-slate-200/80">
+        {/* Subtle decorative grid background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-70"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-100/40 rounded-full filter blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 container mx-auto px-6 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Column: Text & Stats */}
+            <div className="lg:col-span-7 text-left space-y-6">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-50 border border-blue-100 rounded-full shadow-sm">
+                <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+                <span className="text-blue-700 font-bold text-xs uppercase tracking-wider">
+                  Our Showcase
+                </span>
+              </div>
+
+              <h1 className="text-2xl md:text-4xl  font-black text-slate-900 leading-tight tracking-tight uppercase">
+                Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Digital Masterpieces</span>
+              </h1>
+
+              <p className="text-base md:text-lg text-slate-600 max-w-xl leading-relaxed font-semibold">
+                A curated selection of high-performance web products, ecommerce portals, and digital scaling systems built by our elite developers.
+              </p>
+
+              {/* Stats Counters */}
+              <div className="grid grid-cols-3 gap-4 pt-4 max-w-xl">
+                <div className="bg-slate-50/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-4 shadow-[0_8px_25px_rgba(0,0,0,0.02)] hover:-translate-y-1 transition-all duration-300 group/stat">
+                  <div className="text-2xl md:text-3xl font-black text-blue-600 mb-1 group-hover/stat:text-blue-700 transition-colors">1000+</div>
+                  <div className="text-slate-500 text-[9px] font-black uppercase tracking-wider">Projects</div>
+                </div>
+                <div className="bg-slate-50/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-4 shadow-[0_8px_25px_rgba(0,0,0,0.02)] hover:-translate-y-1 transition-all duration-300 group/stat">
+                  <div className="text-2xl md:text-3xl font-black text-indigo-600 mb-1 group-hover/stat:text-indigo-700 transition-colors">25+</div>
+                  <div className="text-slate-500 text-[9px] font-black uppercase tracking-wider">Countries</div>
+                </div>
+                <div className="bg-slate-50/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-4 shadow-[0_8px_25px_rgba(0,0,0,0.02)] hover:-translate-y-1 transition-all duration-300 group/stat">
+                  <div className="text-2xl md:text-3xl font-black text-purple-600 mb-1 group-hover/stat:text-purple-700 transition-colors">99.8%</div>
+                  <div className="text-slate-500 text-[9px] font-black uppercase tracking-wider">Uptime</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Beautiful Developer Image */}
+            <div className="lg:col-span-5 relative px-4 lg:px-0">
+              {/* Back decoration element */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-600 rounded-[2rem] transform rotate-3 scale-[1.02] opacity-15 blur-md pointer-events-none"></div>
+              
+              {/* Floating Badge 1 - Top Right */}
+              <div className="absolute -top-4 -right-2 md:-right-4 bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl px-4 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-300">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span className="text-[9px] font-black text-slate-800 uppercase tracking-widest">Active Development</span>
+              </div>
+
+              {/* Floating Badge 2 - Bottom Left */}
+              <div className="absolute -bottom-4 -left-2 md:-left-4 bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-2xl px-4 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-300">
+                <span className="text-base">⚡</span>
+                <div className="text-left">
+                  <div className="text-[9px] font-black text-slate-900 uppercase tracking-widest leading-none">Speed Optimized</div>
+                  <div className="text-[7px] font-bold text-slate-500 leading-none mt-1">100% PageSpeed Core</div>
+                </div>
+              </div>
+              
+              {/* Main image container */}
+              <div className="relative rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl bg-white aspect-video lg:aspect-square flex items-center justify-center group/hero-img">
+                <img
+                  src="/developer_hero.png"
+                  alt="Developer working on project"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/hero-img:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none"></div>
+              </div>
+            </div>
+
           </div>
-
-          {/* Main Heading */}
-          <h1 className="text-2xl md:text-4xl  font-extrabold mb-6 text-white drop-shadow-2xl">
-            Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-blue-400">Creative Work</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-8">
-            From IT and Digital Marketing to AI, Cloud, and Real Estate — we
-            drive innovation and excellence across industries.
-          </p>
-
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <div className="text-4xl font-bold text-orange-400 mb-2">350+</div>
-              <div className="text-gray-200 text-sm uppercase tracking-wide">Projects Delivered</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <div className="text-4xl font-bold text-orange-400 mb-2">42+</div>
-              <div className="text-gray-200 text-sm uppercase tracking-wide">Countries Served</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl px-8 py-6 border border-white/20">
-              <div className="text-4xl font-bold text-orange-400 mb-2">14+</div>
-              <div className="text-gray-200 text-sm uppercase tracking-wide">Years Experience</div>
-            </div>
-          </div>
         </div>
-
       </section>
 
-      {/* Main Portfolio Section */}
-      <div className="bg-gradient-to-b from-white to-slate-50 py-5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[90vw] mx-auto">
-          {/* Header */}
-          <header className="mb-5 text-center">
-            <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4 animate-[fadeIn_1s_ease-out]">
-
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600">              Featured Web Projects
-              </span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Browse our latest web developments, custom platforms, and high-converting landing pages.
-            </p>
-          </header>
-
-          {/* Project Cards Grid */}
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {webProjects.slice(0, visibleCount).map((project) => (
-              <article
-                key={project.id}
-                className="flex flex-col h-[390px] bg-white rounded-3xl overflow-hidden group transition-all duration-500 shadow-[0_10px_35px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_45px_rgba(59,130,246,0.1)] hover:-translate-y-1.5 border border-slate-100/80 hover:border-blue-500/20"
-              >
-                {/* Mock Browser Header */}
-                <div className="bg-slate-100/90 border-b border-slate-200/50 px-4 py-2.5 flex items-center gap-2 flex-shrink-0">
-                  <div className="flex gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-400"></span>
-                    <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
-                    <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                  </div>
-                  <div className="flex-1 max-w-[140px] mx-auto bg-white/80 rounded-md py-0.5 px-2 text-[9px] text-slate-400 font-mono text-center truncate border border-slate-200/40">
-                    {project.title.toLowerCase().replace(/\s+/g, '')}.com
-                  </div>
-                </div>
-
-                {/* Mock Browser Viewport (Screenshot container) */}
-                <div className="relative h-[230px] overflow-hidden bg-slate-50 flex-shrink-0">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="absolute top-0 left-0 w-full h-auto transition-transform duration-[5000ms] ease-in-out group-hover:-translate-y-[calc(100%-230px)]"
-                  />
-
-                  {/* Float Tag Badge */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="inline-flex items-center px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-lg bg-[#0e1527]/90 text-white backdrop-blur-md border border-white/10 shadow-sm">
-                      {project.tag || "Web Application"}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Details Panel - Permanent visibility */}
-                <div className="flex-1 p-5 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
-                  <div>
-                    {/* Category and Title */}
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
-                        {project.tag || "Web Project"}
-                      </span>
-                    </div>
-                    <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-1">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  {/* Footer Launch link */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors duration-300 group/btn"
-                    >
-                      <span>Visit Live Website</span>
-                      <div className="w-5 h-5 rounded-full bg-slate-100 group-hover/btn:bg-blue-50 flex items-center justify-center transition-colors">
-                        <HiArrowRight className="w-3 h-3 text-slate-500 group-hover/btn:text-blue-600 group-hover/btn:translate-x-0.5 transition-all" />
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {/* Load More Button */}
-          {visibleCount < webProjects.length && (
-            <div className="flex justify-center mt-16">
-              <button
-                onClick={() => setVisibleCount((prev) => prev + 6)}
-                className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-2xl group bg-gradient-to-br from-blue-600 to-orange-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 shadow-md hover:shadow-orange-500/20 transition-all duration-300 transform hover:scale-[1.03]"
-              >
-                <span className="relative px-8 py-3.5 transition-all ease-in duration-75 bg-white text-gray-800 rounded-2xl group-hover:bg-opacity-0 group-hover:text-white font-bold tracking-wide">
-                  Load More Projects
-                </span>
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      <ProjectShowcase />
 
       {/* Mobile Apps Accordion Section */}
-      <div className="bg-gradient-to-br from-blue-50 via-white to-orange-50 py-5 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
+      <section className="bg-gradient-to-br from-blue-50 via-white to-orange-50 pt-16 pb-24 px-4 sm:px-6 lg:px-8 border-t border-gray-100 text-slate-800 overflow-hidden">
         <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-5">
-
-            <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 mb-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4 uppercase tracking-tight">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600">Mobile Apps</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore our innovative mobile applications designed for various industries
+            <p className="text-gray-600 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+              Explore our innovative native mobile applications engineered for startups, communities, and enterprises.
             </p>
           </div>
 
-          {/* Accordion */}
           <div className="space-y-4">
             {mobileApps.map((app) => (
               <div
                 key={app.id}
                 className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-                {/* Accordion Header */}
                 <button
                   onClick={() => toggleApp(app.id)}
                   className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-gray-50 transition-colors duration-200 group"
                 >
                   <div className="flex items-center gap-4 flex-1">
-                    {/* App Icon */}
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 border-blue-200">
                       <Image
                         src={app.image}
@@ -510,19 +401,16 @@ const PortFolio = () => {
                         className="object-cover"
                       />
                     </div>
-
-                    {/* App Info */}
                     <div className="flex-1">
                       <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-200 mb-1">
                         {app.title}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 font-medium">
                         {app.description}
                       </p>
                     </div>
                   </div>
 
-                  {/* Expand Icon */}
                   <div
                     className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${expandedApp === app.id
                       ? "bg-gradient-to-r from-blue-600 to-orange-500 text-white"
@@ -537,16 +425,12 @@ const PortFolio = () => {
                   </div>
                 </button>
 
-                {/* Accordion Content */}
                 <div
-                  className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedApp === app.id
-                    ? "max-h-[600px] opacity-100"
-                    : "max-h-0 opacity-0"
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${expandedApp === app.id ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                 >
                   <div className="px-6 md:px-8 pb-6 md:pb-8">
                     <div className="pt-4 border-t border-gray-100">
-                      {/* App Screenshot */}
                       <div className="relative w-full h-64 rounded-xl overflow-hidden mb-6 shadow-lg">
                         <Image
                           src={app.image}
@@ -556,7 +440,6 @@ const PortFolio = () => {
                         />
                       </div>
 
-                      {/* App Details */}
                       <div className="grid md:grid-cols-2 gap-6 mb-6">
                         <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
                           <h4 className="font-semibold text-gray-900 mb-2">Platform</h4>
@@ -568,7 +451,6 @@ const PortFolio = () => {
                         </div>
                       </div>
 
-                      {/* CTA Button */}
                       <a
                         href={app.link}
                         target="_blank"
@@ -585,7 +467,8 @@ const PortFolio = () => {
             ))}
           </div>
         </div>
-      </div>
+      </section>
+
     </div>
   );
 };

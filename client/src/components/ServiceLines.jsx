@@ -156,7 +156,7 @@ const ServiceLines = () => {
                   {/* CTA button link */}
                   <Link
                     href={item.path}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-blue-500/10 hover:shadow-lg"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-blue-500/10 hover:shadow-lg"
                   >
                     <span>Explore Service</span>
                     <FaArrowRight className="w-3.5 h-3.5" />

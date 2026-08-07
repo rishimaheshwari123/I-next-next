@@ -166,19 +166,23 @@ const Navbar = () => {
               {/* Call pill with visible contrast border and background */}
               <a
                 href="tel:+919981122493"
-                className="flex items-center gap-2 border border-slate-700/80 bg-[#0e1527] text-slate-200 hover:text-white rounded-full px-5 py-2 hover:bg-[#151e36] hover:border-slate-600 transition-all text-xs font-bold shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
+                className="relative inline-flex items-center justify-center p-[1px] overflow-hidden rounded-full group bg-gradient-to-br from-purple-600 to-blue-500 shadow-lg hover:shadow-purple-500/20 hover:scale-[1.03] transition-all duration-300"
               >
-                <FaPhone className="text-pink-500 w-3 h-3 animate-pulse" />
-                <span>+91 9981122493</span>
+                <span className="relative flex items-center gap-2 px-5 py-2 bg-[#0e1527] text-slate-200 group-hover:text-white rounded-full transition-all duration-300 font-bold text-xs">
+                  <FaPhone className="text-pink-500 w-3 h-3 animate-pulse" />
+                  <span>+91 9981122493</span>
+                </span>
               </a>
 
               {/* LOGIN button */}
               <Link
                 href="/login"
-                className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white rounded-full px-5 py-2.5 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-red-500/10 hover:shadow-lg transition-all"
+                className="relative inline-flex items-center justify-center p-[1px] overflow-hidden rounded-full group bg-gradient-to-br from-purple-600 to-blue-500 shadow-lg hover:shadow-purple-500/20 hover:scale-[1.03] transition-all duration-300"
               >
-                <span>Login</span>
-                <FaArrowRight className="w-3 h-3" />
+                <span className="relative flex items-center gap-1.5 px-5 py-2 bg-[#0e1527] text-slate-200 group-hover:bg-gradient-to-br group-hover:from-purple-600 group-hover:to-blue-500 group-hover:text-white rounded-full transition-all duration-300 font-bold text-xs uppercase tracking-wider">
+                  <span>Login</span>
+                  <FaArrowRight className="w-3 h-3" />
+                </span>
               </Link>
             </div>
 
@@ -490,9 +494,11 @@ const Navbar = () => {
               <Link
                 href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md shadow-blue-500/20"
+                className="relative w-full inline-flex items-center justify-center p-[1px] overflow-hidden rounded-xl group bg-gradient-to-br from-purple-600 to-blue-500 shadow-lg hover:shadow-purple-500/20 transition-all duration-300"
               >
-                Login
+                <span className="w-full text-center px-6 py-3 bg-[#0e1527] text-slate-200 group-hover:bg-gradient-to-br group-hover:from-purple-600 group-hover:to-blue-500 group-hover:text-white rounded-xl font-bold transition-all duration-300 text-sm">
+                  Login
+                </span>
               </Link>
             </div>
           </div>

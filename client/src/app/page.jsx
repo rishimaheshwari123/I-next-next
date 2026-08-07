@@ -2,6 +2,7 @@ import React from "react";
 import HeroSlider from "../components/HeroSlider";
 import ServicesGrid from "@/components/ServicesGrid";
 import ServiceLines from "@/components/ServiceLines";
+import ProjectShowcase from "@/components/ProjectShowcase";
 import StatsSection from "@/components/StatsSection";
 // import TechnologyNew from "@/components/TechnologyNew";
 import Testimonials from "@/components/Testimonials";
@@ -19,6 +20,7 @@ const HomePage = () => {
       <HeroSlider />
       <ServicesGrid />
       <ServiceLines />
+      <ProjectShowcase />
       {/* <TechnologyNew /> */}
       <Testimonials />
       <VideoTestimonials />

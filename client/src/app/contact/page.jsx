@@ -11,11 +11,11 @@ export default function ContactPage() {
     companyName: '',
     email: '',
     phone: '',
-    
+
     // Services
     servicesInterested: [],
     otherServicesSpecify: '',
-    
+
     // Website Development Specific
     websiteType: '',
     websiteVision: '',
@@ -27,33 +27,33 @@ export default function ContactPage() {
     websitePurpose: '',
     existingWebsite: '',
     ongoingMaintenance: [],
-    
+
     // Social Media Marketing Specific
     socialMediaPlatforms: [],
     socialMediaGoals: '',
     postingFrequency: '',
     targetDemographic: '',
     contentType: [],
-    
+
     // Digital Marketing/SEO Specific
     currentChallenges: '',
     kpisImportant: [],
     competitorsAdmire: '',
     uniqueSellingProposition: '',
     geographicTarget: '',
-    
+
     // Project Details
     budgetRange: '',
     preferredStartDate: '',
     expectedTimeframe: '',
     projectDeadline: '',
     urgencyRating: 3,
-    
+
     // Importance & Preferences
     proposalImportance: 5,
     involvementLevel: 3,
     clarityRating: 3,
-    
+
     // Additional Information
     targetAudience: '',
     visualStyle: '',
@@ -62,7 +62,7 @@ export default function ContactPage() {
     existingMarketingMaterials: '',
     expectedResults: '',
     digitalMarketingFamiliarity: '',
-    
+
     // Partnership Factors
     partnershipFactors: {
       transparentReporting: '',
@@ -70,7 +70,7 @@ export default function ContactPage() {
       dataDrivenStrategies: '',
       longTermPartnership: '',
     },
-    
+
     // Source & Additional
     hearAboutUs: '',
     additionalComments: '',
@@ -81,7 +81,7 @@ export default function ContactPage() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     if (type === 'checkbox') {
       const arrayField = formData[name];
       if (checked) {
@@ -105,7 +105,7 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate required fields
     if (!formData.contactPersonName || !formData.email || !formData.phone || formData.servicesInterested.length === 0) {
       toast.error('Please fill in all required fields (Name, Email, Phone, Services)');
@@ -193,11 +193,11 @@ export default function ContactPage() {
 
   const showWebsiteFields = formData.servicesInterested.includes('Website Development');
   const showSocialMediaFields = formData.servicesInterested.includes('Social Media Marketing');
-  const showDigitalMarketingFields = formData.servicesInterested.includes('Digital Marketing') || 
-                                      formData.servicesInterested.includes('Lead Generation');
+  const showDigitalMarketingFields = formData.servicesInterested.includes('Digital Marketing') ||
+    formData.servicesInterested.includes('Lead Generation');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-28 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -214,15 +214,13 @@ export default function ContactPage() {
           <div className="flex justify-between items-center">
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center flex-1">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                  currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-                } font-semibold`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                  } font-semibold`}>
                   {step}
                 </div>
                 {step < 4 && (
-                  <div className={`flex-1 h-1 mx-2 ${
-                    currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
-                  }`} />
+                  <div className={`flex-1 h-1 mx-2 ${currentStep > step ? 'bg-blue-600' : 'bg-gray-200'
+                    }`} />
                 )}
               </div>
             ))}
@@ -237,12 +235,12 @@ export default function ContactPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-8">
-          
+
           {/* Step 1: Basic Information */}
           {currentStep === 1 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Basic Information</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Contact Person Name <span className="text-red-500">*</span>
@@ -318,7 +316,7 @@ export default function ContactPage() {
           {currentStep === 2 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Services Interested</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Select Services <span className="text-red-500">*</span>
@@ -370,7 +368,7 @@ export default function ContactPage() {
               {showWebsiteFields && (
                 <div className="space-y-6 border-t pt-6">
                   <h3 className="text-xl font-semibold text-gray-800">Website Development Details</h3>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Website Type
@@ -538,7 +536,7 @@ export default function ContactPage() {
               {showSocialMediaFields && (
                 <div className="space-y-6 border-t pt-6">
                   <h3 className="text-xl font-semibold text-gray-800">Social Media Marketing Details</h3>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Social Media Platforms
@@ -642,7 +640,7 @@ export default function ContactPage() {
               {showDigitalMarketingFields && (
                 <div className="space-y-6 border-t pt-6">
                   <h3 className="text-xl font-semibold text-gray-800">Digital Marketing Details</h3>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Current Marketing Challenges
@@ -757,7 +755,7 @@ export default function ContactPage() {
           {currentStep === 3 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Project Details</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Budget Range
@@ -960,7 +958,7 @@ export default function ContactPage() {
           {currentStep === 4 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Additional Information</h2>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
                   Preferred Communication Methods
@@ -1035,7 +1033,7 @@ export default function ContactPage() {
               <div className="border-t pt-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Partnership Factors</h3>
                 <p className="text-sm text-gray-600 mb-4">Rate the importance of these factors in choosing a partner:</p>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
