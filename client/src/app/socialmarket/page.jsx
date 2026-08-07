@@ -105,7 +105,7 @@ const SocialMedia = () => {
         <br />
 
         <div className="flex gap-3 mb-3 ">
-          
+
           <p className="border-r-2 pr-3 text-gray-300 text-xl">Home</p>
           <p className="text-xl">Social Media Marketing</p>
         </div>
@@ -114,17 +114,17 @@ const SocialMedia = () => {
         <div className="relative bg-gradient-to-r from-orange-50 via-white to-blue-50 rounded-3xl p-8 lg:p-16 mb-20 overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             <div className="first order-2 lg:order-1">
               <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
                 🚀 Grow Your Brand Online
               </div>
               <h1 className="text-3xl lg:text-5xl font-bold leading-tight mb-6">
-                Transform Your Social Media Into A 
+                Transform Your Social Media Into A
                 <span className="text-orange-500"> Powerful Marketing Engine</span>
               </h1>
-              
+
               <p className="text-lg lg:text-xl text-gray-700 leading-relaxed mb-8">
                 Build authentic connections, engage your audience, and drive real business results with our expert social media marketing strategies.
               </p>
@@ -137,11 +137,11 @@ const SocialMedia = () => {
                   </div>
                 ))}
               </div>
-              
+
               <a href="/contact">
-              <button className="flex items-center gap-2 font-bold text-xl bg-orange-500 px-8 py-4 rounded-full hover:bg-orange-600 hover:shadow-2xl transition-all duration-300 text-white group">
-                Start Your Journey <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
-              </button></a>
+                <button className="flex items-center gap-2 font-bold text-xl bg-orange-500 px-8 py-4 rounded-full hover:bg-orange-600 hover:shadow-2xl transition-all duration-300 text-white group">
+                  Start Your Journey <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
+                </button></a>
             </div>
 
             <div className="second order-1 lg:order-2 flex justify-center">
@@ -204,7 +204,7 @@ const SocialMedia = () => {
               We understand your struggles and have the solutions
             </p>
           </div>
-          
+
           <div className="grid lg:grid-cols-2 gap-8">
             {socialMediaMarketing.map((currElem, index) => (
               <div
@@ -230,12 +230,12 @@ const SocialMedia = () => {
             <p className="text-xl text-gray-700 mb-6">
               <span className="font-bold text-orange-500">Don't let these challenges hold you back!</span> Let our experts handle your social media.
             </p>
-            
+
           </div>
         </div>
 
         {/* Pricing Plans Section - Enhanced */}
-        <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
+        {/* <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
           <div className="text-center mb-16">
             <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
               💰 Flexible Pricing
@@ -262,7 +262,7 @@ const SocialMedia = () => {
               Contact Our Team <IoIosArrowDropright className="text-2xl" />
             </a>
           </div>
-        </div>
+        </div> */}
 
         {/* Feedback Section */}
         {/* <div className="mb-16">

@@ -94,9 +94,8 @@ const Navbar = () => {
     <>
       {/* Topbar */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 transition-all duration-300 ${
-          isScrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 transition-all duration-300 ${isScrolled ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+          }`}
       >
         <div className="max-w-[90vw] mx-auto px-4 lg:px-6">
           <div className="flex justify-between items-center h-12">
@@ -173,17 +172,15 @@ const Navbar = () => {
 
       {/* Main Navbar */}
       <nav
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "top-3 mx-auto w-[94vw] max-w-7xl bg-white/90 backdrop-blur-md border border-slate-200/50 shadow-[0_10px_30px_rgba(0,0,0,0.04)] rounded-2xl py-1 px-4"
-            : "top-12 w-full bg-white border-b border-slate-100"
-        }`}
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? "top-3 mx-auto w-[94vw] max-w-7xl bg-white/90 backdrop-blur-md border border-slate-200/50 shadow-[0_10px_30px_rgba(0,0,0,0.04)] rounded-2xl py-1 px-4"
+          : "top-12 w-full bg-white border-b border-slate-100"
+          }`}
       >
         <div className="max-w-[90vw] mx-auto px-2 lg:px-4">
           <div
-            className={`flex justify-between items-center transition-all duration-300 ${
-              isScrolled ? "h-16" : "h-20"
-            }`}
+            className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? "h-16" : "h-20"
+              }`}
           >
             {/* Logo */}
             <Link
@@ -219,20 +216,18 @@ const Navbar = () => {
                         <button suppressHydrationWarning className="flex items-center space-x-1 text-slate-700 hover:text-blue-600 font-semibold transition-all duration-200 py-2 px-2 hover:bg-slate-50/80 rounded-xl">
                           <span>{link.title}</span>
                           <IoIosArrowDown
-                            className={`transition-transform duration-300 ${
-                              isServicesOpen ? "rotate-180 text-blue-600" : ""
-                            }`}
+                            className={`transition-transform duration-300 ${isServicesOpen ? "rotate-180 text-blue-600" : ""
+                              }`}
                           />
                         </button>
 
                         {/* Mega Menu */}
                         <div
                           ref={megaMenuRef}
-                          className={`absolute left-0 right-0 top-full pt-3 transition-all duration-300 z-[100] ${
-                            isServicesOpen
-                              ? "opacity-100 visible translate-y-0"
-                              : "opacity-0 invisible -translate-y-4"
-                          }`}
+                          className={`absolute left-0 right-0 top-full pt-3 transition-all duration-300 z-[100] ${isServicesOpen
+                            ? "opacity-100 visible translate-y-0"
+                            : "opacity-0 invisible -translate-y-4"
+                            }`}
                         >
                           <div className="w-full px-0">
                             <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-slate-100/80 overflow-hidden">
@@ -267,10 +262,9 @@ const Navbar = () => {
                                         >
                                           <div className="flex items-start space-x-4">
                                             <div
-                                              className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white ${
-                                                serviceIconColors[service.id] ||
+                                              className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white ${serviceIconColors[service.id] ||
                                                 "bg-blue-600"
-                                              } group-hover/item:scale-110 transition-all duration-300 shadow-md`}
+                                                } group-hover/item:scale-110 transition-all duration-300 shadow-md`}
                                             >
                                               <IconComponent className="w-5 h-5" />
                                             </div>
@@ -418,17 +412,15 @@ const Navbar = () => {
                     ) : (
                       <Link
                         href={link.path}
-                        className={`font-semibold transition-all duration-300 py-2 px-2 rounded-xl relative group/link ${
-                          pathname === link.path
-                            ? "text-blue-600 bg-blue-50/50"
-                            : "text-slate-700 hover:text-blue-600 hover:bg-slate-50/80"
-                        }`}
+                        className={`font-semibold transition-all duration-300 py-2 px-2 rounded-xl relative group/link ${pathname === link.path
+                          ? "text-blue-600 bg-blue-50/50"
+                          : "text-slate-700 hover:text-blue-600 hover:bg-slate-50/80"
+                          }`}
                       >
                         {link.title}
                         <span
-                          className={`absolute bottom-1 left-2 right-2 h-0.5 bg-blue-600 transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 ${
-                            pathname === link.path ? "scale-x-100" : ""
-                          }`}
+                          className={`absolute bottom-1 left-2 right-2 h-0.5 bg-blue-600 transition-all duration-300 scale-x-0 group-hover/link:scale-x-100 ${pathname === link.path ? "scale-x-100" : ""
+                            }`}
                         ></span>
                       </Link>
                     )}
@@ -446,9 +438,9 @@ const Navbar = () => {
               >
                 {/* Sweeping RGB Border Light */}
                 <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#ff453a_70%,#ff9f0a_85%,#30d158_95%,#0a84ff_100%)]" />
-                <span className="relative flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-200">
+                {/* <span className="relative flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-semibold hover:from-orange-600 hover:to-amber-600 transition-all duration-200">
                   Book Domain
-                </span>
+                </span> */}
               </button>
               <Link
                 href="/login"
@@ -456,7 +448,7 @@ const Navbar = () => {
               >
                 {/* Sweeping RGB Border Light */}
                 <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#0a84ff_70%,#30d158_85%,#bf5af2_95%,#ff453a_100%)]" />
-                <span className="relative flex items-center justify-center px-5 py-2.5 bg-white text-blue-600 rounded-[10px] font-semibold transition-all duration-200 group-hover:bg-slate-50">
+                <span className="relative flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-semibold hover:from-orange-600 hover:to-amber-600 transition-all rounded-[10px] font-semibold transition-all duration-200 group-hover:bg-slate-50">
                   Login
                 </span>
               </Link>
@@ -480,9 +472,8 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${
-          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 z-[100] lg:hidden transition-all duration-500 ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       >
         {/* Backdrop */}
         <div
@@ -493,9 +484,8 @@ const Navbar = () => {
         {/* Sidebar Panel */}
         <div
           ref={sidebarRef}
-          className={`absolute top-0 right-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl rounded-l-3xl transform transition-transform duration-500 ease-out overflow-y-auto ${
-            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`absolute top-0 right-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl rounded-l-3xl transform transition-transform duration-500 ease-out overflow-y-auto ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="flex flex-col min-h-full">
             {/* Sidebar Header */}
@@ -536,21 +526,19 @@ const Navbar = () => {
                         >
                           <span>{link.title}</span>
                           <IoIosArrowDown
-                            className={`transition-transform duration-300 ${
-                              isMobileServicesOpen
-                                ? "rotate-180 text-blue-600"
-                                : ""
-                            }`}
+                            className={`transition-transform duration-300 ${isMobileServicesOpen
+                              ? "rotate-180 text-blue-600"
+                              : ""
+                              }`}
                           />
                         </button>
 
                         {/* Mobile Services Dropdown */}
                         <div
-                          className={`overflow-hidden transition-all duration-300 ${
-                            isMobileServicesOpen
-                              ? "max-h-[2000px] opacity-100 mt-2"
-                              : "max-h-0 opacity-0"
-                          }`}
+                          className={`overflow-hidden transition-all duration-300 ${isMobileServicesOpen
+                            ? "max-h-[2000px] opacity-100 mt-2"
+                            : "max-h-0 opacity-0"
+                            }`}
                         >
                           <div className="space-y-2 pl-2">
                             {services.map((service) => {
@@ -566,10 +554,9 @@ const Navbar = () => {
                                   className="flex items-start space-x-3 px-4 py-3 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 rounded-xl transition-all duration-200 border border-slate-100/50"
                                 >
                                   <div
-                                    className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-white ${
-                                      serviceIconColors[service.id] ||
+                                    className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-white ${serviceIconColors[service.id] ||
                                       "bg-blue-600"
-                                    } shadow-sm`}
+                                      } shadow-sm`}
                                   >
                                     <IconComponent className="w-4.5 h-4.5" />
                                   </div>
@@ -591,11 +578,10 @@ const Navbar = () => {
                       <Link
                         href={link.path}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`block px-4 py-3 text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-xl font-semibold transition-all duration-200 ${
-                          pathname === link.path
-                            ? "text-blue-600 bg-blue-50/40"
-                            : ""
-                        }`}
+                        className={`block px-4 py-3 text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-xl font-semibold transition-all duration-200 ${pathname === link.path
+                          ? "text-blue-600 bg-blue-50/40"
+                          : ""
+                          }`}
                       >
                         {link.title}
                       </Link>
@@ -607,15 +593,13 @@ const Navbar = () => {
 
             {/* Sidebar Footer */}
             <div className="p-6 border-t border-slate-100 bg-white sticky bottom-0">
-              <button
-                onClick={() => {
-                  setIsModalOpen(true);
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full px-6 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold hover:from-orange-600 hover:to-amber-600 transition-all duration-200 shadow-md shadow-orange-500/20"
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md shadow-blue-500/20"
               >
-                Get In Touch
-              </button>
+                Login
+              </Link>
             </div>
           </div>
         </div>

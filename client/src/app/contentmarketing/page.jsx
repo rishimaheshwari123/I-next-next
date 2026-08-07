@@ -166,17 +166,17 @@ const BusinessGrowth = () => {
         <div className="relative bg-gradient-to-r from-indigo-50 via-white to-cyan-50 rounded-3xl p-8 lg:p-16 mb-20 overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             <div className="first order-2 lg:order-1">
               <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
                 🚀 Accelerate Your Success
               </div>
               <h1 className="text-3xl lg:text-5xl font-bold leading-tight mb-6">
-                Scale Your Business With 
+                Scale Your Business With
                 <span className="text-orange-500"> Strategic Growth Solutions</span>
               </h1>
-              
+
               <p className="text-lg lg:text-xl text-gray-700 leading-relaxed mb-8">
                 Transform your business with proven growth strategies. From market expansion to revenue optimization, we provide end-to-end solutions that drive sustainable, measurable growth.
               </p>
@@ -204,7 +204,7 @@ const BusinessGrowth = () => {
                   <span className="font-semibold">Scalable Systems</span>
                 </div>
               </div>
-              
+
               <Link href="/contact">
                 <button className="flex items-center gap-2 font-bold text-xl bg-orange-500 px-8 py-4 rounded-full hover:bg-orange-600 hover:shadow-2xl transition-all duration-300 text-white group">
                   Start Growing Today <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
@@ -348,7 +348,7 @@ const BusinessGrowth = () => {
         </div>
 
         {/* Pricing Plans Section */}
-        <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
+        {/* <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
           <div className="text-center mb-16">
             <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
               💰 Investment in Your Growth
@@ -375,7 +375,7 @@ const BusinessGrowth = () => {
               Contact Our Growth Strategists <IoIosArrowDropright className="text-2xl" />
             </Link>
           </div>
-        </div>
+        </div> */}
 
         {/* Feedback Section */}
         {/* <div className="mb-16">

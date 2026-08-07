@@ -184,17 +184,17 @@ const AIServices = () => {
         <div className="relative bg-gradient-to-r from-purple-50 via-white to-blue-50 rounded-3xl p-8 lg:p-16 mb-20 overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-purple-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-200 rounded-full filter blur-3xl opacity-30 -z-10"></div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
             <div className="first order-2 lg:order-1">
               <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
                 🤖 Intelligent Solutions
               </div>
               <h1 className="text-3xl lg:text-5xl font-bold leading-tight mb-6">
-                Transform Your Business With 
+                Transform Your Business With
                 <span className="text-orange-500"> Artificial Intelligence</span>
               </h1>
-              
+
               <p className="text-lg lg:text-xl text-gray-700 leading-relaxed mb-8">
                 Harness the power of AI and machine learning to automate processes, gain insights, and make smarter decisions. From predictive analytics to intelligent automation, we deliver AI solutions that drive real business value.
               </p>
@@ -222,7 +222,7 @@ const AIServices = () => {
                   <span className="font-semibold">Data Insights</span>
                 </div>
               </div>
-              
+
               <Link href="/contact">
                 <button className="flex items-center gap-2 font-bold text-xl bg-orange-500 px-8 py-4 rounded-full hover:bg-orange-600 hover:shadow-2xl transition-all duration-300 text-white group">
                   Explore AI Solutions <IoIosArrowDropright className="text-2xl group-hover:translate-x-2 transition-transform" />
@@ -390,7 +390,7 @@ const AIServices = () => {
         </div>
 
         {/* Pricing Plans Section */}
-        <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
+        {/* <div className="mb-20 bg-gradient-to-b from-gray-50 to-white py-16 -mx-[8.333333%] px-[8.333333%] rounded-3xl">
           <div className="text-center mb-16">
             <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
               💰 Transparent Pricing
@@ -463,7 +463,7 @@ const AIServices = () => {
               Contact Our AI Experts <IoIosArrowDropright className="text-2xl" />
             </Link>
           </div>
-        </div>
+        </div> */}
 
         {/* Feedback Section */}
         {/* <div className="mb-16">
