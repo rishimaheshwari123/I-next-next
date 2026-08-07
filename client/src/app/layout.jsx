@@ -97,7 +97,7 @@ export default function RootLayout({ children }) {
             "@type": "Corporation",
             name: "I Next ETS",
             url: "https://www.inextets.in/",
-            logo: "https://i.ibb.co/N608STN/inext-ets-logo.jpg",
+            logo: "/logo.jpeg",
           })}
         </script>
       </head>

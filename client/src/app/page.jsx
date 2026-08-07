@@ -1,8 +1,9 @@
 import React from "react";
 import HeroSlider from "../components/HeroSlider";
 import ServicesGrid from "@/components/ServicesGrid";
+import ServiceLines from "@/components/ServiceLines";
 import StatsSection from "@/components/StatsSection";
-import TechnologyNew from "@/components/TechnologyNew";
+// import TechnologyNew from "@/components/TechnologyNew";
 import Testimonials from "@/components/Testimonials";
 import VideoTestimonials from "@/components/VideoTestimonials";
 import Faq from "@/components/Faq";
@@ -17,14 +18,16 @@ const HomePage = () => {
     <div>
       <HeroSlider />
       <ServicesGrid />
-      <StatsSection />
-      <TechnologyNew />
+      <ServiceLines />
+      {/* <TechnologyNew /> */}
       <Testimonials />
       <VideoTestimonials />
       <div className=" ">
         <Faq />
         {/* <TrustedCompanies /> */}
       </div>
+      <StatsSection />
+
       <ContactInquiry />
       <WhatsAppButton />
       <AIChatbot />

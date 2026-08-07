@@ -2,37 +2,37 @@ export const services = [
     {
         id: 1,
         title: "Social Media Marketing",
-        path: "/socialmarket",
+        path: "/social-media-marketing",
         description: "Grow your brand presence on social platforms"
     },
     {
         id: 2,
         title: "Digital Marketing",
-        path: "/inboudmarket",
+        path: "/digital-marketing",
         description: "Complete digital marketing solutions"
     },
     {
         id: 3,
         title: "Lead Generation",
-        path: "/paiadvertising",
+        path: "/lead-generation",
         description: "Generate quality leads for your business"
     },
     {
         id: 4,
         title: "Business Growth Package",
-        path: "/contentmarketing",
+        path: "/business-growth-package",
         description: "Comprehensive growth strategies"
     },
     {
         id: 5,
         title: "Website Development",
-        path: "/webDevelopment",
+        path: "/web-development",
         description: "Custom website solutions"
     },
     {
         id: 6,
         title: "Mobile App Development",
-        path: "/mobile",
+        path: "/mobile-app-development",
         description: "iOS & Android app development"
     },
     {
@@ -73,7 +73,7 @@ export const design = [
     {
         id: 5,
         title: "Mobile UI/UX Design",
-        path: "/mobile"
+        path: "/mobile-app-development"
 
     }
 ]
@@ -84,7 +84,7 @@ export const devlopemt = [
     {
         id: 1,
         title: "Web Developement",
-        path: "/webDevelopment"
+        path: "/web-development"
     },
     {
         id: 2,
@@ -111,7 +111,7 @@ export const devlopemt = [
     {
         id: 6,
         title: "Mobile App Developement Android/IOS",
-        path: "/mobile"
+        path: "/mobile-app-development"
 
     },
 
@@ -122,7 +122,7 @@ export const marketing = [
     {
         id: 1,
         title: "Inbound Marketing",
-        path: "/inboudmarket"
+        path: "/digital-marketing"
     },
     {
         id: 2,
@@ -133,19 +133,19 @@ export const marketing = [
     {
         id: 3,
         title: "Social Media Marketing",
-        path: "/socialmarket"
+        path: "/social-media-marketing"
     },
 
 
     {
         id: 4,
         title: "Paid Advertising",
-        path: "/paiadvertising"
+        path: "/lead-generation"
     },
 
     {
         id: 5,
         title: "Content Marketing",
-        path: "/contentmarketing"
+        path: "/business-growth-package"
     }
 ]

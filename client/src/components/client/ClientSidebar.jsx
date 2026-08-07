@@ -166,9 +166,8 @@ const ClientSidebar = ({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-2xl z-40 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 ${isCollapsed ? "lg:w-20" : "lg:w-72"}`}
       >
         <div className="flex flex-col h-full relative">
           {/* Desktop Toggle Button */}
@@ -189,25 +188,14 @@ const ClientSidebar = ({
               className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-3"}`}
             >
               <div className="relative">
-                <Image
-                  src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
-                  width={isCollapsed ? 40 : 50}
-                  height={isCollapsed ? 40 : 50}
+                <img
+                  src="/logo.jpeg"
                   alt="Logo"
-                  className="rounded-xl"
+                  className={`${isCollapsed ? "h-8" : "h-10"} w-auto object-contain rounded-xl`}
                 />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
-              {!isCollapsed && (
-                <div>
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    I Next ETS
-                  </h2>
-                  <p className="text-xs text-gray-500 font-medium">
-                    Client Portal
-                  </p>
-                </div>
-              )}
+
             </div>
           </div>
 
@@ -241,13 +229,11 @@ const ClientSidebar = ({
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsSidebarOpen(false)}
-                    className={`group relative flex items-center ${
-                      isCollapsed ? "justify-center" : "space-x-3"
-                    } px-4 py-3 rounded-xl transition-all duration-200 ${
-                      isActive
+                    className={`group relative flex items-center ${isCollapsed ? "justify-center" : "space-x-3"
+                      } px-4 py-3 rounded-xl transition-all duration-200 ${isActive
                         ? `bg-gradient-to-r ${item.color} text-white shadow-lg transform scale-105`
                         : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                      }`}
                     title={isCollapsed ? item.name : ""}
                   >
                     <Icon
@@ -283,13 +269,11 @@ const ClientSidebar = ({
                           key={purchase._id}
                           href={`/client/plans/${purchase._id}`}
                           onClick={() => setIsSidebarOpen(false)}
-                          className={`group flex items-center ${
-                            isCollapsed ? "justify-center" : "space-x-3"
-                          } px-4 py-2.5 rounded-xl transition-all duration-200 ${
-                            pathname === `/client/plans/${purchase._id}`
+                          className={`group flex items-center ${isCollapsed ? "justify-center" : "space-x-3"
+                            } px-4 py-2.5 rounded-xl transition-all duration-200 ${pathname === `/client/plans/${purchase._id}`
                               ? "bg-blue-50 text-blue-600 font-bold"
                               : "text-gray-600 hover:bg-gray-50"
-                          }`}
+                            }`}
                           title={isCollapsed ? purchase.planId?.name : ""}
                         >
                           <FaGem
@@ -318,9 +302,8 @@ const ClientSidebar = ({
           <div className="p-4 border-t border-gray-200 bg-gray-50">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center ${
-                isCollapsed ? "justify-center" : "justify-center space-x-3"
-              } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
+              className={`w-full flex items-center ${isCollapsed ? "justify-center" : "justify-center space-x-3"
+                } px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-semibold`}
               title={isCollapsed ? "Logout" : ""}
             >
               <FaSignOutAlt className="text-xl" />

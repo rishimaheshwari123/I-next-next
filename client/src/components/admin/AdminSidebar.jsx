@@ -295,25 +295,14 @@ const AdminSidebar = ({
               className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-3"}`}
             >
               <div className="relative">
-                <Image
-                  src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
-                  width={isCollapsed ? 40 : 50}
-                  height={isCollapsed ? 40 : 50}
+                <img
+                  src="/logo.jpeg"
                   alt="Logo"
-                  className="rounded-xl"
+                  className={`${isCollapsed ? "h-8" : "h-10"} w-auto object-contain rounded-xl`}
                 />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
-              {!isCollapsed && (
-                <div>
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    I Next ETS
-                  </h2>
-                  <p className="text-xs text-gray-500 font-medium">
-                    Admin Panel
-                  </p>
-                </div>
-              )}
+
             </div>
           </div>
 

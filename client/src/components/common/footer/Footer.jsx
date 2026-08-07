@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { 
-  FaFacebook, 
-  FaLinkedin, 
-  FaTwitter, 
+import {
+  FaFacebook,
+  FaLinkedin,
+  FaTwitter,
   FaInstagram,
   FaYoutube,
   FaPhone,
@@ -29,27 +29,22 @@ function Footer() {
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          
+
           {/* Column 1: Logo & About */}
           <div className="space-y-6">
             <Link href="/" className="inline-block group">
               <div className="flex items-center space-x-3">
-                <Image
-                  src="https://i.ibb.co/N608STN/inext-ets-logo.jpg"
-                  width={60}
-                  height={60}
+                <img
+                  src="/logo.jpeg"
                   alt="I Next ETS Logo"
-                  className="rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300"
+                  className="h-14 w-auto object-contain  group-hover:scale-110 transition-transform duration-300"
                 />
                 <div>
-                  <h2 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
-                    I Next ETS
-                  </h2>
-                  <p className="text-xs text-gray-400">Innovation & Excellence</p>
+
                 </div>
               </div>
             </Link>
-            
+
             <p className="text-gray-400 text-sm leading-relaxed">
               Transforming ideas into digital reality. We deliver cutting-edge solutions in web development, mobile apps, and digital marketing.
             </p>
@@ -61,49 +56,49 @@ function Footer() {
                 Follow Us
               </h3>
               <div className="flex items-center gap-3">
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/50"
                   aria-label="Facebook"
                 >
                   <FaFacebook className="w-5 h-5" />
                 </a>
-                
-                <a 
-                  href="https://linkedin.com" 
-                  target="_blank" 
+
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-700/50"
                   aria-label="LinkedIn"
                 >
                   <FaLinkedin className="w-5 h-5" />
                 </a>
-                
-                <a 
-                  href="https://twitter.com" 
-                  target="_blank" 
+
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 hover:bg-sky-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-sky-500/50"
                   aria-label="Twitter"
                 >
                   <FaTwitter className="w-5 h-5" />
                 </a>
-                
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
+
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-pink-600/50"
                   aria-label="Instagram"
                 >
                   <FaInstagram className="w-5 h-5" />
                 </a>
-                
-                <a 
-                  href="https://youtube.com" 
-                  target="_blank" 
+
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-600/50"
                   aria-label="YouTube"
@@ -122,8 +117,8 @@ function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link 
-                  href="/socialmarket" 
+                <Link
+                  href="/social-media-marketing"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -131,8 +126,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/contentmarketing" 
+                <Link
+                  href="/business-growth-package"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -140,8 +135,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/inboudmarket" 
+                <Link
+                  href="/digital-marketing"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -149,8 +144,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/seomarket" 
+                <Link
+                  href="/seomarket"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -158,8 +153,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/webDevelopment" 
+                <Link
+                  href="/web-development"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -167,8 +162,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/mobile" 
+                <Link
+                  href="/mobile-app-development"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -176,8 +171,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/ai-services" 
+                <Link
+                  href="/ai-services"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -185,8 +180,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/cyber-security" 
+                <Link
+                  href="/cyber-security"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -204,8 +199,8 @@ function Footer() {
             </h3>
             <ul className="space-y-3">
               <li>
-                <Link 
-                  href="/about" 
+                <Link
+                  href="/about"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -213,8 +208,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/portfolio" 
+                <Link
+                  href="/portfolio"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -222,8 +217,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/workinfo" 
+                <Link
+                  href="/workinfo"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -231,8 +226,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/career" 
+                <Link
+                  href="/career"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -240,8 +235,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -249,8 +244,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/support" 
+                <Link
+                  href="/support"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -258,8 +253,8 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/investment-policy-advisory" 
+                <Link
+                  href="/investment-policy-advisory"
                   className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
                 >
                   <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -277,8 +272,8 @@ function Footer() {
             </h3>
             <div className="space-y-5">
               {/* Phone */}
-              <a 
-                href="tel:+919981122493" 
+              <a
+                href="tel:+919981122493"
                 className="flex items-start space-x-3 text-gray-400 hover:text-white transition-colors duration-300 group"
               >
                 <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-orange-600 transition-colors duration-300 shadow-lg">
@@ -291,8 +286,8 @@ function Footer() {
               </a>
 
               {/* Email */}
-              <a 
-                href="mailto:info.inextets@gmail.com" 
+              <a
+                href="mailto:info.inextets@gmail.com"
                 className="flex items-start space-x-3 text-gray-400 hover:text-white transition-colors duration-300 group"
               >
                 <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors duration-300 shadow-lg">
@@ -328,16 +323,16 @@ function Footer() {
           <p className="text-gray-400 text-sm text-center md:text-left">
             © {currentYear} <span className="text-white font-semibold">I Next ETS</span>. All rights reserved. Designed with ❤️ by I Next ETS Team.
           </p>
-          
+
           <div className="flex items-center space-x-6">
-            <Link 
-              href="/privacy-policy" 
+            <Link
+              href="/privacy-policy"
               className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
             >
               Privacy Policy
             </Link>
-            <Link 
-              href="/terms-conditions" 
+            <Link
+              href="/terms-conditions"
               className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
             >
               Terms & Conditions
