@@ -24,10 +24,10 @@ const heroSlides = [
     path: "/web-development",
     description: "Custom website solutions tailored to your business needs. We create responsive, fast, and SEO-friendly websites that drive results.",
     image: "/herosection/web.jpg",
-    bgColor: "from-blue-600/60 to-slate-950/90",
+    bgColor: "bg-blue-600/60",
     icon: FaLaptopCode,
     themeColor: "blue",
-    gradient: "from-blue-400 to-indigo-400"
+    gradient: "text-blue-500"
   },
   {
     id: 2,
@@ -35,65 +35,66 @@ const heroSlides = [
     path: "/mobile-app-development",
     description: "iOS & Android app development with cutting-edge technology. Transform your ideas into powerful, native, and cross-platform mobile applications.",
     image: "/herosection/app.png",
-    bgColor: "from-purple-600/60 to-slate-950/90",
+    bgColor: "bg-orange-500/60",
     icon: FaMobileAlt,
-    themeColor: "purple",
-    gradient: "from-purple-400 to-pink-400"
+    themeColor: "orange",
+    gradient: "text-orange-500"
   },
+
   {
     id: 3,
-    title: "AI (Artificial Intelligence)",
-    path: "/ai-services",
-    description: "AI-powered solutions for your business. Leverage machine learning, custom chatbots, and intelligence to automate and stay ahead of the competition.",
-    image: "/herosection/aiml.jpg",
-    bgColor: "from-orange-600/60 to-slate-950/90",
-    icon: FaRobot,
-    themeColor: "orange",
-    gradient: "from-orange-400 to-amber-400"
-  },
-  {
-    id: 4,
     title: "Social Media Marketing",
     path: "/social-media-marketing",
     description: "Grow your brand presence on social platforms. Engage your audience, run hyper-targeted campaigns, and build a loyal community around your brand.",
     image: "/herosection/marketing.webp",
-    bgColor: "from-pink-600/60 to-slate-950/90",
+    bgColor: "bg-orange-500/60",
     icon: FaFacebook,
-    themeColor: "pink",
-    gradient: "from-pink-400 to-rose-400"
+    themeColor: "orange",
+    gradient: "text-orange-500"
   },
   {
-    id: 5,
+    id: 4,
     title: "Digital Marketing",
     path: "/digital-marketing",
     description: "Complete digital marketing solutions including inbound marketing, SEO, and paid advertising to skyrocket your online visibility and conversion rates.",
     image: "/herosection/marketing.webp",
-    bgColor: "from-emerald-600/60 to-slate-950/90",
+    bgColor: "bg-blue-600/60",
     icon: FaBullhorn,
-    themeColor: "emerald",
-    gradient: "from-emerald-400 to-teal-400"
+    themeColor: "blue",
+    gradient: "text-blue-500"
   },
   {
-    id: 6,
+    id: 5,
     title: "Lead Generation",
     path: "/lead-generation",
     description: "Generate quality leads for your business. Build a consistent and predictable sales pipeline, and convert prospects into high-paying loyal customers.",
     image: "/herosection/marketing.webp",
-    bgColor: "from-indigo-600/60 to-slate-950/90",
+    bgColor: "bg-orange-500/60",
     icon: FaUserPlus,
-    themeColor: "indigo",
-    gradient: "from-indigo-400 to-cyan-400"
+    themeColor: "orange",
+    gradient: "text-orange-500"
   },
   {
-    id: 7,
+    id: 6,
     title: "Business Growth Package",
     path: "/business-growth-package",
     description: "Comprehensive growth packages combining content marketing, search engine optimization, and custom marketing strategies to scale your business.",
     image: "/herosection/marketing.webp",
-    bgColor: "from-rose-600/60 to-slate-950/90",
+    bgColor: "bg-blue-600/60",
     icon: FaChartLine,
-    themeColor: "rose",
-    gradient: "from-rose-400 to-orange-400"
+    themeColor: "blue",
+    gradient: "text-blue-500"
+  },
+  {
+    id: 7,
+    title: "AI (Artificial Intelligence)",
+    path: "/ai-services",
+    description: "AI-powered solutions for your business. Leverage machine learning, custom chatbots, and intelligence to automate and stay ahead of the competition.",
+    image: "/herosection/aiml.jpg",
+    bgColor: "bg-blue-600/60",
+    icon: FaRobot,
+    themeColor: "blue",
+    gradient: "text-blue-500"
   },
   {
     id: 8,
@@ -101,10 +102,10 @@ const heroSlides = [
     path: "/cyber-security",
     description: "Protect your digital assets. Enterprise-grade security solutions, threat assessments, and monitoring to secure your data, applications, and networks.",
     image: "/herosection/info.jpeg",
-    bgColor: "from-red-600/60 to-slate-950/90",
+    bgColor: "bg-orange-500/60",
     icon: FaShieldAlt,
-    themeColor: "red",
-    gradient: "from-red-400 to-rose-500"
+    themeColor: "orange",
+    gradient: "text-orange-500"
   }
 ];
 
@@ -255,8 +256,8 @@ const HeroSlider = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight select-none">
-              <span className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent`}>
+            <h1 className="text-2xl md:text-4xl font-extrabold text-white mb-6 leading-tight select-none">
+              <span className={`${activeTheme.text}`}>
                 {activeSlide.title}
               </span>
             </h1>
@@ -267,25 +268,19 @@ const HeroSlider = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
               <Link
                 href={activeSlide.path}
-                className="w-full sm:w-auto relative group overflow-hidden rounded-xl p-[2px] bg-orange-100/10 transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg hover:shadow-orange-500/20"
+                className={`w-full sm:w-auto flex items-center justify-center px-8 py-3.5 ${activeTheme.bg} text-white rounded-xl font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg ${activeTheme.shadow} gap-2 group`}
               >
-                {/* Sweeping RGB Border Light */}
-                <span className="absolute -inset-[300%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_50%,#ff453a_70%,#ff9f0a_85%,#30d158_95%,#0a84ff_100%)]" />
-                <span className="relative flex items-center justify-center px-8 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-[10px] font-bold hover:from-orange-600 hover:to-amber-600 transition-all duration-200 w-full gap-2">
-                  Learn More
-                  <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
+                <span>Learn More</span>
+                <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/#contact"
-                className="w-full sm:w-auto relative group overflow-hidden rounded-xl p-[2px] bg-white/10 hover:bg-white/20 transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-md"
+                className="w-full sm:w-auto flex items-center justify-center px-8 py-3.5 bg-slate-900 border border-slate-700 hover:bg-slate-800 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-md"
               >
-                <span className="relative flex items-center justify-center px-8 py-3.5 bg-slate-955/80 backdrop-blur-md text-white rounded-[10px] font-semibold transition-all duration-200 group-hover:bg-slate-950/95 w-full">
-                  Get Started
-                </span>
+                <span>Get Started</span>
               </Link>
             </div>
 
@@ -300,8 +295,8 @@ const HeroSlider = () => {
                     key={slide.id}
                     onClick={() => setCurrentSlide(index)}
                     className={`flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl transition-all duration-300 border ${isSelected
-                        ? `${slideTheme.bg} ${slideTheme.border} text-white scale-110 shadow-lg`
-                        : "bg-white/5 border-white/10 text-slate-400 hover:bg-white/10"
+                      ? `${slideTheme.bg} ${slideTheme.border} text-white scale-110 shadow-lg`
+                      : "bg-white/5 border-white/10 text-slate-400 hover:bg-white/10"
                       }`}
                     title={slide.title}
                   >
@@ -348,14 +343,14 @@ const HeroSlider = () => {
                       key={slide.id}
                       onClick={() => setCurrentSlide(index)}
                       className={`group/btn flex items-center gap-2.5 p-2 rounded-xl text-left transition-all duration-300 border ${isSelected
-                          ? "bg-white/10 border-white/20 shadow-md translate-x-1"
-                          : "bg-white/0 border-transparent hover:bg-white/5 text-slate-400 hover:text-white"
+                        ? "bg-white/10 border-white/20 shadow-md translate-x-1"
+                        : "bg-white/0 border-transparent hover:bg-white/5 text-slate-400 hover:text-white"
                         }`}
                     >
                       {/* Icon */}
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 ${isSelected
-                          ? `${slideTheme.bg} text-white shadow-md ${slideTheme.shadow}`
-                          : "bg-white/5 text-slate-300 group-hover/btn:scale-110"
+                        ? `${slideTheme.bg} text-white shadow-md ${slideTheme.shadow}`
+                        : "bg-white/5 text-slate-300 group-hover/btn:scale-110"
                         }`}>
                         <SlideIcon className="w-4 h-4" />
                       </div>

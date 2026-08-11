@@ -8,53 +8,58 @@ import { FaArrowRight } from "react-icons/fa";
 const serviceLines = [
   {
     id: 1,
-    title: "Brand Strategy & Design",
-    subtitle: "Identity & Visual Systems",
-    tag: "Creative Direction",
-    description: "Crafting beautiful, memorable, and high-impact brand identities that connect deeply with your target audience.",
-    image: "/herosection/marketing.webp",
-    path: "/business-growth-package",
-    borderGradient: "from-red-500 to-rose-500"
+    title: "Website Development",
+    subtitle: "Custom Web Solutions",
+    tag: "Web Design & Dev",
+    description: "Custom website solutions tailored to your business needs. Responsive, fast, and SEO-friendly.",
+    image: "/herosection/web.jpg",
+    path: "/web-development",
+    borderColor: "bg-blue-600",
+    btnColor: "bg-blue-600 hover:bg-blue-700"
   },
   {
     id: 2,
-    title: "Website Engineering",
-    subtitle: "Premium Web Experiences",
-    tag: "Full-Stack Development",
-    description: "Building responsive, blazing-fast, and search-optimized websites using state-of-the-art web frameworks.",
-    image: "/herosection/web.jpg",
-    path: "/web-development",
-    borderGradient: "from-blue-500 to-indigo-500"
+    title: "Mobile App Development",
+    subtitle: "iOS & Android Solutions",
+    tag: "App Innovation",
+    description: "iOS & Android app development with cutting-edge technology. Build native and cross-platform apps.",
+    image: "/herosection/app.png",
+    path: "/mobile-app-development",
+    borderColor: "bg-orange-500",
+    btnColor: "bg-orange-500 hover:bg-orange-600"
   },
   {
     id: 3,
-    title: "Mobile App Innovation",
-    subtitle: "iOS & Android Solutions",
-    tag: "Cross-Platform Apps",
-    description: "Developing native-grade mobile applications with smooth micro-animations, offline capability, and high performance.",
-    image: "/herosection/app.png",
-    path: "/mobile-app-development",
-    borderGradient: "from-orange-500 to-amber-500"
+    title: "Social Media Marketing",
+    subtitle: "Organic & Paid Growth",
+    tag: "Social Strategy",
+    description: "Grow your brand presence on social platforms. Engage your audience and run targeted campaigns.",
+    image: "/herosection/marketing.webp",
+    path: "/social-media-marketing",
+    borderColor: "bg-blue-600",
+    btnColor: "bg-blue-600 hover:bg-blue-700"
   },
   {
     id: 4,
-    title: "AI & Intelligent Systems",
-    subtitle: "Chatbots & Automation",
-    tag: "Machine Learning",
-    description: "Integrating custom large language models, smart automation assistants, and predictive analytics into workflows.",
-    image: "/herosection/aiml.jpg",
-    path: "/ai-services",
-    borderGradient: "from-cyan-500 to-teal-500"
+    title: "Digital Marketing",
+    subtitle: "Complete Digital Solutions",
+    tag: "Online Reach",
+    description: "Complete digital marketing solutions. Maximize reach, optimize ads, and boost your conversion rates.",
+    image: "/herosection/marketing.webp",
+    path: "/digital-marketing",
+    borderColor: "bg-orange-500",
+    btnColor: "bg-orange-500 hover:bg-orange-600"
   },
   {
     id: 5,
-    title: "Cyber Security & Cloud",
-    subtitle: "Enterprise Data Safety",
-    tag: "Infrastructure",
-    description: "Securing your cloud hosting, running threat assessments, and setting up bulletproof firewalls to protect your business assets.",
-    image: "/herosection/info.jpeg",
-    path: "/cyber-security",
-    borderGradient: "from-purple-500 to-pink-500"
+    title: "Lead Generation",
+    subtitle: "Sales Pipeline Optimization",
+    tag: "Customer Acquisition",
+    description: "Generate quality leads for your business. Build a consistent and predictable sales pipeline.",
+    image: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?q=80&w=600&auto=format&fit=crop",
+    path: "/lead-generation",
+    borderColor: "bg-blue-600",
+    btnColor: "bg-blue-600 hover:bg-blue-700"
   }
 ];
 
@@ -98,7 +103,7 @@ const ServiceLines = () => {
                 className="relative h-full rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group"
               >
                 {/* Colored Top Border Indicator */}
-                <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${item.borderGradient} z-20`}></div>
+                <div className={`absolute top-0 left-0 right-0 h-1.5 ${item.borderColor} z-20`}></div>
 
                 {/* Cover Image Background */}
                 <div className="absolute inset-0 z-0 bg-slate-900">
@@ -135,7 +140,7 @@ const ServiceLines = () => {
                 >
                   {/* Top floating Tag badge */}
                   <div className="mb-4">
-                    <span className={`px-3 py-1 bg-gradient-to-r ${item.borderGradient} text-white font-extrabold text-[9px] uppercase tracking-widest rounded-md shadow-md`}>
+                    <span className={`px-3 py-1 ${item.borderColor} text-white font-extrabold text-[9px] uppercase tracking-widest rounded-md shadow-md`}>
                       {item.tag}
                     </span>
                   </div>
@@ -156,7 +161,7 @@ const ServiceLines = () => {
                   {/* CTA button link */}
                   <Link
                     href={item.path}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md shadow-blue-500/10 hover:shadow-lg"
+                    className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 ${item.btnColor} text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md`}
                   >
                     <span>Explore Service</span>
                     <FaArrowRight className="w-3.5 h-3.5" />
@@ -179,7 +184,7 @@ const ServiceLines = () => {
                   }`}
               >
                 {/* Color Top Border Accent */}
-                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${item.borderGradient} z-20`}></div>
+                <div className={`absolute top-0 left-0 right-0 h-1 ${item.borderColor} z-20`}></div>
 
                 {/* Cover Image Background */}
                 <div className="absolute inset-0 z-0 bg-slate-900">
@@ -216,7 +221,7 @@ const ServiceLines = () => {
                   </p>
                   <Link
                     href={item.path}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider rounded-lg"
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 ${item.btnColor} text-white font-bold text-[10px] uppercase tracking-wider rounded-lg`}
                   >
                     <span>View More</span>
                     <FaArrowRight className="w-3 h-3" />

@@ -16,52 +16,9 @@ import {
 } from "react-icons/fa";
 
 const services = [
+
   {
     id: 1,
-    title: "Social Media Marketing",
-    path: "/social-media-marketing",
-    description: "Grow your brand presence on social platforms. Engage your audience and run targeted campaigns.",
-    icon: FaFacebook,
-    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=600&auto=format&fit=crop",
-    gradient: "from-blue-500 to-indigo-500",
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600 border-blue-100"
-  },
-  {
-    id: 2,
-    title: "Digital Marketing",
-    path: "/digital-marketing",
-    description: "Complete digital marketing solutions. Maximize reach, optimize ads, and boost your conversion rates.",
-    icon: FaBullhorn,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
-    gradient: "from-orange-500 to-amber-500",
-    bgColor: "bg-orange-50",
-    iconColor: "text-orange-600 border-orange-100"
-  },
-  {
-    id: 3,
-    title: "Lead Generation",
-    path: "/lead-generation",
-    description: "Generate quality leads for your business. Build a consistent and predictable sales pipeline.",
-    icon: FaUserPlus,
-    image: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?q=80&w=600&auto=format&fit=crop",
-    gradient: "from-purple-500 to-pink-500",
-    bgColor: "bg-purple-50",
-    iconColor: "text-purple-600 border-purple-100"
-  },
-  {
-    id: 4,
-    title: "Business Growth Package",
-    path: "/business-growth-package",
-    description: "Comprehensive growth packages. Content marketing, SEO, and custom marketing strategies.",
-    icon: FaChartLine,
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
-    gradient: "from-emerald-500 to-teal-500",
-    bgColor: "bg-emerald-50",
-    iconColor: "text-emerald-600 border-emerald-100"
-  },
-  {
-    id: 5,
     title: "Website Development",
     path: "/web-development",
     description: "Custom website solutions tailored to your business needs. Responsive, fast, and SEO-friendly.",
@@ -72,7 +29,7 @@ const services = [
     iconColor: "text-indigo-600 border-indigo-100"
   },
   {
-    id: 6,
+    id: 2,
     title: "Mobile App Development",
     path: "/mobile-app-development",
     description: "iOS & Android app development with cutting-edge technology. Build native and cross-platform apps.",
@@ -82,6 +39,51 @@ const services = [
     bgColor: "bg-pink-50",
     iconColor: "text-pink-600 border-pink-100"
   },
+  {
+    id: 3,
+    title: "Social Media Marketing",
+    path: "/social-media-marketing",
+    description: "Grow your brand presence on social platforms. Engage your audience and run targeted campaigns.",
+    icon: FaFacebook,
+    image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=600&auto=format&fit=crop",
+    gradient: "from-blue-500 to-indigo-500",
+    bgColor: "bg-blue-50",
+    iconColor: "text-blue-600 border-blue-100"
+  },
+  {
+    id: 4,
+    title: "Digital Marketing",
+    path: "/digital-marketing",
+    description: "Complete digital marketing solutions. Maximize reach, optimize ads, and boost your conversion rates.",
+    icon: FaBullhorn,
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
+    gradient: "from-orange-500 to-amber-500",
+    bgColor: "bg-orange-50",
+    iconColor: "text-orange-600 border-orange-100"
+  },
+  {
+    id: 5,
+    title: "Lead Generation",
+    path: "/lead-generation",
+    description: "Generate quality leads for your business. Build a consistent and predictable sales pipeline.",
+    icon: FaUserPlus,
+    image: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?q=80&w=600&auto=format&fit=crop",
+    gradient: "from-purple-500 to-pink-500",
+    bgColor: "bg-purple-50",
+    iconColor: "text-purple-600 border-purple-100"
+  },
+  {
+    id: 6,
+    title: "Business Growth Package",
+    path: "/business-growth-package",
+    description: "Comprehensive growth packages. Content marketing, SEO, and custom marketing strategies.",
+    icon: FaChartLine,
+    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop",
+    gradient: "from-emerald-500 to-teal-500",
+    bgColor: "bg-emerald-50",
+    iconColor: "text-emerald-600 border-emerald-100"
+  },
+
   {
     id: 7,
     title: "AI (Artificial Intelligence)",
@@ -161,7 +163,7 @@ const ServicesGrid = () => {
         className="relative h-[250vh] bg-gradient-to-b from-slate-50 via-white to-slate-50 hidden lg:block"
       >
         <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-          
+
           {/* Section Header */}
           <div className="max-w-[90vw] mx-auto w-full mb-10 text-center flex flex-col items-center">
             <div className="inline-flex items-center gap-2 mb-3">
@@ -203,7 +205,7 @@ const ServicesGrid = () => {
                         sizes="360px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
-                      
+
                       {/* Floating Glass Index Badge */}
                       <span className="absolute top-4 right-4 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-sm px-3 py-1 rounded-full shadow-sm">
                         0{service.id}
@@ -280,7 +282,7 @@ const ServicesGrid = () => {
                     sizes="290px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
-                  
+
                   <span className="absolute top-3 right-3 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-xs px-2.5 py-0.5 rounded-full">
                     0{service.id}
                   </span>

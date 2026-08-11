@@ -1,40 +1,42 @@
 export const services = [
+
     {
         id: 1,
-        title: "Social Media Marketing",
-        path: "/social-media-marketing",
-        description: "Grow your brand presence on social platforms"
-    },
-    {
-        id: 2,
-        title: "Digital Marketing",
-        path: "/digital-marketing",
-        description: "Complete digital marketing solutions"
-    },
-    {
-        id: 3,
-        title: "Lead Generation",
-        path: "/lead-generation",
-        description: "Generate quality leads for your business"
-    },
-    {
-        id: 4,
-        title: "Business Growth Package",
-        path: "/business-growth-package",
-        description: "Comprehensive growth strategies"
-    },
-    {
-        id: 5,
         title: "Website Development",
         path: "/web-development",
         description: "Custom website solutions"
     },
     {
-        id: 6,
+        id: 2,
         title: "Mobile App Development",
         path: "/mobile-app-development",
         description: "iOS & Android app development"
     },
+    {
+        id: 3,
+        title: "Social Media Marketing",
+        path: "/social-media-marketing",
+        description: "Grow your brand presence on social platforms"
+    },
+    {
+        id: 4,
+        title: "Digital Marketing",
+        path: "/digital-marketing",
+        description: "Complete digital marketing solutions"
+    },
+    {
+        id: 5,
+        title: "Lead Generation",
+        path: "/lead-generation",
+        description: "Generate quality leads for your business"
+    },
+    {
+        id: 6,
+        title: "Business Growth Package",
+        path: "/business-growth-package",
+        description: "Comprehensive growth strategies"
+    },
+
     {
         id: 7,
         title: "AI (Artificial Intelligence)",

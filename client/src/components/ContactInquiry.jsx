@@ -90,32 +90,31 @@ export default function ContactInquiry() {
   };
 
   return (
-    <section id="contact" className="py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="max-w-6xl mx-auto">
+    <section id="contact" className="py-8 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-100">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-
-          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">
             Get In Touch
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm text-slate-500 max-w-xl mx-auto">
             Have a question or want to work together? Drop us a message and we'll get back to you shortly.
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Side - Form */}
-            <div className="p-8 md:p-12">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="p-6 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
                     <input
                       suppressHydrationWarning
                       type="text"
@@ -124,7 +123,7 @@ export default function ContactInquiry() {
                       onChange={handleChange}
                       required
                       disabled={submitting}
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
                       placeholder="John Doe"
                     />
                   </div>
@@ -133,11 +132,11 @@ export default function ContactInquiry() {
                 {/* Email & Phone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
                       <input
                         suppressHydrationWarning
                         type="email"
@@ -146,18 +145,18 @@ export default function ContactInquiry() {
                         onChange={handleChange}
                         required
                         disabled={submitting}
-                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+                        className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
                         placeholder="john@example.com"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
                       Phone <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <FaPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <FaPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
                       <input
                         suppressHydrationWarning
                         type="tel"
@@ -166,7 +165,7 @@ export default function ContactInquiry() {
                         onChange={handleChange}
                         required
                         disabled={submitting}
-                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+                        className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
                         placeholder="+91 98765 43210"
                       />
                     </div>
@@ -175,11 +174,11 @@ export default function ContactInquiry() {
 
                 {/* Subject */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaEdit className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <FaEdit className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
                     <input
                       suppressHydrationWarning
                       type="text"
@@ -188,7 +187,7 @@ export default function ContactInquiry() {
                       onChange={handleChange}
                       required
                       disabled={submitting}
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
                       placeholder="How can we help you?"
                     />
                   </div>
@@ -196,11 +195,11 @@ export default function ContactInquiry() {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaCommentAlt className="absolute left-4 top-4 text-gray-400" />
+                    <FaCommentAlt className="absolute left-4 top-3 text-slate-400 text-sm" />
                     <textarea
                       suppressHydrationWarning
                       name="message"
@@ -208,8 +207,8 @@ export default function ContactInquiry() {
                       onChange={handleChange}
                       required
                       disabled={submitting}
-                      rows="5"
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+                      rows="3"
+                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
                       placeholder="Tell us more about your project or inquiry..."
                     />
                   </div>
@@ -220,16 +219,16 @@ export default function ContactInquiry() {
                   suppressHydrationWarning
                   type="submit"
                   disabled={submitting}
-                  className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02]"
                 >
                   {submitting ? (
                     <>
-                      <FaSpinner className="text-2xl animate-spin" />
+                      <FaSpinner className="text-lg animate-spin" />
                       Sending...
                     </>
                   ) : (
                     <>
-                      <FaPaperPlane className="text-xl" />
+                      <FaPaperPlane className="text-sm" />
                       Send Message
                     </>
                   )}
@@ -238,57 +237,57 @@ export default function ContactInquiry() {
             </div>
 
             {/* Right Side - Info */}
-            <div className="bg-gradient-to-br from-blue-600 to-purple-600 p-8 md:p-12 text-white flex flex-col justify-center">
-              <div className="space-y-8">
+            <div className="bg-blue-600 p-6 md:p-8 text-white flex flex-col justify-center">
+              <div className="space-y-4">
                 <div>
-                  <h3 className="text-3xl font-bold mb-4">Let's Build Something Amazing Together</h3>
-                  <p className="text-blue-100 leading-relaxed">
+                  <h3 className="text-xl font-bold mb-2">Let's Build Something Amazing Together</h3>
+                  <p className="text-blue-100/90 text-xs leading-relaxed">
                     We're here to help bring your ideas to life. Whether you need a website, mobile app, or digital marketing services, our team is ready to assist you.
                   </p>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-2xl" />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-base" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-1">Quick Response</h4>
-                      <p className="text-blue-100 text-sm">We typically respond within 24 hours</p>
+                      <h4 className="font-bold text-xs">Quick Response</h4>
+                      <p className="text-blue-100/80 text-[10px]">We typically respond within 24 hours</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-2xl" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-base" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-1">Expert Consultation</h4>
-                      <p className="text-blue-100 text-sm">Free consultation for your project</p>
+                      <h4 className="font-bold text-xs">Expert Consultation</h4>
+                      <p className="text-blue-100/80 text-[10px]">Free consultation for your project</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-2xl" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-base" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-1">Dedicated Support</h4>
-                      <p className="text-blue-100 text-sm">Ongoing support throughout your journey</p>
+                      <h4 className="font-bold text-xs">Dedicated Support</h4>
+                      <p className="text-blue-100/80 text-[10px]">Ongoing support throughout your journey</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-8 border-t border-white/20">
-                  <p className="text-sm text-blue-100 mb-4">Or reach us directly:</p>
-                  <div className="space-y-3">
-                    <a href="tel:+919981122493" className="flex items-center gap-3 text-white hover:text-blue-200 transition-colors">
-                      <FaPhone className="text-lg" />
-                      <span className="font-semibold">+91 9981122493</span>
+                <div className="pt-4 border-t border-white/20">
+                  <p className="text-[10px] text-blue-100/80 mb-2">Or reach us directly:</p>
+                  <div className="space-y-2">
+                    <a href="tel:+919981122493" className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors text-xs font-semibold">
+                      <FaPhone className="text-sm" />
+                      <span>+91 9981122493</span>
                     </a>
-                    <a href="mailto:info.inextets@gmail.com" className="flex items-center gap-3 text-white hover:text-blue-200 transition-colors">
-                      <FaEnvelope className="text-lg" />
-                      <span className="font-semibold">info.inextets@gmail.com</span>
+                    <a href="mailto:info.inextets@gmail.com" className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors text-xs font-semibold">
+                      <FaEnvelope className="text-sm" />
+                      <span>info.inextets@gmail.com</span>
                     </a>
                   </div>
                 </div>
