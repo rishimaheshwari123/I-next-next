@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import PageLoader from "@/components/common/PageLoader";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -19,7 +18,7 @@ export default function ConditionalLayout({ children }) {
 
   // Regular routes: show navbar, footer, and other components
   return (
-    <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={null}>
       <Navbar />
       {children}
       <ScrollToTop />
