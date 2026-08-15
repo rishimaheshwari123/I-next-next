@@ -24,8 +24,9 @@ const createDomainInquiry = async (req, res) => {
         });
 
         // Send notification email to admin
-        const adminEmail = "rishimaheshwari040@gmail.com";
-        
+        // const adminEmail = "rishimaheshwari040@gmail.com";
+        const adminEmail = "info.inextets@gmail.com";
+
         try {
             await mailSender(
                 adminEmail,
@@ -84,11 +85,11 @@ const createDomainInquiry = async (req, res) => {
                         </div>
 
                         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-                            <p style="color: #6b7280; font-size: 14px; margin: 0;">Inquiry received on ${new Date(domainInquiry.createdAt).toLocaleString('en-IN', { 
-                                dateStyle: 'full', 
-                                timeStyle: 'short',
-                                timeZone: 'Asia/Kolkata'
-                            })}</p>
+                            <p style="color: #6b7280; font-size: 14px; margin: 0;">Inquiry received on ${new Date(domainInquiry.createdAt).toLocaleString('en-IN', {
+                    dateStyle: 'full',
+                    timeStyle: 'short',
+                    timeZone: 'Asia/Kolkata'
+                })}</p>
                         </div>
                     </div>
                     
@@ -122,7 +123,7 @@ const createDomainInquiry = async (req, res) => {
 const getAllDomainInquiries = async (req, res) => {
     try {
         const inquiries = await domainModel.find({}).sort({ createdAt: -1 });
-        
+
         return res.status(200).json({
             success: true,
             totalInquiries: inquiries.length,
@@ -141,14 +142,14 @@ const getSingleDomainInquiry = async (req, res) => {
     try {
         const { id } = req.params;
         const inquiry = await domainModel.findById(id);
-        
+
         if (!inquiry) {
             return res.status(404).json({
                 success: false,
                 message: "Domain inquiry not found"
             });
         }
-        
+
         return res.status(200).json({
             success: true,
             inquiry
@@ -205,7 +206,7 @@ const deleteDomainInquiry = async (req, res) => {
     try {
         const { id } = req.params;
         await domainModel.findByIdAndDelete(id);
-        
+
         return res.status(200).json({
             success: true,
             message: "Domain inquiry deleted successfully!"

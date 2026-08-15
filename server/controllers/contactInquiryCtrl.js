@@ -44,9 +44,9 @@ const createContactInquiry = async (req, res) => {
 
     // Send email to admin
     try {
-      // const adminEmail = "info.inextets@gmail.com";
+      const adminEmail = "info.inextets@gmail.com";
 
-      const adminEmail = "rishimaheshwari040@gmail.com";
+      // const adminEmail = "rishimaheshwari040@gmail.com";
       const emailBody = contactInquiryTemplate(name, email, phone, subject, message);
       await mailSender(
         adminEmail,

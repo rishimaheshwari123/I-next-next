@@ -11,11 +11,11 @@ const contactCtrl = async (req, res) => {
             companyName,
             email,
             phone,
-            
+
             // Services
             servicesInterested,
             otherServicesSpecify,
-            
+
             // Website Development Specific
             websiteType,
             websiteVision,
@@ -27,33 +27,33 @@ const contactCtrl = async (req, res) => {
             websitePurpose,
             existingWebsite,
             ongoingMaintenance,
-            
+
             // Social Media Marketing Specific
             socialMediaPlatforms,
             socialMediaGoals,
             postingFrequency,
             targetDemographic,
             contentType,
-            
+
             // Digital Marketing/SEO Specific
             currentChallenges,
             kpisImportant,
             competitorsAdmire,
             uniqueSellingProposition,
             geographicTarget,
-            
+
             // Project Details
             budgetRange,
             preferredStartDate,
             expectedTimeframe,
             projectDeadline,
             urgencyRating,
-            
+
             // Importance & Preferences
             proposalImportance,
             involvementLevel,
             clarityRating,
-            
+
             // Additional Information
             targetAudience,
             visualStyle,
@@ -62,14 +62,14 @@ const contactCtrl = async (req, res) => {
             existingMarketingMaterials,
             expectedResults,
             digitalMarketingFamiliarity,
-            
+
             // Partnership Factors
             partnershipFactors,
-            
+
             // Source & Additional
             hearAboutUs,
             additionalComments,
-            
+
             // Status
             status
         } = req.body;
@@ -89,11 +89,11 @@ const contactCtrl = async (req, res) => {
             companyName,
             email,
             phone,
-            
+
             // Services
             servicesInterested,
             otherServicesSpecify,
-            
+
             // Website Development Specific
             websiteType,
             websiteVision,
@@ -105,33 +105,33 @@ const contactCtrl = async (req, res) => {
             websitePurpose,
             existingWebsite,
             ongoingMaintenance,
-            
+
             // Social Media Marketing Specific
             socialMediaPlatforms,
             socialMediaGoals,
             postingFrequency,
             targetDemographic,
             contentType,
-            
+
             // Digital Marketing/SEO Specific
             currentChallenges,
             kpisImportant,
             competitorsAdmire,
             uniqueSellingProposition,
             geographicTarget,
-            
+
             // Project Details
             budgetRange,
             preferredStartDate,
             expectedTimeframe,
             projectDeadline,
             urgencyRating,
-            
+
             // Importance & Preferences
             proposalImportance,
             involvementLevel,
             clarityRating,
-            
+
             // Additional Information
             targetAudience,
             visualStyle,
@@ -140,14 +140,14 @@ const contactCtrl = async (req, res) => {
             existingMarketingMaterials,
             expectedResults,
             digitalMarketingFamiliarity,
-            
+
             // Partnership Factors
             partnershipFactors,
-            
+
             // Source & Additional
             hearAboutUs,
             additionalComments,
-            
+
             // Status
             status
         };
@@ -158,8 +158,8 @@ const contactCtrl = async (req, res) => {
         // Send email to admin
         try {
             await mailSender(
-                // "info.inextets@gmail.com",
-                "rishimaheshwari040@gmail.com",
+                "info.inextets@gmail.com",
+                // "rishimaheshwari040@gmail.com",
                 "New Contact Form Submission - I Next ETS",
                 contactUsEmail(contactData)
             );
@@ -188,7 +188,7 @@ const contactCtrl = async (req, res) => {
 const getAllContacts = async (req, res) => {
     try {
         const contacts = await Contact.find().sort({ createdAt: -1 });
-        
+
         res.status(200).send({
             success: true,
             contacts,
@@ -207,7 +207,7 @@ const getAllContacts = async (req, res) => {
 const getContactById = async (req, res) => {
     try {
         const contact = await Contact.findById(req.params.id);
-        
+
         if (!contact) {
             return res.status(404).send({
                 message: "Contact not found",
@@ -284,10 +284,10 @@ const deleteContact = async (req, res) => {
     }
 };
 
-module.exports = { 
-    contactCtrl, 
-    getAllContacts, 
-    getContactById, 
-    updateContactStatus, 
-    deleteContact 
+module.exports = {
+    contactCtrl,
+    getAllContacts,
+    getContactById,
+    updateContactStatus,
+    deleteContact
 };
