@@ -5,9 +5,9 @@ import ServiceLines from "@/components/ServiceLines";
 import StatsSection from "@/components/StatsSection";
 // import TechnologyNew from "@/components/TechnologyNew";
 import Testimonials from "@/components/Testimonials";
-import VideoTestimonials from "@/components/VideoTestimonials";
+// import VideoTestimonials from "@/components/VideoTestimonials";
 import Faq from "@/components/Faq";
-import TrustedCompanies from "@/components/TrustedCompanies";
+// import TrustedCompanies from "@/components/TrustedCompanies";
 import ContactInquiry from "@/components/ContactInquiry";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AIChatbot from "@/components/AIChatbot";
@@ -21,7 +21,7 @@ const HomePage = () => {
       <ServiceLines />
       {/* <TechnologyNew /> */}
       <Testimonials />
-      <VideoTestimonials />
+      {/* <VideoTestimonials /> */}
       <div className=" ">
         <Faq />
         {/* <TrustedCompanies /> */}
