@@ -1,30 +1,40 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import GoogleReviewsWidget from "google-reviews-widget";
 import { FaStar, FaGoogle, FaCheckCircle, FaExternalLinkAlt } from "react-icons/fa";
 
 export default function GoogleReviews() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const target = document.querySelector(`div[data-instance-id="X6xj2UP39V8sptjsHG7Y"]`);
-        if (!target) return;
+        const scriptId = "beaver-reviews-script";
+        
+        // Remove existing script to ensure it re-executes on page/component mount
+        const existingScript = document.getElementById(scriptId);
+        if (existingScript) {
+            existingScript.remove();
+        }
 
-        // Check if it already has more than the script tag (e.g. cached/preloaded)
-        if (target.children.length > 1) {
-            setIsLoading(false);
-            return;
+        const script = document.createElement("script");
+        script.id = scriptId;
+        script.src = `https://reviews.beaver.codes/widget/web-google-reviews.js?v=${Date.now()}`;
+        script.async = true;
+        
+        const target = document.querySelector(`div[data-instance-id="X6xj2UP39V8sptjsHG7Y"]`);
+        if (target) {
+            target.appendChild(script);
         }
 
         const observer = new MutationObserver(() => {
-            if (target.children.length > 1) {
+            if (target && target.children.length > 1) {
                 setIsLoading(false);
                 observer.disconnect();
             }
         });
 
-        observer.observe(target, { childList: true, subtree: true });
+        if (target) {
+            observer.observe(target, { childList: true, subtree: true });
+        }
 
         // Safeguard timeout to hide loader if loading takes too long
         const timer = setTimeout(() => {
@@ -35,6 +45,10 @@ export default function GoogleReviews() {
         return () => {
             observer.disconnect();
             clearTimeout(timer);
+            const addedScript = document.getElementById(scriptId);
+            if (addedScript) {
+                addedScript.remove();
+            }
         };
     }, []);
 
@@ -99,7 +113,7 @@ export default function GoogleReviews() {
 
                     {/* The Widget Wrapper */}
                     <div className="w-full min-h-[250px] overflow-hidden py-2">
-                        <GoogleReviewsWidget instanceId="X6xj2UP39V8sptjsHG7Y" />
+                        <div data-instance-id="X6xj2UP39V8sptjsHG7Y" className="w-full" />
                     </div>
                 </div>
 
