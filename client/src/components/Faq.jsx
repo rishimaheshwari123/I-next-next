@@ -17,9 +17,9 @@ const Faq = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 via-white to-slate-50 relative">
+    <section className="py-5 bg-gradient-to-b from-slate-50 via-white to-slate-50 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header Section */}
         <div className="text-center mb-16 flex flex-col items-center">
           <div className="inline-flex items-center gap-2 mb-3">
@@ -59,11 +59,10 @@ const Faq = () => {
                 <div className="flex items-center gap-4 flex-1">
                   {/* Icon Button */}
                   <div
-                    className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      faqState[index]
+                    className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${faqState[index]
                         ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
                         : "bg-blue-50 text-blue-600 group-hover:bg-blue-100"
-                    }`}
+                      }`}
                   >
                     {faqState[index] ? (
                       <HiMinus className="w-5.5 h-5.5 transition-transform duration-300 rotate-180" />
@@ -80,17 +79,15 @@ const Faq = () => {
 
                 {/* Indicator Circle Badge */}
                 <div
-                  className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-300 ${
-                    faqState[index] ? "bg-blue-600 scale-125" : "bg-slate-200"
-                  }`}
+                  className={`flex-shrink-0 w-2 h-2 rounded-full transition-all duration-300 ${faqState[index] ? "bg-blue-600 scale-125" : "bg-slate-200"
+                    }`}
                 ></div>
               </button>
 
               {/* Answer Content */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  faqState[index] ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                }`}
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${faqState[index] ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
               >
                 <div className="px-6 md:px-8 pb-6 md:pb-8">
                   <div className="pl-15">

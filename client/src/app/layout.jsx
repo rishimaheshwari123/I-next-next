@@ -91,6 +91,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://reviews.beaver.codes" />
+        <link rel="dns-prefetch" href="https://reviews.beaver.codes" />
+        <link rel="preload" href="https://reviews.beaver.codes/widget/web-google-reviews.js" as="script" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",

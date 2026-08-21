@@ -4,7 +4,7 @@ import ServicesGrid from "@/components/ServicesGrid";
 import ServiceLines from "@/components/ServiceLines";
 import StatsSection from "@/components/StatsSection";
 // import TechnologyNew from "@/components/TechnologyNew";
-import Testimonials from "@/components/Testimonials";
+// import Testimonials from "@/components/Testimonials";
 // import VideoTestimonials from "@/components/VideoTestimonials";
 import Faq from "@/components/Faq";
 // import TrustedCompanies from "@/components/TrustedCompanies";
@@ -12,7 +12,7 @@ import ContactInquiry from "@/components/ContactInquiry";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import AIChatbot from "@/components/AIChatbot";
 // import Help from "@/components/Help";
-
+import GoogleReviews from "@/components/GoogleReviews";
 const HomePage = () => {
   return (
     <div>
@@ -20,7 +20,9 @@ const HomePage = () => {
       <ServicesGrid />
       <ServiceLines />
       {/* <TechnologyNew /> */}
-      <Testimonials />
+      <GoogleReviews />
+
+      {/* <Testimonials /> */}
       {/* <VideoTestimonials /> */}
       <div className=" ">
         <Faq />
