@@ -1,5 +1,5 @@
-const BASE_URL = 'http://localhost:8085/api/v1';
-// const BASE_URL =    'https://api.inextets.in/api/v1';
+// const BASE_URL = 'http://localhost:8085/api/v1';
+const BASE_URL = 'https://api.inextets.in/api/v1';
 
 
 
