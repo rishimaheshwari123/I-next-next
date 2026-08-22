@@ -2,6 +2,7 @@ import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import ConditionalLayout from "@/components/ConditionalLayout";
 import { ToastContainer } from 'react-toastify';
+import Tracker from "@/components/common/Tracker";
 
 export const metadata = {
   title: "Top Digital Marketing Agency in Bhopal - I Next ETS",
@@ -105,6 +106,7 @@ export default function RootLayout({ children }) {
         </script>
       </head>
       <body>
+        <Tracker />
         <ConditionalLayout>
           {children}
         </ConditionalLayout>

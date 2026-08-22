@@ -1,6 +1,7 @@
-// const BASE_URL = 'http://localhost:8085/api/v1';
-// const BASE_URL = 'https://i-next-next.onrender.com/api/v1';
-const BASE_URL = 'https://api.inextets.in/api/v1';
+const BASE_URL = 'http://localhost:8085/api/v1';
+// const BASE_URL =    'https://api.inextets.in/api/v1';
+
+
 
 // Employee Management API Endpoints
 export const EMPLOYEE_API = {
@@ -156,6 +157,13 @@ export const JOB_API = {
   GET_SINGLE: (id) => `${BASE_URL}/job/get/${id}`,
   UPDATE: (id) => `${BASE_URL}/job/update/${id}`,
   DELETE: (id) => `${BASE_URL}/job/delete/${id}`,
+};
+
+// Analytics API Endpoints
+export const ANALYTICS_API = {
+  TRACK: `${BASE_URL}/analytics/track`,
+  PING: `${BASE_URL}/analytics/ping`,
+  GET_STATS: `${BASE_URL}/analytics/stats`,
 };
 
 export { BASE_URL };

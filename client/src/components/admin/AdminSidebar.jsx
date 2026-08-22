@@ -213,6 +213,13 @@ const AdminSidebar = ({
       color: "from-amber-500 to-amber-600",
       permission: "leaveRequests",
     },
+    {
+      name: "Visits & Web Analytics",
+      icon: FaGlobe,
+      path: "/admin/website-counter",
+      color: "from-teal-500 to-emerald-600",
+      permission: "dashboard",
+    },
   ];
 
   // Filter menu items based on user permissions

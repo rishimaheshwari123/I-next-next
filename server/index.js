@@ -5,12 +5,14 @@ const fs = require('fs');
 const fileUpload = require('express-fileupload');
 const connectDB = require("./config/db");
 const { cloudinaryConnect } = require("./config/cloudinary");
+const { preloadCache } = require("./utils/analyticsCache");
 
 const app = express();
 
 dotenv.config();
 
 connectDB();
+preloadCache();
 cloudinaryConnect();
 
 
@@ -71,9 +73,10 @@ app.use("/api/v1/revenue", require("./routes/revenueRoute"));
 
 // Dashboard Routes
 app.use("/api/v1/dashboard", require("./routes/dashboardRoute"));
+app.use("/api/v1/analytics", require("./routes/analyticsRoute"));
 
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port no ${PORT}`);
-});
+}); // Force nodemon restart to reload analytics cache
