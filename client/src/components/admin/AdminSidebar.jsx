@@ -72,6 +72,13 @@ const AdminSidebar = ({
       permission: "leadManagement",
     },
     {
+      name: "Contacts Leads",
+      icon: FaEnvelope,
+      path: "/admin/contacts",
+      color: "from-purple-500 to-purple-600",
+      permission: "contacts",
+    },
+    {
       name: "Company Revenue",
       icon: FaDollarSign,
       path: "/admin/revenue",
@@ -142,13 +149,7 @@ const AdminSidebar = ({
       color: "from-green-500 to-green-600",
       permission: "serverHosting",
     },
-    {
-      name: "Contacts",
-      icon: FaEnvelope,
-      path: "/admin/contacts",
-      color: "from-purple-500 to-purple-600",
-      permission: "contacts",
-    },
+
 
     {
       name: "Domain Inquiries",

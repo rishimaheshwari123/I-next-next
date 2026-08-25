@@ -184,10 +184,19 @@ const contactCtrl = async (req, res) => {
     }
 };
 
-// Get all contacts (for admin)
+// Get all contacts (for admin/staff)
 const getAllContacts = async (req, res) => {
     try {
-        const contacts = await Contact.find().sort({ createdAt: -1 });
+        let query = {};
+        
+        // If the user is not a super admin (i.e. is an employee or a staff member), they can only see contacts assigned to them
+        if (req.user && (req.user.role !== "admin" || req.user.isStaff)) {
+            query.assignedTo = req.user.id;
+        }
+
+        const contacts = await Contact.find(query)
+            .populate("assignedTo")
+            .sort({ createdAt: -1 });
 
         res.status(200).send({
             success: true,
@@ -206,7 +215,7 @@ const getAllContacts = async (req, res) => {
 // Get single contact by ID
 const getContactById = async (req, res) => {
     try {
-        const contact = await Contact.findById(req.params.id);
+        const contact = await Contact.findById(req.params.id).populate("assignedTo");
 
         if (!contact) {
             return res.status(404).send({
@@ -228,15 +237,40 @@ const getContactById = async (req, res) => {
     }
 };
 
-// Update contact status
+// Update contact status, assignment, and notes
 const updateContactStatus = async (req, res) => {
     try {
-        const { status } = req.body;
-        const contact = await Contact.findByIdAndUpdate(
-            req.params.id,
-            { status },
-            { new: true }
-        );
+        const { status, assignedTo, assignedToModel, noteText } = req.body;
+        
+        const updateData = {};
+        if (status) updateData.status = status;
+        if (assignedTo !== undefined) {
+            updateData.assignedTo = assignedTo || null;
+            updateData.assignedToModel = assignedToModel || null;
+        }
+
+        let contact;
+        if (noteText) {
+            contact = await Contact.findByIdAndUpdate(
+                req.params.id,
+                { 
+                    $set: updateData,
+                    $push: { 
+                        notes: { 
+                            text: noteText, 
+                            addedBy: req.user?.name || req.user?.email || "Unknown" 
+                        } 
+                    } 
+                },
+                { new: true }
+            ).populate("assignedTo");
+        } else {
+            contact = await Contact.findByIdAndUpdate(
+                req.params.id,
+                updateData,
+                { new: true }
+            ).populate("assignedTo");
+        }
 
         if (!contact) {
             return res.status(404).send({
@@ -247,7 +281,7 @@ const updateContactStatus = async (req, res) => {
 
         res.status(200).send({
             success: true,
-            message: "Contact status updated",
+            message: "Contact updated successfully",
             contact
         });
     } catch (error) {

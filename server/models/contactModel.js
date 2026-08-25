@@ -271,6 +271,34 @@ const contactSchema = new mongoose.Schema(
             enum: ['new', 'in-progress', 'completed', 'archived'],
             default: 'new'
         },
+
+        // Assignment
+        assignedTo: {
+            type: mongoose.Schema.Types.ObjectId,
+            refPath: 'assignedToModel'
+        },
+        assignedToModel: {
+            type: String,
+            enum: ['Employee', 'auth']
+        },
+
+        // Notes
+        notes: [
+            {
+                text: {
+                    type: String,
+                    required: true
+                },
+                addedBy: {
+                    type: String,
+                    required: true
+                },
+                createdAt: {
+                    type: Date,
+                    default: Date.now
+                }
+            }
+        ]
     },
     { timestamps: true }
 );

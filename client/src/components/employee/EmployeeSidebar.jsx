@@ -16,6 +16,7 @@ import {
   FaChevronRight,
   FaChartLine,
   FaHeadset,
+  FaEnvelope,
 } from "react-icons/fa";
 import Image from "next/image";
 import { toast } from "react-toastify";
@@ -64,12 +65,12 @@ const EmployeeSidebar = ({
       color: "from-amber-500 to-amber-600",
     },
 
-    // {
-    //   name: "My Leads",
-    //   icon: FaChartLine,
-    //   path: "/employee/leads",
-    //   color: "from-indigo-500 to-purple-600",
-    // },
+    {
+      name: "Contact Leads",
+      icon: FaEnvelope,
+      path: "/employee/contacts",
+      color: "from-purple-500 to-purple-600",
+    },
     {
       name: "My Assigned Projects",
       icon: FaTasks,

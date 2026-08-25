@@ -307,8 +307,8 @@ const Contacts = () => {
               <tbody className="divide-y divide-gray-200">
                 {filteredContacts.map((contact) => (
                   <tr
-                    key={contact._id}
-                    className="hover:bg-gray-50 transition-colors duration-150"
+                      key={contact._id}
+                      className="hover:bg-gray-50 transition-colors duration-150"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-start">
