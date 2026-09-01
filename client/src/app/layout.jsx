@@ -3,6 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConditionalLayout from "@/components/ConditionalLayout";
 import { ToastContainer } from 'react-toastify';
 import Tracker from "@/components/common/Tracker";
+import Script from "next/script";
 
 export const metadata = {
   title: "Top Digital Marketing Agency in Bhopal - I Next ETS",
@@ -106,6 +107,20 @@ export default function RootLayout({ children }) {
         </script>
       </head>
       <body>
+        {/* Google tag (gtag.js) */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18420322623"
+        />
+        <Script id="google-analytics-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-18420322623');
+          `}
+        </Script>
         <Tracker />
         <ConditionalLayout>
           {children}
