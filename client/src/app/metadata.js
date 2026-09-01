@@ -78,6 +78,6 @@ export const metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "3oINP7AC9MEKIj-hCT7n8PX-W_vLAUE8xVJtXwUjmYw",
   },
 };
