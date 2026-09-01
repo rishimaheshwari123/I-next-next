@@ -261,6 +261,15 @@ function Footer() {
                   Investment & Policy Advisory
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/sitemap"
+                  className="text-gray-400 hover:text-white hover:pl-2 transition-all duration-300 flex items-center group text-sm"
+                >
+                  <FaArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Site Map
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -325,6 +334,12 @@ function Footer() {
           </p>
 
           <div className="flex items-center space-x-6">
+            <Link
+              href="/sitemap"
+              className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
+            >
+              Site Map
+            </Link>
             <Link
               href="/privacy-policy"
               className="text-gray-400 hover:text-white text-sm transition-colors duration-300"
