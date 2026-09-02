@@ -90,31 +90,37 @@ export default function ContactInquiry() {
   };
 
   return (
-    <section id="contact" className="py-8 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-100">
+    <section id="contact" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-slate-100">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2">
-            Get In Touch
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 mb-2 sm:mb-3">
+            <span className="w-1.5 h-5 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full"></span>
+            <span className="text-blue-600 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest">
+              Let's Connect
+            </span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">
+            Get In Touch With Us
           </h2>
-          <p className="text-sm text-slate-500 max-w-xl mx-auto">
+          <p className="text-xs sm:text-sm md:text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
             Have a question or want to work together? Drop us a message and we'll get back to you shortly.
           </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-            {/* Left Side - Form */}
-            <div className="p-6 md:p-8">
-              <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form Container */}
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            {/* Left Side - Form (7 Cols on desktop) */}
+            <div className="lg:col-span-7 p-5 sm:p-7 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
                 {/* Name */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaUser className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
+                    <FaUser className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs" />
                     <input
                       suppressHydrationWarning
                       type="text"
@@ -123,20 +129,20 @@ export default function ContactInquiry() {
                       onChange={handleChange}
                       required
                       disabled={submitting}
-                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
+                      className="w-full pl-9 sm:pl-10 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 placeholder:text-slate-400 outline-none"
                       placeholder="John Doe"
                     />
                   </div>
                 </div>
 
                 {/* Email & Phone */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <FaEnvelope className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
+                      <FaEnvelope className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs" />
                       <input
                         suppressHydrationWarning
                         type="email"
@@ -145,18 +151,18 @@ export default function ContactInquiry() {
                         onChange={handleChange}
                         required
                         disabled={submitting}
-                        className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
+                        className="w-full pl-9 sm:pl-10 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 placeholder:text-slate-400 outline-none"
                         placeholder="john@example.com"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
                       Phone <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <FaPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
+                      <FaPhone className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs" />
                       <input
                         suppressHydrationWarning
                         type="tel"
@@ -165,7 +171,7 @@ export default function ContactInquiry() {
                         onChange={handleChange}
                         required
                         disabled={submitting}
-                        className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
+                        className="w-full pl-9 sm:pl-10 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 placeholder:text-slate-400 outline-none"
                         placeholder="+91 98765 43210"
                       />
                     </div>
@@ -174,11 +180,11 @@ export default function ContactInquiry() {
 
                 {/* Subject */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaEdit className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm" />
+                    <FaEdit className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs" />
                     <input
                       suppressHydrationWarning
                       type="text"
@@ -187,7 +193,7 @@ export default function ContactInquiry() {
                       onChange={handleChange}
                       required
                       disabled={submitting}
-                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
+                      className="w-full pl-9 sm:pl-10 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 placeholder:text-slate-400 outline-none"
                       placeholder="How can we help you?"
                     />
                   </div>
@@ -195,11 +201,11 @@ export default function ContactInquiry() {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <FaCommentAlt className="absolute left-4 top-3 text-slate-400 text-sm" />
+                    <FaCommentAlt className="absolute left-3.5 top-3 text-slate-400 text-xs" />
                     <textarea
                       suppressHydrationWarning
                       name="message"
@@ -208,8 +214,8 @@ export default function ContactInquiry() {
                       required
                       disabled={submitting}
                       rows="3"
-                      className="w-full pl-11 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-all disabled:bg-gray-50 placeholder:text-slate-400"
-                      placeholder="Tell us more about your project or inquiry..."
+                      className="w-full pl-9 sm:pl-10 pr-3.5 py-2 sm:py-2.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-50 placeholder:text-slate-400 outline-none"
+                      placeholder="Tell us more about your project..."
                     />
                   </div>
                 </div>
@@ -219,37 +225,37 @@ export default function ContactInquiry() {
                   suppressHydrationWarning
                   type="submit"
                   disabled={submitting}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02]"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs sm:text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.01] active:scale-98"
                 >
                   {submitting ? (
                     <>
-                      <FaSpinner className="text-lg animate-spin" />
-                      Sending...
+                      <FaSpinner className="text-sm animate-spin" />
+                      <span>Sending...</span>
                     </>
                   ) : (
                     <>
-                      <FaPaperPlane className="text-sm" />
-                      Send Message
+                      <FaPaperPlane className="text-xs" />
+                      <span>Send Message</span>
                     </>
                   )}
                 </button>
               </form>
             </div>
 
-            {/* Right Side - Info */}
-            <div className="bg-blue-600 p-6 md:p-8 text-white flex flex-col justify-center">
+            {/* Right Side - Info Box (5 Cols on desktop) */}
+            <div className="lg:col-span-5 bg-gradient-to-br from-blue-600 to-indigo-700 p-5 sm:p-7 md:p-8 text-white flex flex-col justify-between">
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold mb-2">Let's Build Something Amazing Together</h3>
+                  <h3 className="text-lg sm:text-xl font-bold mb-1.5">Let's Build Something Great</h3>
                   <p className="text-blue-100/90 text-xs leading-relaxed">
                     We're here to help bring your ideas to life. Whether you need a website, mobile app, or digital marketing services, our team is ready to assist you.
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2.5 pt-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-base" />
+                    <div className="w-7 h-7 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-xs" />
                     </div>
                     <div>
                       <h4 className="font-bold text-xs">Quick Response</h4>
@@ -258,18 +264,18 @@ export default function ContactInquiry() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-base" />
+                    <div className="w-7 h-7 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-xs" />
                     </div>
                     <div>
                       <h4 className="font-bold text-xs">Expert Consultation</h4>
-                      <p className="text-blue-100/80 text-[10px]">Free consultation for your project</p>
+                      <p className="text-blue-100/80 text-[10px]">Free initial consultation for your project</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FaCheckCircle className="text-base" />
+                    <div className="w-7 h-7 bg-white/20 backdrop-blur-md rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FaCheckCircle className="text-xs" />
                     </div>
                     <div>
                       <h4 className="font-bold text-xs">Dedicated Support</h4>
@@ -277,19 +283,19 @@ export default function ContactInquiry() {
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t border-white/20">
-                  <p className="text-[10px] text-blue-100/80 mb-2">Or reach us directly:</p>
-                  <div className="space-y-2">
-                    <a href="tel:+919981122493" className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors text-xs font-semibold">
-                      <FaPhone className="text-sm" />
-                      <span>+91 9981122493</span>
-                    </a>
-                    <a href="mailto:info.inextets@gmail.com" className="flex items-center gap-2 text-white hover:text-orange-400 transition-colors text-xs font-semibold">
-                      <FaEnvelope className="text-sm" />
-                      <span>info.inextets@gmail.com</span>
-                    </a>
-                  </div>
+              <div className="pt-4 mt-4 border-t border-white/20 space-y-2">
+                <p className="text-[10px] text-blue-100/80">Direct Contact:</p>
+                <div className="space-y-1.5">
+                  <a href="tel:+919981122493" className="flex items-center gap-2 text-white hover:text-orange-300 transition-colors text-xs font-semibold">
+                    <FaPhone className="text-xs" />
+                    <span>+91 9981122493</span>
+                  </a>
+                  <a href="mailto:info.inextets@gmail.com" className="flex items-center gap-2 text-white hover:text-orange-300 transition-colors text-xs font-semibold truncate">
+                    <FaEnvelope className="text-xs" />
+                    <span className="truncate">info.inextets@gmail.com</span>
+                  </a>
                 </div>
               </div>
             </div>

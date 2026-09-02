@@ -16,7 +16,6 @@ import {
 } from "react-icons/fa";
 
 const services = [
-
   {
     id: 1,
     title: "Website Development",
@@ -83,7 +82,6 @@ const services = [
     bgColor: "bg-emerald-50",
     iconColor: "text-emerald-600 border-emerald-100"
   },
-
   {
     id: 7,
     title: "AI (Artificial Intelligence)",
@@ -99,10 +97,10 @@ const services = [
     id: 8,
     title: "Cyber Security",
     path: "/cyber-security",
-    description: "Protect your digital assets. Enterprise security, threat assessments, and monitoring.",
+    description: "Enterprise security architecture, risk audits, penetration testing, and 24/7 cloud asset protection.",
     icon: FaShieldAlt,
-    image: "/herosection/info.jpeg",
-    gradient: "from-red-500 to-rose-500",
+    image: "/herosection/cyber.jpg",
+    gradient: "from-red-500 to-orange-500",
     bgColor: "bg-red-50",
     iconColor: "text-red-600 border-red-100"
   }
@@ -120,32 +118,15 @@ const ServicesGrid = () => {
       const container = containerRef.current;
       const scrollSection = scrollSectionRef.current;
 
-      const containerRect = container.getBoundingClientRect();
-      const viewWidth = window.innerWidth;
+      const rect = container.getBoundingClientRect();
+      const scrollDistance = container.offsetHeight - window.innerHeight;
+      const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
 
-      // Only apply sticky vertical-to-horizontal translate on desktop (lg)
-      if (viewWidth < 1024) {
-        setTranslateX(0);
-        return;
-      }
-
-      const totalHeight = containerRect.height - window.innerHeight;
-      const scrolled = -containerRect.top;
-
-      if (scrolled >= 0 && scrolled <= totalHeight) {
-        // Calculate max scroll translation (with some safety offset padding)
-        const maxTranslate = scrollSection.scrollWidth - viewWidth + 80;
-        const percentage = scrolled / totalHeight;
-        setTranslateX(-percentage * Math.max(0, maxTranslate));
-      } else if (scrolled < 0) {
-        setTranslateX(0);
-      } else if (scrolled > totalHeight) {
-        const maxTranslate = scrollSection.scrollWidth - viewWidth + 80;
-        setTranslateX(-Math.max(0, maxTranslate));
-      }
+      const maxTranslate = scrollSection.scrollWidth - window.innerWidth + 80;
+      setTranslateX(-progress * maxTranslate);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
     handleScroll();
 
@@ -165,17 +146,17 @@ const ServicesGrid = () => {
         <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
 
           {/* Section Header */}
-          <div className="max-w-[90vw] mx-auto w-full mb-10 text-center flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-1.5 h-6 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full"></span>
-              <span className="text-orange-600 text-xs font-extrabold uppercase tracking-widest">
+          <div className="max-w-[1480px] mx-auto w-full mb-6 xl:mb-10 text-center flex flex-col items-center px-4 sm:px-6 lg:px-8">
+            <div className="inline-flex items-center gap-2 mb-2 sm:mb-3">
+              <span className="w-1.5 h-5 sm:h-6 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full"></span>
+              <span className="text-orange-600 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest">
                 What We Offer
               </span>
             </div>
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">
               EXPLORE OUR SERVICES
             </h2>
-            <p className="text-slate-600 text-sm max-w-xl font-medium mx-auto">
+            <p className="text-slate-600 text-xs sm:text-sm max-w-xl font-medium mx-auto">
               Comprehensive solutions to grow your business, optimize operations, and achieve your goals.
             </p>
           </div>
@@ -184,7 +165,7 @@ const ServicesGrid = () => {
           <div className="w-full overflow-hidden">
             <div
               ref={scrollSectionRef}
-              className="flex gap-8 pl-[5vw] transition-transform duration-100 ease-out py-4"
+              className="flex gap-5 xl:gap-7 pl-[4vw] transition-transform duration-100 ease-out py-4"
               style={{ transform: `translate3d(${translateX}px, 0px, 0px)` }}
             >
               {services.map((service) => {
@@ -193,46 +174,46 @@ const ServicesGrid = () => {
                   <Link
                     key={service.id}
                     href={service.path}
-                    className="flex-shrink-0 w-[360px] bg-white rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(15,23,42,0.08)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden"
+                    className="flex-shrink-0 w-[300px] xl:w-[350px] bg-white rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(15,23,42,0.08)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden"
                   >
                     {/* Card Top Image */}
-                    <div className="relative w-full h-[180px] overflow-hidden bg-slate-100">
+                    <div className="relative w-full h-[150px] xl:h-[180px] overflow-hidden bg-slate-100">
                       <Image
                         src={service.image}
                         alt={service.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="360px"
+                        sizes="350px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
 
                       {/* Floating Glass Index Badge */}
-                      <span className="absolute top-4 right-4 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-sm px-3 py-1 rounded-full shadow-sm">
+                      <span className="absolute top-3 right-3 xl:top-4 xl:right-4 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-xs xl:text-sm px-2.5 py-0.5 xl:px-3 xl:py-1 rounded-full shadow-sm">
                         0{service.id}
                       </span>
                     </div>
 
                     {/* Card Content */}
-                    <div className="p-6 flex flex-col gap-4">
+                    <div className="p-4 xl:p-6 flex flex-col gap-3 xl:gap-4">
                       {/* Icon & Title Row */}
-                      <div className="flex items-center gap-3.5">
-                        <div className={`${service.bgColor} w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border ${service.iconColor.split(' ')[1]}`}>
-                          <IconComponent className={`w-5.5 h-5.5 ${service.iconColor.split(' ')[0]}`} />
+                      <div className="flex items-center gap-3">
+                        <div className={`${service.bgColor} w-10 h-10 xl:w-11 xl:h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border ${service.iconColor.split(' ')[1]}`}>
+                          <IconComponent className={`w-5 h-5 ${service.iconColor.split(' ')[0]}`} />
                         </div>
-                        <h3 className="font-extrabold text-slate-900 text-lg leading-tight group-hover:text-blue-600 transition-colors duration-250">
+                        <h3 className="font-extrabold text-slate-900 text-base xl:text-lg leading-tight group-hover:text-blue-600 transition-colors duration-250 truncate">
                           {service.title}
                         </h3>
                       </div>
 
                       {/* Description */}
-                      <p className="text-sm text-slate-500 leading-relaxed min-h-[60px] line-clamp-3">
+                      <p className="text-xs xl:text-sm text-slate-500 leading-relaxed min-h-[50px] xl:min-h-[58px] line-clamp-3">
                         {service.description}
                       </p>
 
                       {/* CTA Link */}
-                      <div className="flex items-center gap-2 text-slate-600 group-hover:text-orange-500 transition-colors duration-200 font-bold text-xs mt-1">
+                      <div className="flex items-center gap-1.5 text-slate-600 group-hover:text-orange-500 transition-colors duration-200 font-bold text-xs mt-0.5">
                         <span>Learn More</span>
-                        <FaArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform duration-200 text-orange-500" />
+                        <FaArrowRight className="w-3 h-3 group-hover:translate-x-1.5 transition-transform duration-200 text-orange-500" />
                       </div>
                     </div>
                   </Link>
@@ -244,68 +225,68 @@ const ServicesGrid = () => {
         </div>
       </div>
 
-      {/* Mobile Swipeable Horizontal Layout */}
-      <div className="bg-gradient-to-b from-slate-50 via-white to-slate-50 py-16 px-4 sm:px-6 lg:hidden">
+      {/* Mobile Swipeable Horizontal Layout (< 1024px) */}
+      <div className="bg-gradient-to-b from-slate-50 via-white to-slate-50 py-12 sm:py-16 px-4 sm:px-6 lg:hidden">
         {/* Mobile Header */}
-        <div className="max-w-xl mx-auto mb-10 text-center">
-          <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-1.5 h-6 bg-gradient-to-b from-orange-50 to-amber-500 rounded-full"></span>
-            <span className="text-orange-600 text-xs font-extrabold uppercase tracking-widest">
+        <div className="max-w-xl mx-auto mb-8 text-center">
+          <div className="inline-flex items-center gap-2 mb-2 sm:mb-3">
+            <span className="w-1.5 h-5 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full"></span>
+            <span className="text-orange-600 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest">
               What We Offer
             </span>
           </div>
-          <h2 className="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">
             OUR SERVICES
           </h2>
-          <p className="text-slate-600 text-sm font-medium">
+          <p className="text-slate-600 text-xs sm:text-sm font-medium">
             Comprehensive solutions to grow your business and achieve your goals.
           </p>
         </div>
 
         {/* Mobile Swipe Track */}
-        <div className="flex gap-5 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
+        <div className="flex gap-4 sm:gap-5 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
           {services.map((service) => {
             const IconComponent = service.icon;
             return (
               <Link
                 key={service.id}
                 href={service.path}
-                className="flex-shrink-0 w-[290px] snap-center bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] overflow-hidden relative"
+                className="flex-shrink-0 w-[260px] sm:w-[290px] snap-center bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] overflow-hidden relative"
               >
                 {/* Mobile Card Top Image */}
-                <div className="relative w-full h-[140px] overflow-hidden bg-slate-100">
+                <div className="relative w-full h-[130px] sm:h-[145px] overflow-hidden bg-slate-100">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
                     className="object-cover"
-                    sizes="290px"
+                    sizes="(max-width: 640px) 260px, 290px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent"></div>
 
-                  <span className="absolute top-3 right-3 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-xs px-2.5 py-0.5 rounded-full">
+                  <span className="absolute top-2.5 right-2.5 bg-white/30 backdrop-blur-md border border-white/20 text-white font-black text-xs px-2.5 py-0.5 rounded-full">
                     0{service.id}
                   </span>
                 </div>
 
                 {/* Mobile Card Content */}
-                <div className="p-5 flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`${service.bgColor} w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 border ${service.iconColor.split(' ')[1]}`}>
-                      <IconComponent className={`w-4.5 h-4.5 ${service.iconColor.split(' ')[0]}`} />
+                <div className="p-4 sm:p-5 flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`${service.bgColor} w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center flex-shrink-0 border ${service.iconColor.split(' ')[1]}`}>
+                      <IconComponent className={`w-4 h-4 ${service.iconColor.split(' ')[0]}`} />
                     </div>
-                    <h3 className="font-extrabold text-slate-900 text-base leading-tight">
+                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-tight truncate">
                       {service.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs text-slate-500 leading-relaxed min-h-[48px] line-clamp-3">
+                  <p className="text-xs text-slate-500 leading-relaxed min-h-[44px] line-clamp-3">
                     {service.description}
                   </p>
 
-                  <div className="flex items-center gap-2 text-slate-600 font-bold text-xs mt-1">
+                  <div className="flex items-center gap-1.5 text-slate-600 font-bold text-xs mt-0.5">
                     <span>Learn More</span>
-                    <FaArrowRight className="w-3.5 h-3.5 text-orange-500" />
+                    <FaArrowRight className="w-3 h-3 text-orange-500" />
                   </div>
                 </div>
               </Link>
